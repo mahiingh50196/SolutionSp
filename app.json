@@ -1,0 +1,12 @@
+{
+  "name": "SolutionSp",
+  "displayName": "SolutionSp",
+  "expo": {
+    "name": "SolutionSp",
+    "slug": "SolutionSp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
