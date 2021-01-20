@@ -20,7 +20,7 @@ export default function Signup({ navigation: { navigate } }) {
       setLoading(true);
       api({
         method: "post",
-        url: "/User/Login",
+        url: "/Provider/Login",
         data: {
           email,
           password,
@@ -31,6 +31,7 @@ export default function Signup({ navigation: { navigate } }) {
             data: { data },
           } = res;
           if (data) {
+            console.warn(("login data", data));
             setUserInfo(res.data?.data);
           }
         })

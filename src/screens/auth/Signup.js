@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Image, ScrollView } from "react-native";
-import { Avatar } from "../../assets/images";
+import { Avatar, DownArrow } from "../../assets/images";
 import {
   Background,
   Text,
@@ -9,6 +9,7 @@ import {
   TextInput,
   PhoneInput,
   FullScreenLoader,
+  Dropdown,
 } from "../../common";
 import { SocialLogin } from "../../components";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
@@ -32,6 +33,10 @@ export default function Signup({ navigation: { navigate } }) {
   const [phone, setPhone] = React.useState(null);
   const [code, setCode] = React.useState(91);
   const [img, setImage] = React.useState(null);
+  const [CategoryData, setCategoryData] = React.useState([
+    { label: "", value: "" },
+  ]);
+  const [categoryId, setCategoryId] = React.useState("");
   const [uploadLoading, setUploadLoading] = React.useState(false);
   const [responseImage, setResponseImage] = React.useState(null);
   const setAuthInfo = useSetRecoilState(signUpInfo);
@@ -64,6 +69,29 @@ export default function Signup({ navigation: { navigate } }) {
     setErrorInfo(null);
   };
 
+  useEffect(() => {
+    api({
+      method: "GET",
+      url: "/Provider/listCategories",
+    })
+      .then((res) => {
+        if (res.data && res.data.data.length) {
+          let array = [];
+          console.warn("hi key..", JSON.stringify(array, undefined, 2));
+          res.data.data.map((item) => {
+            array.push({
+              label: item.name,
+              value: item._id,
+            });
+          });
+          setCategoryData(array);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   function initSignUp() {
     const error = getErrorInfo();
     if (error) {
@@ -77,13 +105,14 @@ export default function Signup({ navigation: { navigate } }) {
         password,
         phoneNumber: phone,
         countrycode: `+${code}`,
+        categoryId,
       };
       if (responseImage) {
         userData.profilePicture = responseImage;
       }
       api({
         method: "post",
-        url: "/User/SingUp",
+        url: "/Provider/SingUp",
         data: userData,
       })
         .then((res) => {
@@ -93,6 +122,7 @@ export default function Signup({ navigation: { navigate } }) {
           if (data) {
             setAuthInfo(res.data?.data);
             navigate("OtpVerify");
+            console.warn("hi..", data);
           }
         })
         .finally(() => {
@@ -206,6 +236,16 @@ export default function Signup({ navigation: { navigate } }) {
               setCode(code);
             }}
           />
+          <View style={styles.space} />
+          <Touchable style={styles.dropdowncontainer}>
+            <Dropdown
+              itemData={CategoryData}
+              onValueChange={(value) => setCategoryId(value)}
+            />
+            <View style={styles.downarrowimg}>
+              <Image source={DownArrow} />
+            </View>
+          </Touchable>
         </View>
         <Button
           isLoading={loading}
@@ -292,5 +332,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+  },
+  dropdowncontainer: {
+    borderWidth: 1,
+    padding: 15,
+    borderRadius: 15,
+    borderColor: Colors.primary,
+  },
+  downarrowimg: {
+    alignItems: "flex-end",
   },
 });

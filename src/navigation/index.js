@@ -23,7 +23,7 @@ import {
   ForgetPassword,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
-import { Home } from "../screens/services";
+import { Home, Docshare } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { Text, Touchable } from "../common";
 import { api } from "../services";
@@ -96,6 +96,7 @@ function DrawerNav() {
   return (
     <drawer.Navigator drawerContent={CustomDrawerContent}>
       <drawer.Screen name="Home" component={Home} />
+      <drawer.Screen name="Docshare" component={Docshare} />
     </drawer.Navigator>
   );
 }

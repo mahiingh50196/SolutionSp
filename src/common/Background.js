@@ -10,7 +10,7 @@ const Background = ({
     headerShown: false,
   },
 }) => {
-  const { headerShown } = options;
+  const { headerShown, title } = options;
   const contentViewStyle = Array.isArray(contentStyle)
     ? [styles.contentView, ...contentStyle]
     : [styles.contentView, contentStyle];
@@ -18,7 +18,7 @@ const Background = ({
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.statusBar} />
-      {headerShown && <Header />}
+      {headerShown && <Header title={title} />}
       <View style={contentViewStyle}>{children}</View>
     </SafeAreaView>
   );

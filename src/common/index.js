@@ -10,6 +10,7 @@ import CodeInput from "./CodeInput";
 import Toast from "./Toast";
 import HeaderTitle from "./HeaderTitle";
 import FullScreenLoader from "./FullScreenLoader";
+import Dropdown from "./Dropdown";
 
 export {
   TextInput,
@@ -24,4 +25,5 @@ export {
   Toast,
   HeaderTitle,
   FullScreenLoader,
+  Dropdown,
 };

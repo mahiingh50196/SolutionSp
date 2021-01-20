@@ -12,6 +12,8 @@ import scratch from "./scratch.png";
 import drawer from "./drawer.png";
 import nav from "./Nav.png";
 import Cross from "./cross.png";
+import Drivinglicence from "./Drivinglicence.png";
+import DownArrow from "./downArrow.png";
 
 export {
   Welcome,
@@ -28,4 +30,6 @@ export {
   drawer,
   nav,
   Cross,
+  Drivinglicence,
+  DownArrow,
 };
