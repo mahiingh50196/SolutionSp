@@ -67,9 +67,10 @@ function DrawerNav() {
 
   function CustomDrawerContent(props) {
     function logout() {
+      console.log(user.accessToken);
       api({
-        method: "post",
-        url: "/User/Logout",
+        method: "PUT",
+        url: "/Provider/Logout",
         headers: {
           Authorization: `Bearer ${user?.accessToken}`,
         },
