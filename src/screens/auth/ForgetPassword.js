@@ -28,7 +28,6 @@ export default function ForgetPassword({ navigation: { navigate } }) {
         },
       })
         .then((res) => {
-          console.warn("hi", res);
           // const {
           //   data: { data, statusCode },
           // } = res;

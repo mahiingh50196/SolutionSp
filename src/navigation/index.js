@@ -74,13 +74,9 @@ function DrawerNav() {
         headers: {
           Authorization: `Bearer ${user?.accessToken}`,
         },
-      })
-        .then((res) => {
-          setUser(null);
-        })
-        .catch((er) => {
-          console.warn(er);
-        });
+      }).then((res) => {
+        setUser(null);
+      });
     }
     return (
       <DrawerContentScrollView {...props}>

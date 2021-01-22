@@ -31,7 +31,6 @@ export default function Signup({ navigation: { navigate } }) {
             data: { data },
           } = res;
           if (data) {
-            console.warn(("login data", data));
             setUserInfo(res.data?.data);
           }
         })
@@ -102,6 +101,7 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.xxLarge,
     fontFamily: FontFamilies.sfBold,
     marginTop: 20,
+    color: Colors.black,
   },
   alreadyAccountLabel: {
     color: "#8f9bb3",

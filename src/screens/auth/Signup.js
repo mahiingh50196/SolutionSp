@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Image, ScrollView } from "react-native";
-import { Avatar, DownArrow } from "../../assets/images";
+import { Avatar } from "../../assets/images";
 import {
   Background,
   Text,
@@ -14,7 +14,6 @@ import {
 import { SocialLogin } from "../../components";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
-// import * as ImagePicker from "expo-image-picker";
 import { api } from "../../services";
 import {
   useRecoilBridgeAcrossReactRoots_UNSTABLE,
@@ -76,15 +75,13 @@ export default function Signup({ navigation: { navigate } }) {
     })
       .then((res) => {
         if (res.data && res.data.data.length) {
-          let array = [];
-          console.warn("hi key..", JSON.stringify(array, undefined, 2));
-          res.data.data.map((item) => {
-            array.push({
+          const categories = res.data.data.map((item) => {
+            return {
               label: item.name,
               value: item._id,
-            });
+            };
           });
-          setCategoryData(array);
+          setCategoryData(categories);
         }
       })
       .finally(() => {
@@ -122,7 +119,6 @@ export default function Signup({ navigation: { navigate } }) {
           if (data) {
             setAuthInfo(res.data?.data);
             navigate("OtpVerify");
-            console.warn("hi..", data);
           }
         })
         .finally(() => {
@@ -149,7 +145,6 @@ export default function Signup({ navigation: { navigate } }) {
             name: "image.jpg",
           });
           setUploadLoading(true);
-
           api({
             baseURL: "http://52.39.158.82:8001",
             url: "/api/uploadImage",
@@ -173,6 +168,11 @@ export default function Signup({ navigation: { navigate } }) {
       }
     );
   };
+
+  const selectedCategory = React.useMemo(() => CategoryData || []).find(
+    (each) => each.value === categoryId,
+    []
+  );
 
   return (
     <Background
@@ -237,14 +237,29 @@ export default function Signup({ navigation: { navigate } }) {
             }}
           />
           <View style={styles.space} />
-          <Touchable style={styles.dropdowncontainer}>
+          <Touchable
+            style={[
+              styles.dropdowncontainer,
+              {
+                borderColor:
+                  selectedCategory && selectedCategory.value
+                    ? Colors.primary
+                    : "#e4e9f2",
+              },
+            ]}
+          >
             <Dropdown
+              itemKey="drop"
               itemData={CategoryData}
               onValueChange={(value) => setCategoryId(value)}
-            />
-            <View style={styles.downarrowimg}>
-              <Image source={DownArrow} />
-            </View>
+              placeholder={{
+                label: "Select Category",
+              }}
+            >
+              {selectedCategory && selectedCategory.value ? (
+                <Text style={{ padding: 12 }}>{selectedCategory.label}</Text>
+              ) : null}
+            </Dropdown>
           </Touchable>
         </View>
         <Button
@@ -335,7 +350,6 @@ const styles = StyleSheet.create({
   },
   dropdowncontainer: {
     borderWidth: 1,
-    padding: 15,
     borderRadius: 15,
     borderColor: Colors.primary,
   },

@@ -34,7 +34,6 @@ export default function Home() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      //   console.warn("hi", location);
       if (locationRef) {
         const newCoords = {
           ...defaultLocation,
@@ -42,11 +41,9 @@ export default function Home() {
           longitude: location.coords.longitude,
         };
 
-        // console.warn("newcorrds", newCoords);
         locationRef.current.animateToRegion(newCoords, 1000);
       }
       setLocation(location);
-      //   console.warn(location);
     })();
   }, []);
 
