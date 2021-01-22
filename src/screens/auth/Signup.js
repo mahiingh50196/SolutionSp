@@ -118,7 +118,9 @@ export default function Signup({ navigation: { navigate } }) {
           } = res;
           if (data) {
             setAuthInfo(res.data?.data);
-            navigate("OtpVerify");
+            navigate("OtpVerify", {
+              phone,
+            });
           }
         })
         .finally(() => {

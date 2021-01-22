@@ -1,0 +1,100 @@
+{
+  "project_info": {
+    "project_number": "478152961296",
+    "project_id": "handwash-solutio-1610912056218",
+    "storage_bucket": "handwash-solutio-1610912056218.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478152961296:android:0b133444c5d414697e8995",
+        "android_client_info": {
+          "package_name": "com.handwash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478152961296-abbe6hkir82a8q5t06bgvsog9dudlpek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.handwash",
+            "certificate_hash": "50f0fd36411cb447193290b1f70c01b0440842c7"
+          }
+        },
+        {
+          "client_id": "478152961296-bp52nu3bce88mp62nl73indbehhjl3f4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.handwash",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "478152961296-4r4262q28oin04rb2o5a30m4o0g0b5mn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrybe4rTmQNcP_7kKqkNSg0hLvtgY-PL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478152961296-4r4262q28oin04rb2o5a30m4o0g0b5mn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478152961296:android:bcbe08aedd8bca7b7e8995",
+        "android_client_info": {
+          "package_name": "com.solutionsp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478152961296-4npioj633vr7b92ir1go8ncij00d1fl6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutionsp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "478152961296-p4i3rs1lpm618imcubj6p7ei3uguq2e2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutionsp",
+            "certificate_hash": "58cb40256e368529fe72707cb233a93d02aaa72a"
+          }
+        },
+        {
+          "client_id": "478152961296-4r4262q28oin04rb2o5a30m4o0g0b5mn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrybe4rTmQNcP_7kKqkNSg0hLvtgY-PL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478152961296-4r4262q28oin04rb2o5a30m4o0g0b5mn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

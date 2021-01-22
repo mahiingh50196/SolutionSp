@@ -4,7 +4,12 @@ import { Background, Text, Touchable, Button, CodeInput } from "../../common";
 import { SCREEN_HEIGHT } from "../../config/Layout";
 import { FontFamilies, FontSizes, Colors } from "../../config/Theme";
 
-const OtpVerify = ({ navigation: { navigate } }) => {
+const OtpVerify = ({
+  navigation: { navigate },
+  route: {
+    params: { phone },
+  },
+}) => {
   return (
     <Background options={{ headerShown: true }}>
       <View>
@@ -13,7 +18,7 @@ const OtpVerify = ({ navigation: { navigate } }) => {
           <Text style={styles.alreadyAccountLabel}>
             Check your SMS messages. We've sent you the PIN at
             <Touchable onPress={() => navigate("Login")}>
-              <Text style={styles.loginLabel}>(+1) 080-744-5078</Text>
+              <Text style={styles.loginLabel}>{phone}</Text>
             </Touchable>
           </Text>
         </View>
