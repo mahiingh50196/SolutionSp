@@ -18,7 +18,8 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
   const [responseImage, setResponseImage] = React.useState(null);
   const [docNumber, setDocNumber] = React.useState(null);
   const [docDate, setDocDate] = React.useState(null);
-  const { title, callback } = route.params;
+  const { docData, callback } = route.params;
+  const { title } = docData;
   function renderOpenModalButton(handlePresentModalPress) {
     return (
       <Touchable onPress={handlePresentModalPress}>
@@ -65,7 +66,13 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
   };
 
   const handleSubmit = () => {
-    callback();
+    const data = {
+      ...docData,
+      docDate,
+      docNumber,
+      docUri: responseImage,
+    };
+    callback(data);
     goBack();
   };
 

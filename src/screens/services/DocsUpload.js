@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Background } from "../../common";
 import { Drivinglicence } from "../../assets/images";
@@ -6,44 +6,51 @@ import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 
 export default function DocsUpload({ navigation: { navigate } }) {
+  const [docs, setDocs] = useState([
+    {
+      type: "address",
+      title: "Address Proof",
+    },
+    {
+      type: "id",
+      title: "Identity Proof",
+    },
+  ]);
+
+  const handleCallBack = (info) => {
+    const updatedDocs = docs.map((doc) => {
+      if (doc.type === info.type) {
+        return {
+          ...info,
+        };
+      }
+      return doc;
+    });
+    console.log(updatedDocs);
+    setDocs(updatedDocs);
+  };
+
   return (
     <Background options={{ headerShown: true, title: "Document Management" }}>
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() =>
-          navigate("IdUpload", {
-            type: "address",
-            title: "Address Proof",
-            callBack: () => console.log("warn"),
-          })
-        }
-      >
-        <Text style={styles.uploadText}>Upload</Text>
-        <Image
-          resizeMode="cover"
-          source={Drivinglicence}
-          style={styles.image}
-        />
-        <Text style={styles.label}>Address Proof</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() =>
-          navigate("IdUpload", {
-            type: "identity",
-            title: "Identity Proof",
-            callBack: () => console.log("warn"),
-          })
-        }
-      >
-        <Text style={styles.uploadText}>Upload</Text>
-        <Image
-          resizeMode="cover"
-          source={Drivinglicence}
-          style={styles.image}
-        />
-        <Text style={styles.label}>Identification Cards</Text>
-      </TouchableOpacity>
+      {docs.map((doc) => (
+        <TouchableOpacity
+          style={styles.touchable}
+          onPress={() =>
+            navigate("IdUpload", {
+              docData: doc,
+              callback: handleCallBack,
+            })
+          }
+        >
+          <Text style={styles.uploadText}>Upload</Text>
+          <Image
+            resizeMode="cover"
+            source={doc.docUri ? { source: doc.docUri } : Drivinglicence}
+            style={styles.image}
+          />
+          <Text style={styles.label}>Address Proof</Text>
+        </TouchableOpacity>
+      ))}
     </Background>
   );
 }
