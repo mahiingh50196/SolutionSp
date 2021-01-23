@@ -23,12 +23,13 @@ import {
   ForgetPassword,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
-import { Home, Docshare } from "../screens/services";
+import { Home, DocsUpload, IdUpload } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { Text, Touchable } from "../common";
 import { api } from "../services";
 
 const auth = createStackNavigator();
+const home = createStackNavigator();
 // const services = createStackNavigator();
 const drawer = createDrawerNavigator();
 
@@ -50,24 +51,25 @@ function AuthStack() {
   );
 }
 
-// function ServicesStack() {
-//   return (
-//     <services.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//       }}
-//     >
-//       <services.Screen name="Home" component={Home} />
-//     </services.Navigator>
-//   );
-// }
+function HomeStack() {
+  return (
+    <home.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <home.Screen name="Home" component={Home} />
+      <home.Screen name="DocsUpload" component={DocsUpload} />
+      <home.Screen name="IdUpload" component={IdUpload} />
+    </home.Navigator>
+  );
+}
 
 function DrawerNav() {
   const [user, setUser] = useRecoilState(userInfo);
 
   function CustomDrawerContent(props) {
     function logout() {
-      console.log(user.accessToken);
       api({
         method: "PUT",
         url: "/Provider/Logout",
@@ -92,8 +94,7 @@ function DrawerNav() {
 
   return (
     <drawer.Navigator drawerContent={CustomDrawerContent}>
-      <drawer.Screen name="Home" component={Home} />
-      <drawer.Screen name="Docshare" component={Docshare} />
+      <drawer.Screen name="Home" component={HomeStack} />
     </drawer.Navigator>
   );
 }

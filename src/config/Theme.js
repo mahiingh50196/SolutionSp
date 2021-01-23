@@ -7,6 +7,7 @@ export const Colors = {
   gray: "#8f9bb3",
   blue: "rgb(0, 100, 156)",
   danger: "#ff0045",
+  white: "#fff",
 };
 
 export const FontSizes = {

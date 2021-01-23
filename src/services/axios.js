@@ -15,7 +15,6 @@ instance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     if (error?.response?.data?.message) {
-      console.log(error.response.data.message);
       Toast.show({
         text: error.response.data.message,
         type: "error",

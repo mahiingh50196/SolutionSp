@@ -11,6 +11,7 @@ import Toast from "./Toast";
 import HeaderTitle from "./HeaderTitle";
 import FullScreenLoader from "./FullScreenLoader";
 import Dropdown from "./Dropdown";
+import Modal from "./Modal";
 
 export {
   TextInput,
@@ -26,4 +27,5 @@ export {
   HeaderTitle,
   FullScreenLoader,
   Dropdown,
+  Modal,
 };

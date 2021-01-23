@@ -11,15 +11,11 @@ import {
   FullScreenLoader,
   Dropdown,
 } from "../../common";
-import { SocialLogin } from "../../components";
+import { ImagePick, SocialLogin } from "../../components";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import { api } from "../../services";
-import {
-  useRecoilBridgeAcrossReactRoots_UNSTABLE,
-  useSetRecoilState,
-} from "recoil";
-import ImagePicker from "react-native-image-picker";
+import { useSetRecoilState } from "recoil";
 import { signUpInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
 
@@ -31,7 +27,6 @@ export default function Signup({ navigation: { navigate } }) {
   const [password, setPassword] = React.useState(null);
   const [phone, setPhone] = React.useState(null);
   const [code, setCode] = React.useState(91);
-  const [img, setImage] = React.useState(null);
   const [CategoryData, setCategoryData] = React.useState([
     { label: "", value: "" },
   ]);
@@ -129,51 +124,50 @@ export default function Signup({ navigation: { navigate } }) {
     }
   }
 
-  const pickImage = () => {
-    ImagePicker.launchImageLibrary(
-      {
-        mediaType: "photo",
-        includeBase64: false,
-        maxHeight: 200,
-        maxWidth: 200,
+  const uploadImage = (image) => {
+    const formData = new FormData();
+    formData.append("image", {
+      uri: image.path,
+      type: image.mime,
+      name: "image.jpg",
+    });
+    setUploadLoading(true);
+    api({
+      baseURL: "http://52.39.158.82:8001",
+      url: "/api/uploadImage",
+      method: "post",
+      data: formData,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
-      (response) => {
-        if (response.uri) {
-          setImage(response);
-          const formData = new FormData();
-          formData.append("image", {
-            uri: response.uri,
-            type: response.type,
-            name: "image.jpg",
-          });
-          setUploadLoading(true);
-          api({
-            baseURL: "http://52.39.158.82:8001",
-            url: "/api/uploadImage",
-            method: "post",
-            data: formData,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-            .then((res) => {
-              console.log(res);
-              if (res.data?.data) {
-                setResponseImage(res.data?.data.original);
-              }
-            })
-            .finally(() => {
-              setUploadLoading(false);
-            });
+    })
+      .then((res) => {
+        if (res.data?.data) {
+          setResponseImage(res.data?.data.original);
         }
-      }
-    );
+      })
+      .finally(() => {
+        setUploadLoading(false);
+      });
   };
 
-  const selectedCategory = React.useMemo(() => CategoryData || []).find(
-    (each) => each.value === categoryId,
-    []
+  const selectedCategory = React.useMemo(() => {
+    return (CategoryData || []).find((each) => each.value === categoryId);
+  }, [categoryId, CategoryData]);
+
+  const onPickSuccess = (image) => {
+    uploadImage(image);
+  };
+
+  const renderOpenModalButton = (handlePresentModalPress) => (
+    <Touchable onPress={handlePresentModalPress}>
+      <Image
+        resizeMode="cover"
+        source={responseImage ? { uri: responseImage } : Avatar}
+        style={styles.avatar}
+      />
+    </Touchable>
   );
 
   return (
@@ -195,13 +189,10 @@ export default function Signup({ navigation: { navigate } }) {
             <Text style={styles.loginLabel}>Login?</Text>
           </Touchable>
         </View>
-        <Touchable onPress={pickImage}>
-          <Image
-            resizeMode="cover"
-            source={img ? { uri: img.uri } : Avatar}
-            style={styles.avatar}
-          />
-        </Touchable>
+        <ImagePick
+          renderOpenModalButton={renderOpenModalButton}
+          onPickSuccess={onPickSuccess}
+        />
         <View>
           <TextInput
             onChangeText={(val) => setName(val)}

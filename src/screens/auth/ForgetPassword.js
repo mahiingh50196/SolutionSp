@@ -27,15 +27,7 @@ export default function ForgetPassword({ navigation: { navigate } }) {
           email,
         },
       })
-        .then((res) => {
-          // const {
-          //   data: { data, statusCode },
-          // } = res;
-          // console.log(statusCode);
-          // if (data) {
-          //   setUserInfo(res.data?.data);
-          // }
-        })
+        .then((res) => {})
         .catch((err) => {
           console.warn("hi", err?.response?.data?.message);
         })

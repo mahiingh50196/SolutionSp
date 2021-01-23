@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { Background } from "../../common";
-import { Map, CarServices } from "../../components";
+import { Background, Text, Header } from "../../common";
 import { userInfo } from "../../store/atoms/auth";
 import { useRecoilValue } from "recoil";
 
-export default function Home() {
+export default function Home({ navigation: { navigate } }) {
   const info = useRecoilValue(userInfo);
-  console.log(info);
+
+  useEffect(() => {
+    const { isDocumentUploaded } = info;
+    if (!isDocumentUploaded) {
+      navigate("DocsUpload");
+    }
+  }, [info]);
 
   return (
     <Background contentStyle={styles.contentStyle}>
-      <Map />
-      <CarServices />
+      <Header withDrawerIcon />
+      <Text>Welcome</Text>
     </Background>
   );
 }

@@ -3,15 +3,18 @@ import { StyleSheet, View } from "react-native";
 import Navigation from "./src/navigation";
 import { RecoilRoot } from "recoil";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <RootSiblingParent>
-        <RecoilRoot>
-          <Navigation />
-        </RecoilRoot>
-      </RootSiblingParent>
+      <BottomSheetModalProvider>
+        <RootSiblingParent>
+          <RecoilRoot>
+            <Navigation />
+          </RecoilRoot>
+        </RootSiblingParent>
+      </BottomSheetModalProvider>
     </View>
   );
 }

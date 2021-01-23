@@ -1,4 +1,5 @@
 import Home from "./Home";
-import Docshare from "./Docshare";
+import DocsUpload from "./DocsUpload";
+import IdUpload from "./IdUpload";
 
-export { Home, Docshare };
+export { Home, DocsUpload, IdUpload };
