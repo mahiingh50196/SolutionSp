@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, Platform } from "react-native";
 import { Drivinglicence } from "../../assets/images";
 import {
   Background,
@@ -8,18 +8,35 @@ import {
   Text,
   Button,
   TextInput,
+  Toast,
 } from "../../common";
 import { ImagePick } from "../../components";
 import { Colors, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
+import dayjs from "dayjs";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const IdUpload = ({ route, navigation: { goBack } }) => {
   const [uploadLoading, setUploadLoading] = React.useState(false);
+  const [pickerVisibility, setPickerVisibility] = React.useState(false);
   const [responseImage, setResponseImage] = React.useState(null);
   const [docNumber, setDocNumber] = React.useState(null);
-  const [docDate, setDocDate] = React.useState(null);
+  const [docDate, setDocDate] = React.useState();
   const { docData, callback } = route.params;
   const { title } = docData;
+
+  React.useEffect(() => {
+    console.log(docData);
+    if (docData) {
+      if (docData.docUri) {
+        setResponseImage(docData.docUri);
+      }
+      if (docData.docNumber) {
+        setDocNumber(docData.docNumber);
+      }
+    }
+  }, [docData]);
+
   function renderOpenModalButton(handlePresentModalPress) {
     return (
       <Touchable onPress={handlePresentModalPress}>
@@ -65,7 +82,24 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
     uploadImage(image);
   };
 
+  const validateForm = () => {
+    if (!responseImage) {
+      return "Document Image is required";
+    }
+    if (!docNumber) {
+      return "Document Number is required";
+    }
+    if (!docDate) {
+      return "Document Expiration date is required";
+    }
+  };
+
   const handleSubmit = () => {
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      Toast.show({ text: errorMessage, type: "error" });
+      return;
+    }
     const data = {
       ...docData,
       docDate,
@@ -74,6 +108,12 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
     };
     callback(data);
     goBack();
+  };
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || docDate;
+    setPickerVisibility(Platform.OS === "ios");
+    setDocDate(currentDate);
   };
 
   return (
@@ -87,12 +127,28 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
         onChangeText={(val) => setDocNumber(val)}
         label={`${title} Number`}
         placeholder="12345678XXXXXXXXXXXX"
+        keyboardType="number-pad"
+        defaultValue={docNumber}
       />
-      <TextInput
-        onChangeText={(val) => setDocDate(val)}
-        label="Expiration Date"
-        placeholder="MM/DD/YYYY"
-      />
+      <Touchable onPress={() => setPickerVisibility(!pickerVisibility)}>
+        <TextInput
+          editable={false}
+          onChangeText={setDocDate}
+          label="Expiration Date"
+          placeholder="MM/DD/YYYY"
+          value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : null}
+        />
+        {pickerVisibility && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : new Date()}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
+          />
+        )}
+      </Touchable>
       <View style={styles.space} />
       <Button onPress={handleSubmit} />
     </Background>
@@ -105,7 +161,7 @@ const styles = StyleSheet.create({
   image: {
     height: 200,
     width: "100%",
-    marginTop: 20,
+    marginVertical: 20,
   },
   upload: {
     position: "absolute",

@@ -18,7 +18,7 @@ export default Text;
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: FontFamilies.sfSemiBold,
+    fontFamily: FontFamilies.poppinsLight,
     fontSize: FontSizes.default,
   },
 });

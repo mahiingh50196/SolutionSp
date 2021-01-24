@@ -18,6 +18,7 @@ const TextInput = ({
   containerStyle,
   errorMessage,
   withEye = false,
+  dafaultValue,
   ...props
 }) => {
   const [value, setValue] = React.useState("");
@@ -52,7 +53,7 @@ const TextInput = ({
           style={textInputstyle}
           onChangeText={handleInput}
           secureTextEntry={isSecureText}
-          value={value}
+          value={value || dafaultValue}
           {...props}
         />
         {withEye && (

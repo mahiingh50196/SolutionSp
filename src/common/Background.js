@@ -8,9 +8,11 @@ const Background = ({
   contentStyle,
   options = {
     headerShown: false,
+    withBack: true,
+    headerStyle: {},
   },
 }) => {
-  const { headerShown, title } = options;
+  const { headerShown, title, withBack, headerStyle } = options;
   const contentViewStyle = Array.isArray(contentStyle)
     ? [styles.contentView, ...contentStyle]
     : [styles.contentView, contentStyle];
@@ -18,7 +20,9 @@ const Background = ({
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.statusBar} />
-      {headerShown && <Header title={title} />}
+      {headerShown && (
+        <Header title={title} withBack={withBack} headerStyle={headerStyle} />
+      )}
       <View style={contentViewStyle}>{children}</View>
     </SafeAreaView>
   );
@@ -30,6 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingVertical: 8,
   },
   statusBar: {
     flex: 0,

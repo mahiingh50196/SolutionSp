@@ -26,4 +26,8 @@ export const FontFamilies = {
   sfMedium: "SFUIText-Medium",
   sfSemiBold: "SFUIText-Semibold",
   sfBold: "SFUIText-Bold",
+  poppinsBold: "Poppins-Bold",
+  poppinsLight: "Poppins-Light",
+  poppinsMedium: "Poppins-Medium",
+  poppinsSemiBold: "Poppins-SemiBold",
 };

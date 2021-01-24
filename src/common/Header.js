@@ -4,17 +4,22 @@ import { useNavigation } from "@react-navigation/native";
 import Touchable from "./Touchable";
 import { Back, drawer } from "../assets/images";
 import { FontFamilies, FontSizes, Colors } from "../config/Theme";
-import { SCREEN_WIDTH } from "../config/Layout";
 
-const Header = ({ title, withDrawerIcon }) => {
+const Header = ({
+  title,
+  withDrawerIcon = false,
+  withBack = true,
+  headerStyle = {},
+}) => {
   const { goBack, toggleDrawer } = useNavigation();
   return (
-    <View style={styles.container}>
-      {withDrawerIcon ? (
+    <View style={[styles.container, headerStyle]}>
+      {withDrawerIcon && (
         <Touchable onPress={() => toggleDrawer()}>
           <Image style={styles.menu} source={drawer} />
         </Touchable>
-      ) : (
+      )}
+      {withBack && (
         <Touchable style={styles.back} onPress={goBack}>
           <Image source={Back} resizeMode="contain" />
         </Touchable>

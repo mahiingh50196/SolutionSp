@@ -14,6 +14,7 @@ import nav from "./Nav.png";
 import Cross from "./cross.png";
 import Drivinglicence from "./Drivinglicence.png";
 import DownArrow from "./downArrow.png";
+import Tick from "./tick.png";
 
 export {
   Welcome,
@@ -32,4 +33,5 @@ export {
   Cross,
   Drivinglicence,
   DownArrow,
+  Tick,
 };

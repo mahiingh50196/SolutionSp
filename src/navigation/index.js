@@ -10,7 +10,6 @@ import {
   useRecoilValue,
   useRecoilTransactionObserver_UNSTABLE,
   useSetRecoilState,
-  useRecoilState,
 } from "recoil";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -66,16 +65,13 @@ function HomeStack() {
 }
 
 function DrawerNav() {
-  const [user, setUser] = useRecoilState(userInfo);
+  const setUser = useSetRecoilState(userInfo);
 
   function CustomDrawerContent(props) {
     function logout() {
       api({
         method: "PUT",
         url: "/Provider/Logout",
-        headers: {
-          Authorization: `Bearer ${user?.accessToken}`,
-        },
       }).then((res) => {
         setUser(null);
       });
@@ -112,6 +108,20 @@ const styles = StyleSheet.create({
 const root = createStackNavigator();
 function RootStack() {
   const user = useRecoilValue(userInfo);
+
+  api.interceptors.request.use((config) => {
+    const newConfig = { ...config };
+    if (user) {
+      newConfig.headers = {
+        ...newConfig.headers,
+        Authorization: `Bearer ${user?.accessToken}`,
+      };
+    }
+
+    console.log(newConfig.headers);
+    return newConfig;
+  });
+
   return (
     <root.Navigator
       screenOptions={{
