@@ -66,7 +66,10 @@ export default function Signup({ navigation: { navigate } }) {
   useEffect(() => {
     api({
       method: "GET",
-      url: "/Provider/listCategories",
+      url: "/Provider/ListCategories",
+      headers: {
+        Accept: "application/json",
+      },
     })
       .then((res) => {
         if (res.data && res.data.data.length) {
@@ -108,6 +111,7 @@ export default function Signup({ navigation: { navigate } }) {
         data: userData,
       })
         .then((res) => {
+          console.warn("signup..", res);
           const {
             data: { data },
           } = res;

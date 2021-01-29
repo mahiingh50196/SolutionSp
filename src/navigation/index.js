@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AsyncStorage, View, StyleSheet } from "react-native";
+import { AsyncStorage, View, StyleSheet, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
   DrawerContentScrollView,
@@ -26,6 +26,8 @@ import { Home, DocsUpload, IdUpload } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { Text, Touchable } from "../common";
 import { api } from "../services";
+import { CustomeDrawer } from "../components";
+import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
@@ -65,45 +67,12 @@ function HomeStack() {
 }
 
 function DrawerNav() {
-  const setUser = useSetRecoilState(userInfo);
-
-  function CustomDrawerContent(props) {
-    function logout() {
-      api({
-        method: "PUT",
-        url: "/Provider/Logout",
-      }).then((res) => {
-        setUser(null);
-      });
-    }
-    return (
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-        <View style={styles.logout}>
-          <Touchable style={styles.logoutButton} onPress={logout}>
-            <Text>Logout</Text>
-          </Touchable>
-        </View>
-      </DrawerContentScrollView>
-    );
-  }
-
   return (
-    <drawer.Navigator drawerContent={CustomDrawerContent}>
+    <drawer.Navigator drawerContent={(props) => <CustomeDrawer {...props} />}>
       <drawer.Screen name="Home" component={HomeStack} />
     </drawer.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  logout: {
-    marginTop: 100,
-  },
-  logoutButton: {
-    padding: 8,
-    alignSelf: "center",
-  },
-});
 
 const root = createStackNavigator();
 function RootStack() {

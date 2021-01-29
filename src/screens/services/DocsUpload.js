@@ -80,7 +80,7 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
       options={{
         headerShown: true,
         title: "Document Management",
-        withBack: false,
+        withBack: true,
         headerStyle: {
           justifyContent: "center",
         },

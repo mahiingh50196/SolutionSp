@@ -8,6 +8,7 @@ export const Colors = {
   blue: "rgb(0, 100, 156)",
   danger: "#ff0045",
   white: "#fff",
+  dark_black: "rgb(34,43,69)",
 };
 
 export const FontSizes = {

@@ -19,18 +19,20 @@ export default function Signup({ navigation: { navigate } }) {
     if (validateEmail(email)) {
       setLoading(true);
       api({
-        method: "post",
-        url: "/Provider/Login",
+        method: "GET",
+        url: `/Provider/Login?email=${email}&password=${password}`,
         data: {
           email,
           password,
         },
       })
         .then((res) => {
+          console.warn("logindata", res.data.data);
           const {
             data: { data },
           } = res;
           if (data) {
+            alert("if");
             setUserInfo(res.data?.data);
           }
         })
