@@ -15,6 +15,12 @@ import Cross from "./cross.png";
 import Drivinglicence from "./Drivinglicence.png";
 import DownArrow from "./downArrow.png";
 import Tick from "./tick.png";
+import Camera from "./Camera.png";
+import profile from "./profile.png";
+import profiledetail from "./profiledetail.png";
+import san from "./san.png";
+import phone from "./phone.png";
+import message from "./message.png";
 
 export {
   Welcome,
@@ -34,4 +40,10 @@ export {
   Drivinglicence,
   DownArrow,
   Tick,
+  Camera,
+  profile,
+  profiledetail,
+  san,
+  phone,
+  message,
 };

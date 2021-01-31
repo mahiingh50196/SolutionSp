@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
 import { nav } from "../assets/images";
 import { Touchable } from "../common";
 import { api } from "../services";
@@ -19,7 +19,7 @@ export default function CustomeDrawer() {
     });
   }
   return (
-    <View>
+    <SafeAreaView>
       <View style={styles.maindrawerView}>
         <View style={styles.imgtextwrap}>
           <Image source={nav} />
@@ -42,7 +42,7 @@ export default function CustomeDrawer() {
           <Text>Logout</Text>
         </Touchable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

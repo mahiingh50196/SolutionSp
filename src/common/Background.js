@@ -1,9 +1,10 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View, StatusBar } from "react-native";
 import Header from "./Header";
 import { SCREEN_WIDTH } from "../config/Layout";
 
 const Background = ({
+  witNotchstyle,
   children,
   contentStyle,
   options = {
@@ -18,13 +19,16 @@ const Background = ({
     : [styles.contentView, contentStyle];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.statusBar} />
+    <View style={styles.container}>
+      <StatusBar backgroundColor={witNotchstyle} barStyle="dark-content" />
+      <SafeAreaView
+        style={[styles.statusBar, { backgroundColor: witNotchstyle }]}
+      />
       {headerShown && (
         <Header title={title} withBack={withBack} headerStyle={headerStyle} />
       )}
       <View style={contentViewStyle}>{children}</View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -34,7 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingVertical: 8,
+    // paddingVertical: 8,
   },
   statusBar: {
     flex: 0,

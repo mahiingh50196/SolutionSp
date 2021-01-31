@@ -16,11 +16,19 @@ export default function Signup({ navigation: { navigate } }) {
   const setUserInfo = useSetRecoilState(userInfo);
 
   function login() {
+    console.warn(
+      "url",
+      `/Provider/Login?email=${encodeURIComponent(
+        email
+      )}&password=${encodeURIComponent(password)}`
+    );
     if (validateEmail(email)) {
       setLoading(true);
       api({
         method: "GET",
-        url: `/Provider/Login?email=${email}&password=${password}`,
+        url: `/Provider/Login?email=${encodeURIComponent(
+          email
+        )}&password=${encodeURIComponent(password)}`,
         data: {
           email,
           password,

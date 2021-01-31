@@ -10,12 +10,13 @@ const Header = ({
   withDrawerIcon = false,
   withBack = true,
   headerStyle = {},
+  backgroundColor,
 }) => {
   const { goBack, toggleDrawer } = useNavigation();
   return (
-    <View style={[styles.container, headerStyle]}>
+    <View style={[styles.container, headerStyle, backgroundColor]}>
       {withDrawerIcon && (
-        <Touchable onPress={() => toggleDrawer()}>
+        <Touchable onPress={() => toggleDrawer()} style={styles.back}>
           <Image style={styles.menu} source={drawer} />
         </Touchable>
       )}
@@ -26,7 +27,7 @@ const Header = ({
       )}
 
       {!!title && <Text style={styles.text}>{title}</Text>}
-      <View />
+      <View style={styles.back} />
     </View>
   );
 };
@@ -37,8 +38,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
   },
+
   back: {
     paddingLeft: 8,
     width: "20%",
@@ -48,6 +49,9 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.large,
     color: Colors.blue,
     fontFamily: FontFamilies.sfMedium,
+    // backgroundColor: "pink",
+    width: "60%",
+    textAlign: "center",
   },
   menu: {
     height: 100,
