@@ -13,6 +13,8 @@ export const Colors = {
   white_dark: "rgb(255,255,255)",
   navy_blue: "rgb(0,100,156)",
   grey: "rgb(8,15,14)",
+  light_grey: "rgb(190,194,206)",
+  dark_navyblue: "rgb(36,46,66)",
 };
 
 export const FontSizes = {

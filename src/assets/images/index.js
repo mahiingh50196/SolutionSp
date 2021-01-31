@@ -21,6 +21,15 @@ import profiledetail from "./profiledetail.png";
 import san from "./san.png";
 import phone from "./phone.png";
 import message from "./message.png";
+import menu from "./menu.png";
+import Off from "./Off.png";
+import offline from "./offline.png";
+import On from "./On.png";
+import onlineImg from "./onlineImg.png";
+import Right_arrow from "./Right_arrow.png";
+import circle from "./circle.png";
+import location1 from "./location1.png";
+import aeroplane from "./aeroplane.png";
 
 export {
   Welcome,
@@ -46,4 +55,13 @@ export {
   san,
   phone,
   message,
+  menu,
+  Off,
+  offline,
+  On,
+  onlineImg,
+  Right_arrow,
+  circle,
+  location1,
+  aeroplane,
 };

@@ -16,12 +16,12 @@ export default function Signup({ navigation: { navigate } }) {
   const setUserInfo = useSetRecoilState(userInfo);
 
   function login() {
-    console.warn(
-      "url",
-      `/Provider/Login?email=${encodeURIComponent(
-        email
-      )}&password=${encodeURIComponent(password)}`
-    );
+    // console.warn(
+    //   "url",
+    //   `/Provider/Login?email=${encodeURIComponent(
+    //     email
+    //   )}&password=${encodeURIComponent(password)}`
+    // );
     if (validateEmail(email)) {
       setLoading(true);
       api({

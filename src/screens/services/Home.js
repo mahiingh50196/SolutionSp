@@ -20,9 +20,6 @@ export default function Home({ navigation }) {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // if (info && !info.isDocumentUploaded) {
-      //   navigation.navigate("DocsUpload");
-      // }
       if (info && !info.documentUploaded) {
         navigation.navigate("DocsUpload");
       }

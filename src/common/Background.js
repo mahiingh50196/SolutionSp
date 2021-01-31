@@ -20,7 +20,7 @@ const Background = ({
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={witNotchstyle} barStyle="dark-content" />
+      <StatusBar backgroundColor={witNotchstyle} barStyle="light-content" />
       <SafeAreaView
         style={[styles.statusBar, { backgroundColor: witNotchstyle }]}
       />
