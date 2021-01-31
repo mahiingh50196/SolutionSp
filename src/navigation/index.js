@@ -86,8 +86,6 @@ function RootStack() {
         Authorization: `Bearer ${user?.accessToken}`,
       };
     }
-
-    console.log(newConfig.headers);
     return newConfig;
   });
 
@@ -97,12 +95,12 @@ function RootStack() {
         headerShown: false,
       }}
     >
-      {/* {!user ? (
+      {!user ? (
         <root.Screen name="auth" component={AuthStack} />
       ) : (
         <root.Screen name="Drawer" component={DrawerNav} />
-      )} */}
-      <root.Screen name="Drawer" component={DrawerNav} />
+      )}
+      {/* <root.Screen name="Drawer" component={DrawerNav} /> */}
     </root.Navigator>
   );
 }

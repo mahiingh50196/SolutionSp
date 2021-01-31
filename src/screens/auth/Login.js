@@ -25,22 +25,15 @@ export default function Signup({ navigation: { navigate } }) {
     if (validateEmail(email)) {
       setLoading(true);
       api({
-        method: "GET",
-        url: `/Provider/Login?email=${encodeURIComponent(
-          email
-        )}&password=${encodeURIComponent(password)}`,
-        data: {
-          email,
-          password,
-        },
+        url: `/Provider/Login?email=${email}&password=${encodeURIComponent(
+          password
+        )}`,
       })
         .then((res) => {
-          console.warn("logindata", res.data.data);
           const {
             data: { data },
           } = res;
           if (data) {
-            alert("if");
             setUserInfo(res.data?.data);
           }
         })

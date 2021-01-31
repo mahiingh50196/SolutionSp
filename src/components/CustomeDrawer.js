@@ -9,7 +9,6 @@ import { useSetRecoilState } from "recoil";
 
 export default function CustomeDrawer() {
   const setUser = useSetRecoilState(userInfo);
-  console.warn("alldata", setUser());
   function logout() {
     api({
       method: "PUT",
