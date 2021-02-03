@@ -14,6 +14,7 @@ export default function Signup({ navigation: { navigate } }) {
   const [loading, setLoading] = React.useState(false);
 
   const setUserInfo = useSetRecoilState(userInfo);
+  console.log("userinfo..", setUserInfo);
 
   function login() {
     // console.warn(
@@ -35,6 +36,7 @@ export default function Signup({ navigation: { navigate } }) {
           } = res;
           if (data) {
             setUserInfo(res.data?.data);
+            console.log("userinfo..api", setUserInfo);
           }
         })
         .finally(() => {

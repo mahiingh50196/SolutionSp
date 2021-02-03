@@ -22,7 +22,14 @@ import {
   ForgetPassword,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
-import { Home, DocsUpload, IdUpload, Offline } from "../screens/services";
+import {
+  Home,
+  DocsUpload,
+  IdUpload,
+  Offline,
+  ServiceDetails,
+  Notification,
+} from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { Text, Touchable } from "../common";
 import { api } from "../services";
@@ -58,12 +65,14 @@ function HomeStack() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Offline"
+      initialRouteName="Home"
     >
       <home.Screen name="Home" component={Home} />
       <home.Screen name="DocsUpload" component={DocsUpload} />
       <home.Screen name="IdUpload" component={IdUpload} />
       <home.Screen name="Offline" component={Offline} />
+      <home.Screen name="ServiceDetails" component={ServiceDetails} />
+      <home.Screen name="Notification" component={Notification} />
     </home.Navigator>
   );
 }
@@ -80,6 +89,7 @@ const root = createStackNavigator();
 
 function RootStack() {
   const user = useRecoilValue(userInfo);
+  console.log("alluserinfovalue", user);
 
   api.interceptors.request.use((config) => {
     const newConfig = { ...config };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Background, Text, Header, Touchable } from "../../common";
 import { userInfo } from "../../store/atoms/auth";
@@ -12,14 +12,19 @@ import {
   san,
   phone,
   message,
+  License,
+  Tick,
 } from "../../assets/images";
+import { api } from "../../services";
 
 export default function Home({ navigation }) {
   const info = useRecoilValue(userInfo);
+  console.log("infoacountpage", info);
   const [activeStatus, setactivestatus] = useState(1);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
+      getUserDetails();
       if (info && !info.documentUploaded) {
         navigation.navigate("DocsUpload");
       }
@@ -27,6 +32,21 @@ export default function Home({ navigation }) {
 
     return unsubscribe;
   }, [navigation, info]);
+
+  const getUserDetails = async () => {
+    if (info && info._id) {
+      await api({
+        url: `/Provider/GetProviderDetails?providerId=${info._id}`,
+        method: "GET",
+      })
+        .then((res) => {
+          console.warn("res of account", res);
+        })
+        .finally(() => {
+          alert("err");
+        });
+    }
+  };
 
   return (
     <Background
@@ -39,93 +59,165 @@ export default function Home({ navigation }) {
         title="Account"
         backgroundColor={{ backgroundColor: Colors.off_White }}
       />
-      <View style={styles.profiledetaildocumentwrapper}>
-        <View style={styles.detailsdoctextwrapper}>
-          <Touchable
-            style={[
-              styles.personaldetailcontainer,
-              {
-                backgroundColor:
-                  activeStatus == 1 ? Colors.navy_blue : Colors.white,
-              },
-            ]}
-            onPress={() => setactivestatus(1)}
-          >
-            <Text
-              style={[
-                styles.text,
-                { color: activeStatus == 1 ? Colors.white : Colors.navy_blue },
-              ]}
+
+      {activeStatus == 1 ? (
+        <View>
+          <View style={styles.profiledetaildocumentwrapper}>
+            <View style={styles.detailsdoctextwrapper}>
+              <Touchable
+                style={[
+                  styles.personaldetailcontainer,
+                  {
+                    backgroundColor:
+                      activeStatus == 1 ? Colors.navy_blue : Colors.white,
+                  },
+                ]}
+                onPress={() => setactivestatus(1)}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    {
+                      color:
+                        activeStatus == 1 ? Colors.white : Colors.navy_blue,
+                    },
+                  ]}
+                >
+                  Personal Details
+                </Text>
+              </Touchable>
+              <Touchable
+                style={[
+                  styles.personaldetailcontainer1,
+                  {
+                    backgroundColor:
+                      activeStatus == 2 ? Colors.navy_blue : Colors.white,
+                  },
+                ]}
+                onPress={() => setactivestatus(2)}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: activeStatus == 2 ? Colors.white : "grey" },
+                  ]}
+                >
+                  Documents{" "}
+                </Text>
+              </Touchable>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              Personal Details
-            </Text>
-          </Touchable>
-          <Touchable
-            style={[
-              styles.personaldetailcontainer1,
-              {
-                backgroundColor:
-                  activeStatus == 2 ? Colors.navy_blue : Colors.white,
-              },
-            ]}
-            onPress={() => setactivestatus(2)}
-          >
-            <Text
-              style={[
-                styles.text,
-                { color: activeStatus == 2 ? Colors.white : "grey" },
-              ]}
-            >
-              Documents{" "}
-            </Text>
-          </Touchable>
+              <Touchable style={{ marginLeft: SCREEN_WIDTH * 0.3 }}>
+                <Image source={profile} />
+              </Touchable>
+              <Touchable style={{ right: 120 }}>
+                <Image source={Camera} />
+              </Touchable>
+            </View>
+          </View>
+          <View style={styles.userinfowrapper}>
+            <Text style={styles.profiledetailtext}>Profile Detail </Text>
+            <View style={styles.userinfowrap}>
+              <Touchable style={styles.userinfoimg}>
+                <Image source={profiledetail} />
+              </Touchable>
+              <Text style={styles.userifonamewidth}>Smittty werber</Text>
+              <Text style={styles.editwidth}>edit</Text>
+            </View>
+            <View style={styles.userinfowrap}>
+              <Touchable style={styles.userinfoimg}>
+                <Image source={message} />
+              </Touchable>
+              <Text style={styles.userifonamewidth}>Smittty@gmail.com</Text>
+              <Text style={styles.editwidth}>edit</Text>
+            </View>
+            <View style={styles.userinfowrap}>
+              <Touchable style={styles.userinfoimg}>
+                <Image source={phone} />
+              </Touchable>
+              <Text style={styles.userifonamewidth}>0967643455</Text>
+              <Text style={styles.editwidth}>edit</Text>
+            </View>
+            <View style={styles.userinfowrap}>
+              <Touchable style={styles.userinfoimg}>
+                <Image source={san} />
+              </Touchable>
+              <Text style={styles.userifonamewidth}>
+                San francissco, ca 14A
+              </Text>
+              <Text style={styles.editwidth}>edit</Text>
+            </View>
+          </View>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Touchable style={{ marginLeft: SCREEN_WIDTH * 0.3 }}>
-            <Image source={profile} />
-          </Touchable>
-          <Touchable style={{ right: 120 }}>
-            <Image source={Camera} />
-          </Touchable>
+      ) : (
+        <View>
+          <View style={styles.profiledetaildocumentwrapper}>
+            <View style={styles.detailsdoctextwrapper}>
+              <Touchable
+                style={[
+                  styles.personaldetailcontainer,
+                  {
+                    backgroundColor:
+                      activeStatus == 1 ? Colors.navy_blue : Colors.white,
+                  },
+                ]}
+                onPress={() => setactivestatus(1)}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    {
+                      color:
+                        activeStatus == 1 ? Colors.white : Colors.navy_blue,
+                    },
+                  ]}
+                >
+                  Personal Details
+                </Text>
+              </Touchable>
+              <Touchable
+                style={[
+                  styles.personaldetailcontainer1,
+                  {
+                    backgroundColor:
+                      activeStatus == 2 ? Colors.navy_blue : Colors.white,
+                  },
+                ]}
+                onPress={() => setactivestatus(2)}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: activeStatus == 2 ? Colors.white : "grey" },
+                  ]}
+                >
+                  Documents{" "}
+                </Text>
+              </Touchable>
+            </View>
+          </View>
+          <View style={styles.userinfowrapper}>
+            <Image source={License} />
+            <View style={styles.tickproofview}>
+              <Text>Adress Proof</Text>
+              <Image source={Tick} />
+            </View>
+
+            <Image source={License} />
+            <View style={styles.tickproofview}>
+              <Text>Identification cards</Text>
+              <Image source={Tick} />
+            </View>
+            <Image source={License} />
+          </View>
         </View>
-      </View>
-      <View style={styles.userinfowrapper}>
-        <Text style={styles.profiledetailtext}>Profile Detail </Text>
-        <View style={styles.userinfowrap}>
-          <Touchable style={styles.userinfoimg}>
-            <Image source={profiledetail} />
-          </Touchable>
-          <Text style={styles.userifonamewidth}>Smittty werber</Text>
-          <Text style={styles.editwidth}>edit</Text>
-        </View>
-        <View style={styles.userinfowrap}>
-          <Touchable style={styles.userinfoimg}>
-            <Image source={message} />
-          </Touchable>
-          <Text style={styles.userifonamewidth}>Smittty@gmail.com</Text>
-          <Text style={styles.editwidth}>edit</Text>
-        </View>
-        <View style={styles.userinfowrap}>
-          <Touchable style={styles.userinfoimg}>
-            <Image source={phone} />
-          </Touchable>
-          <Text style={styles.userifonamewidth}>0967643455</Text>
-          <Text style={styles.editwidth}>edit</Text>
-        </View>
-        <View style={styles.userinfowrap}>
-          <Touchable style={styles.userinfoimg}>
-            <Image source={san} />
-          </Touchable>
-          <Text style={styles.userifonamewidth}>San francissco, ca 14A</Text>
-          <Text style={styles.editwidth}>edit</Text>
-        </View>
-      </View>
+      )}
     </Background>
   );
 }
@@ -166,7 +258,8 @@ const styles = StyleSheet.create({
     padding: 30,
     borderTopRightRadius: SCREEN_WIDTH * 0.1,
     borderTopLeftRadius: SCREEN_WIDTH * 0.1,
-    marginTop: -30,
+
+    // marginTop: -30,
   },
   profiledetailtext: {
     color: Colors.navy_blue,
@@ -190,5 +283,10 @@ const styles = StyleSheet.create({
     width: "10%",
     fontSize: FontSizes.default,
     color: "grey",
+  },
+  tickproofview: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 20,
   },
 });

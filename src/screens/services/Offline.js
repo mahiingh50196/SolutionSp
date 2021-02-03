@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,12 +18,52 @@ import {
   location1,
   aeroplane,
 } from "../../assets/images";
+import { api } from "../../services";
+import { userInfo } from "../../store/atoms/auth";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 
 export default function Offline(props) {
   const itemList = [1, 2, 3, 4, 5, 6, 7];
-  const [isOnlne, setStatus] = useState(true);
+  const [isOnlne, setStatus] = useState("true");
+  // const user = useRecoilValue(userInfo);
+
+  const setUserInfo = useRecoilValue(userInfo);
+  console.log("hisetUserInfo", setUserInfo);
+
+  useEffect(() => {
+    getOrderList();
+
+    api({
+      method: "PUT",
+      url: "/Provider/OnlineOffline",
+      data: { online: isOnlne },
+    })
+      .then((res) => {
+        console.warn("offline/online", JSON.stringify(res, undefined, 2));
+      })
+      .finally(() => {});
+  }, [isOnlne]);
   const handleStatusData = (value) => {
     setStatus(value);
+  };
+
+  const getOrderList = () => {
+    api({
+      method: "GET",
+      url: "/Provider/HomePage",
+    })
+      .then((res) => {
+        console.warn("userinfo..api", res);
+
+        // const {
+        //   data: { data },
+        // } = res;
+        // if (data) {
+        // }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const renderItem = (item) => {
@@ -71,7 +111,7 @@ export default function Offline(props) {
         withDrawermenuIcon
         withBack={false}
         withDrawerIcon={false}
-        Offswitcher={true}
+        showStatusIcon={true}
         handleStatusData={handleStatusData}
         backgroundColor={{
           backgroundColor: Colors.primary,
@@ -79,7 +119,7 @@ export default function Offline(props) {
         }}
       />
       <View style={{ flex: 1 }}>
-        {!isOnlne ? (
+        {isOnlne == "false" ? (
           <View style={styles.belowheader}>
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />

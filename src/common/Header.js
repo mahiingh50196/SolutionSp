@@ -6,9 +6,7 @@ import { Back, drawer, menu, Off, On } from "../assets/images";
 import { FontFamilies, FontSizes, Colors } from "../config/Theme";
 
 const Header = ({
-  navigation,
-  Offswitcher,
-  Onswitcher,
+  commonHeaderColor,
   withDrawermenuIcon,
   textcolor,
   handleStatusData,
@@ -16,17 +14,18 @@ const Header = ({
   withDrawerIcon = false,
   withBack = true,
   headerStyle = {},
+  showStatusIcon,
   backgroundColor,
 }) => {
-  const [isOnline, setStatus] = useState(true);
-  const { goBack, toggleDrawer, props } = useNavigation();
+  const [isOnline, setStatus] = useState("true");
+  const { goBack, toggleDrawer } = useNavigation();
 
   const handleStatus = (value) => {
     let data;
-    if (value === true) {
-      data = true;
+    if (value === "true") {
+      data = "true";
     } else {
-      data = false;
+      data = "false";
     }
     handleStatusData(data);
     setStatus(data);
@@ -46,7 +45,11 @@ const Header = ({
       )}
       {withBack && (
         <Touchable style={styles.back} onPress={goBack}>
-          <Image source={Back} resizeMode="contain" />
+          <Image
+            source={Back}
+            resizeMode="contain"
+            style={{ tintColor: !!commonHeaderColor && Colors.navy_blue }}
+          />
         </Touchable>
       )}
 
@@ -55,23 +58,27 @@ const Header = ({
           style={[
             styles.text,
             {
-              color: !!textcolor && Colors.white,
-              fontFamily: !!textcolor && FontFamilies.sfBold,
+              color:
+                (!!textcolor && Colors.white) ||
+                (!!commonHeaderColor && Colors.navy_blue),
+              fontFamily:
+                (!!textcolor && FontFamilies.sfBold) ||
+                (!!commonHeaderColor && FontFamilies.sfMedium),
             },
           ]}
         >
           {title}
         </Text>
       )}
-      {!isOnline ? (
-        <Touchable style={styles.off} onPress={() => handleStatus(true)}>
+      {showStatusIcon && isOnline == "false" ? (
+        <Touchable style={styles.off} onPress={() => handleStatus("true")}>
           <Image source={Off} />
         </Touchable>
-      ) : (
-        <Touchable style={styles.off} onPress={() => handleStatus(false)}>
+      ) : showStatusIcon && isOnline == "true" ? (
+        <Touchable style={styles.off} onPress={() => handleStatus("false")}>
           <Image source={On} />
         </Touchable>
-      )}
+      ) : null}
 
       <View style={styles.back} />
     </View>

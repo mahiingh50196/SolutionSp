@@ -30,6 +30,10 @@ import Right_arrow from "./Right_arrow.png";
 import circle from "./circle.png";
 import location1 from "./location1.png";
 import aeroplane from "./aeroplane.png";
+import date from "./date.png";
+import clock from "./clock.png";
+import Mask from "./Mask.png";
+import License from "./License.png";
 
 export {
   Welcome,
@@ -64,4 +68,8 @@ export {
   circle,
   location1,
   aeroplane,
+  date,
+  clock,
+  Mask,
+  License,
 };
