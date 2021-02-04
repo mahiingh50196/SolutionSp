@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { Header, Background, Touchable, Button } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 
-export default function ServiceDetails() {
+export default function ServiceDetails(props) {
   const itemList = [1, 2];
+
+  useEffect(() => {
+    console.warn("param==", props.route.params.itemData);
+  });
 
   const renderItem = (item) => {
     return (
@@ -36,7 +40,7 @@ export default function ServiceDetails() {
 
   return (
     <Background>
-      <Header title="Service Details" commonHeaderColor={true} />
+      <Header title="Service Details" titleColor={Colors.navy_blue} />
       <View style={styles.mainview}>
         <Touchable style={styles.profile}>
           <Image source={onlineImg} />

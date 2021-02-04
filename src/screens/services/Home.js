@@ -19,34 +19,35 @@ import { api } from "../../services";
 
 export default function Home({ navigation }) {
   const info = useRecoilValue(userInfo);
-  console.log("infoacountpage", info);
+
   const [activeStatus, setactivestatus] = useState(1);
+  const [state, setState] = useState({ profileData: {} });
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getUserDetails();
-      if (info && !info.documentUploaded) {
-        navigation.navigate("DocsUpload");
-      }
-    });
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     getUserDetails();
+  //     // if (info && !info.documentUploaded) {
+  //     //   navigation.navigate("DocsUpload");
+  //     // }
+  //   });
 
-    return unsubscribe;
-  }, [navigation, info]);
+  //   return unsubscribe;
+  // }, [navigation, info]);
 
-  const getUserDetails = async () => {
+  useEffect(() => {
     if (info && info._id) {
-      await api({
+      api({
         url: `/Provider/GetProviderDetails?providerId=${info._id}`,
         method: "GET",
       })
         .then((res) => {
-          console.warn("res of account", res);
+          setState({ ...state, profileData: res.data.data });
         })
-        .finally(() => {
-          alert("err");
+        .finally((err) => {
+          console.warn("err", err);
         });
     }
-  };
+  }, []);
 
   return (
     <Background
@@ -127,21 +128,27 @@ export default function Home({ navigation }) {
               <Touchable style={styles.userinfoimg}>
                 <Image source={profiledetail} />
               </Touchable>
-              <Text style={styles.userifonamewidth}>Smittty werber</Text>
+              <Text style={styles.userifonamewidth}>
+                {state.profileData.fullName}
+              </Text>
               <Text style={styles.editwidth}>edit</Text>
             </View>
             <View style={styles.userinfowrap}>
               <Touchable style={styles.userinfoimg}>
                 <Image source={message} />
               </Touchable>
-              <Text style={styles.userifonamewidth}>Smittty@gmail.com</Text>
+              <Text style={styles.userifonamewidth}>
+                {state.profileData.email}
+              </Text>
               <Text style={styles.editwidth}>edit</Text>
             </View>
             <View style={styles.userinfowrap}>
               <Touchable style={styles.userinfoimg}>
                 <Image source={phone} />
               </Touchable>
-              <Text style={styles.userifonamewidth}>0967643455</Text>
+              <Text style={styles.userifonamewidth}>
+                {state.profileData.phoneNumber}
+              </Text>
               <Text style={styles.editwidth}>edit</Text>
             </View>
             <View style={styles.userinfowrap}>
@@ -149,7 +156,7 @@ export default function Home({ navigation }) {
                 <Image source={san} />
               </Touchable>
               <Text style={styles.userifonamewidth}>
-                San francissco, ca 14A
+                {state.profileData.address}
               </Text>
               <Text style={styles.editwidth}>edit</Text>
             </View>

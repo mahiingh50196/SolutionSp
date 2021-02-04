@@ -65,7 +65,7 @@ function HomeStack() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Home"
+      initialRouteName="Offline"
     >
       <home.Screen name="Home" component={Home} />
       <home.Screen name="DocsUpload" component={DocsUpload} />
@@ -79,7 +79,10 @@ function HomeStack() {
 
 function DrawerNav() {
   return (
-    <drawer.Navigator drawerContent={(props) => <CustomeDrawer {...props} />}>
+    <drawer.Navigator
+      drawerContent={(props) => <CustomeDrawer {...props} />}
+      drawerType="slide"
+    >
       <drawer.Screen name="Home" component={HomeStack} />
     </drawer.Navigator>
   );
@@ -113,7 +116,7 @@ function RootStack() {
       ) : (
         <root.Screen name="Drawer" component={DrawerNav} />
       )}
-      {/* <root.Screen name="Drawer" component={DrawerNav} /> */}
+      {/* <root.Screen name="auth" component={AuthStack} /> */}
     </root.Navigator>
   );
 }

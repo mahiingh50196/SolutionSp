@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { Background, Header, Touchable } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
@@ -21,6 +22,7 @@ import {
 import { api } from "../../services";
 import { userInfo } from "../../store/atoms/auth";
 import { useSetRecoilState, useRecoilValue } from "recoil";
+import moment from "moment";
 
 export default function Offline(props) {
   const itemList = [1, 2, 3, 4, 5, 6, 7];
@@ -28,6 +30,8 @@ export default function Offline(props) {
   // const user = useRecoilValue(userInfo);
 
   const setUserInfo = useRecoilValue(userInfo);
+
+  const [state, setState] = useState({ orderList: [] });
   console.log("hisetUserInfo", setUserInfo);
 
   useEffect(() => {
@@ -53,7 +57,11 @@ export default function Offline(props) {
       url: "/Provider/HomePage",
     })
       .then((res) => {
-        console.warn("userinfo..api", res);
+        console.warn(
+          "userinfo..api",
+          JSON.stringify(res.data.data, undefined, 2)
+        );
+        setState({ ...state, orderList: res?.data.data });
 
         // const {
         //   data: { data },
@@ -61,21 +69,30 @@ export default function Offline(props) {
         // if (data) {
         // }
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => {});
   };
 
   const renderItem = (item) => {
     return (
-      <Touchable style={styles.flatlistwrap}>
+      <Touchable
+        style={styles.flatlistwrap}
+        onPress={() =>
+          props.navigation.navigate("ServiceDetails", {
+            itemData: item,
+          })
+        }
+      >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            <Image source={onlineImg} />
+            {item.profilePicture && item.profilePicture.original ? (
+              <Image source={{ uri: item.profilePicture.original }} />
+            ) : (
+              <Image source={onlineImg} />
+            )}
           </Touchable>
           <View style={styles.nametext}>
-            <Text style={styles.name}>Jennie Vin</Text>
-            <Text style={styles.belowname}>Self Service Car Wash</Text>
+            <Text style={styles.name}>{item.username}</Text>
+            <Text style={styles.belowname}>{item.category}</Text>
           </View>
           <Touchable style={styles.flatlistrightarrowimg}>
             <Image source={Right_arrow} />
@@ -85,13 +102,13 @@ export default function Offline(props) {
           <Touchable style={styles.circle}>
             <Image source={circle} />
           </Touchable>
-          <Text style={styles.time}>sat,19jan 2019, 10;00 Am</Text>
+          <Text style={styles.time}>{moment(item.date).format("llll")}</Text>
         </View>
         <View style={styles.direction}>
           <Touchable style={styles.circle}>
             <Image source={location1} />
           </Touchable>
-          <Text style={styles.time}>los angles,california</Text>
+          <Text style={styles.time}>{item.address}</Text>
           <Touchable style={styles.circle}>
             <Image source={aeroplane} />
           </Touchable>
@@ -106,8 +123,8 @@ export default function Offline(props) {
       witNotchstyle={Colors.primary}
     >
       <Header
+        titleColor={Colors.white}
         title={isOnlne ? "You are Online!" : "offline"}
-        textcolor={true}
         withDrawermenuIcon
         withBack={false}
         withDrawerIcon={false}
@@ -133,9 +150,9 @@ export default function Offline(props) {
         ) : (
           <View>
             <FlatList
-              data={itemList}
-              renderItem={renderItem}
-              //  keyExtractor={item => item.id}
+              data={state.orderList}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item) => item._id}
             />
           </View>
         )}
@@ -206,6 +223,7 @@ const styles = StyleSheet.create({
   },
   direction: {
     flexDirection: "row",
+    alignItems: "center",
   },
   circle: {
     width: "10%",

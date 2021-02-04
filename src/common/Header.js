@@ -7,14 +7,16 @@ import { FontFamilies, FontSizes, Colors } from "../config/Theme";
 
 const Header = ({
   commonHeaderColor,
-  withDrawermenuIcon,
-  textcolor,
+
+  withDrawermenuIcon = false,
+  titleColor = Colors.navy_blue,
+  titleFontfamily = FontFamilies.sfMedium,
   handleStatusData,
   title,
   withDrawerIcon = false,
   withBack = true,
   headerStyle = {},
-  showStatusIcon,
+  showStatusIcon = false,
   backgroundColor,
 }) => {
   const [isOnline, setStatus] = useState("true");
@@ -58,12 +60,8 @@ const Header = ({
           style={[
             styles.text,
             {
-              color:
-                (!!textcolor && Colors.white) ||
-                (!!commonHeaderColor && Colors.navy_blue),
-              fontFamily:
-                (!!textcolor && FontFamilies.sfBold) ||
-                (!!commonHeaderColor && FontFamilies.sfMedium),
+              color: titleColor,
+              fontFamily: titleFontfamily,
             },
           ]}
         >
