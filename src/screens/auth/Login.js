@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, Platform } from "react-native";
 import { Background, Text, Button, Touchable, TextInput } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SocialLogin } from "../../components";
@@ -7,6 +7,8 @@ import { api } from "../../services";
 import { useSetRecoilState } from "recoil";
 import { userInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
+import { NoAuthAPI } from "../../config/apiServices";
+// import messaging from "@react-native-firebase/messaging";
 
 export default function Signup({ navigation: { navigate } }) {
   const [email, setEmail] = React.useState(null);
@@ -16,34 +18,30 @@ export default function Signup({ navigation: { navigate } }) {
   const setUserInfo = useSetRecoilState(userInfo);
   console.log("userinfo..", setUserInfo);
 
-  function login() {
-    // console.warn(
-    //   "url",
-    //   `/Provider/Login?email=${encodeURIComponent(
-    //     email
-    //   )}&password=${encodeURIComponent(password)}`
-    // );
+  const login = async () => {
+    // const fcmToken = await messaging().getToken();
+    const deviceType = Platform.OS === "android" ? "ANDROID" : "IPHONE";
+
+    setLoading(true);
+
     if (validateEmail(email)) {
-      setLoading(true);
-      api({
-        url: `/Provider/Login?email=${email}&password=${encodeURIComponent(
-          password
-        )}`,
-      })
-        .then((res) => {
-          const {
-            data: { data },
-          } = res;
-          if (data) {
-            setUserInfo(res.data?.data);
-            console.log("userinfo..api", setUserInfo);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      let url = `/Provider/Login?email=${email}&password=${password}`;
+
+      let json = await NoAuthAPI(url, "GET");
+      if (Object.keys(json).length) {
+        console.warn("res of login", json);
+        setUserInfo(json.data);
+        setLoading(false);
+        setEmail("");
+        setPassword("");
+      } else {
+        alert("failed");
+        setEmail("");
+        setPassword("");
+        setLoading(false);
+      }
     }
-  }
+  };
 
   return (
     <Background options={{ headerShown: true }}>

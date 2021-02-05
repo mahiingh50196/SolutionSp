@@ -31,10 +31,8 @@ import {
   Notification,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
-import { Text, Touchable } from "../common";
 import { api } from "../services";
 import { CustomeDrawer } from "../components";
-import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
@@ -65,7 +63,7 @@ function HomeStack() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Offline"
+      initialRouteName="Notification"
     >
       <home.Screen name="Home" component={Home} />
       <home.Screen name="DocsUpload" component={DocsUpload} />

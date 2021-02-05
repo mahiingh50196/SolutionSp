@@ -25,14 +25,13 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import moment from "moment";
 
 export default function Offline(props) {
-  const itemList = [1, 2, 3, 4, 5, 6, 7];
   const [isOnlne, setStatus] = useState("true");
   // const user = useRecoilValue(userInfo);
 
   const setUserInfo = useRecoilValue(userInfo);
+  console.log("hisetUserInfo", setUserInfo);
 
   const [state, setState] = useState({ orderList: [] });
-  console.log("hisetUserInfo", setUserInfo);
 
   useEffect(() => {
     getOrderList();

@@ -34,6 +34,8 @@ import date from "./date.png";
 import clock from "./clock.png";
 import Mask from "./Mask.png";
 import License from "./License.png";
+import notification from "./notification.png";
+import NotificationClock from "./NotificationClock.png";
 
 export {
   Welcome,
@@ -72,4 +74,6 @@ export {
   clock,
   Mask,
   License,
+  notification,
+  NotificationClock,
 };
