@@ -19,7 +19,7 @@ import {
 } from "../screens/auth";
 import { CountryPicker } from "../components";
 import {
-  Home,
+  Profile,
   DocsUpload,
   IdUpload,
   Offline,
@@ -60,7 +60,7 @@ function HomeStack() {
       }}
     >
       <home.Screen name="Offline" component={Offline} />
-      <home.Screen name="Home" component={Home} />
+      <home.Screen name="Profile" component={Profile} />
       <home.Screen name="DocsUpload" component={DocsUpload} />
       <home.Screen name="IdUpload" component={IdUpload} />
       <home.Screen name="ServiceDetails" component={ServiceDetails} />

@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  StatusBar,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import dayjs from "dayjs";
 import { Background, Header, Touchable } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../config/Layout";
+import { SCREEN_WIDTH } from "../../config/Layout";
 import {
   offline,
   onlineImg,
@@ -22,61 +15,51 @@ import {
 import { api } from "../../services";
 import { userInfo } from "../../store/atoms/auth";
 import { useRecoilValue } from "recoil";
-import moment from "moment";
 
 export default function Offline(props) {
-  const [isOnlne, setStatus] = useState("true");
+  const [isOnline, setStatus] = useState("true");
   const { navigation } = props;
-  // const user = useRecoilValue(userInfo);
 
   const info = useRecoilValue(userInfo);
 
-  const [state, setState] = useState({ orderList: [] });
+  const [orderList, setOrderList] = useState([]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // getUserDetails();
       if (info && !info.documentUploaded) {
         navigation.navigate("DocsUpload");
       }
     });
-
     return unsubscribe;
   }, [navigation, info]);
 
   useEffect(() => {
     if (info && info.documentUploaded) {
       getOrderList();
-
       api({
         method: "PUT",
         url: "/Provider/OnlineOffline",
-        data: { online: isOnlne },
+        data: { online: isOnline },
       })
-        .then((res) => {
-          console.warn("offline/online", JSON.stringify(res, undefined, 2));
-        })
+        .then((res) => {})
         .finally(() => {});
     }
-  }, [isOnlne, info]);
+  }, [isOnline, info, getOrderList]);
+
   const handleStatusData = (value) => {
     setStatus(value);
   };
 
-  const getOrderList = () => {
+  const getOrderList = React.useCallback(() => {
     api({
       method: "GET",
       url: "/Provider/HomePage",
     })
       .then((res) => {
-        console.warn(
-          "userinfo..api",
-          JSON.stringify(res.data.data, undefined, 2)
-        );
-        setState({ ...state, orderList: res?.data.data });
+        setOrderList(res?.data.data);
       })
       .finally(() => {});
-  };
+  }, []);
 
   const renderItem = (item) => {
     return (
@@ -108,7 +91,7 @@ export default function Offline(props) {
           <Touchable style={styles.circle}>
             <Image source={circle} />
           </Touchable>
-          <Text style={styles.time}>{moment(item.date).format("llll")}</Text>
+          <Text style={styles.time}>{dayjs(item.date).format("llll")}</Text>
         </View>
         <View style={styles.direction}>
           <Touchable style={styles.circle}>
@@ -130,7 +113,7 @@ export default function Offline(props) {
     >
       <Header
         titleColor={Colors.white}
-        title={isOnlne ? "You are Online!" : "offline"}
+        title={isOnline ? "You are Online!" : "offline"}
         withDrawermenuIcon
         withBack={false}
         withDrawerIcon={false}
@@ -142,7 +125,7 @@ export default function Offline(props) {
         }}
       />
       <View style={{ flex: 1 }}>
-        {isOnlne == "false" ? (
+        {isOnline == "false" ? (
           <View style={styles.belowheader}>
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />
@@ -156,7 +139,7 @@ export default function Offline(props) {
         ) : (
           <View>
             <FlatList
-              data={state.orderList}
+              data={orderList}
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(item) => item._id}
             />

@@ -44,7 +44,11 @@ export default function Signup({ navigation: { navigate } }) {
 
   return (
     <Background options={{ headerShown: true }}>
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <Text style={styles.title}>Welcome back, Guy!</Text>
         <View style={styles.desc}>
           <Text style={styles.alreadyAccountLabel}>

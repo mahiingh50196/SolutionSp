@@ -67,7 +67,7 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
       });
       setUser({
         ...user,
-        isDocumentUploaded: true,
+        documentUploaded: true,
       });
       popToTop();
     } catch (error) {

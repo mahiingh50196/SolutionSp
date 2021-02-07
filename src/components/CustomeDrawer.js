@@ -7,7 +7,7 @@ import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 import { useSetRecoilState } from "recoil";
 
-export default function CustomeDrawer() {
+export default function CustomeDrawer({ navigation: { navigate } }) {
   const setUser = useSetRecoilState(userInfo);
   function logout() {
     api({
@@ -20,13 +20,15 @@ export default function CustomeDrawer() {
   return (
     <SafeAreaView>
       <View style={styles.maindrawerView}>
-        <View style={styles.imgtextwrap}>
-          <Image source={nav} />
-          <View>
-            <Text style={styles.profiletext}>Travis Ravees</Text>
-            <Text style={styles.editprofiletext}>Edit Profile</Text>
+        <Touchable onPress={() => navigate("Profile")}>
+          <View style={styles.imgtextwrap}>
+            <Image source={nav} />
+            <View>
+              <Text style={styles.profiletext}>Travis Ravees</Text>
+              <Text style={styles.editprofiletext}>Edit Profile</Text>
+            </View>
           </View>
-        </View>
+        </Touchable>
         <View style={styles.belowprofiletextwrapper}>
           <Text style={styles.profiletext}>My Service</Text>
           <Text style={styles.profiletext}>Payment</Text>
