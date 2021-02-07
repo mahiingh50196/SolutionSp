@@ -21,31 +21,44 @@ import {
 } from "../../assets/images";
 import { api } from "../../services";
 import { userInfo } from "../../store/atoms/auth";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import moment from "moment";
 
 export default function Offline(props) {
   const [isOnlne, setStatus] = useState("true");
+  const { navigation } = props;
   // const user = useRecoilValue(userInfo);
 
-  const setUserInfo = useRecoilValue(userInfo);
-  console.log("hisetUserInfo", setUserInfo);
+  const info = useRecoilValue(userInfo);
 
   const [state, setState] = useState({ orderList: [] });
 
-  useEffect(() => {
-    getOrderList();
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // getUserDetails();
+      if (info && !info.documentUploaded) {
+        navigation.navigate("DocsUpload");
+      }
+    });
 
-    api({
-      method: "PUT",
-      url: "/Provider/OnlineOffline",
-      data: { online: isOnlne },
-    })
-      .then((res) => {
-        console.warn("offline/online", JSON.stringify(res, undefined, 2));
+    return unsubscribe;
+  }, [navigation, info]);
+
+  useEffect(() => {
+    if (info && info.documentUploaded) {
+      getOrderList();
+
+      api({
+        method: "PUT",
+        url: "/Provider/OnlineOffline",
+        data: { online: isOnlne },
       })
-      .finally(() => {});
-  }, [isOnlne]);
+        .then((res) => {
+          console.warn("offline/online", JSON.stringify(res, undefined, 2));
+        })
+        .finally(() => {});
+    }
+  }, [isOnlne, info]);
   const handleStatusData = (value) => {
     setStatus(value);
   };
@@ -61,12 +74,6 @@ export default function Offline(props) {
           JSON.stringify(res.data.data, undefined, 2)
         );
         setState({ ...state, orderList: res?.data.data });
-
-        // const {
-        //   data: { data },
-        // } = res;
-        // if (data) {
-        // }
       })
       .finally(() => {});
   };

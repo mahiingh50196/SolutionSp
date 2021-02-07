@@ -50,7 +50,7 @@ const Header = ({
           <Image
             source={Back}
             resizeMode="contain"
-            style={{ tintColor: !!commonHeaderColor && Colors.navy_blue }}
+            // style={{ tintColor: !!commonHeaderColor && Colors.navy_blue }}
           />
         </Touchable>
       )}

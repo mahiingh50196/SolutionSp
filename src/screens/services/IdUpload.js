@@ -26,7 +26,6 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
   const { title } = docData;
 
   React.useEffect(() => {
-    console.log(docData);
     if (docData) {
       if (docData.docUri) {
         setResponseImage(docData.docUri);

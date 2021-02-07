@@ -23,12 +23,7 @@ const OtpVerify = ({
           </Text>
         </View>
         <View style={styles.codeInput}>
-          <CodeInput
-            codeLength={4}
-            onFullFill={(val) => {
-              console.log("code", val);
-            }}
-          />
+          <CodeInput codeLength={4} onFullFill={(val) => {}} />
         </View>
         <Button
           style={styles.signUp}

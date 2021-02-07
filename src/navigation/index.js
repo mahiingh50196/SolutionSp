@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import { AsyncStorage, View, StyleSheet, Image } from "react-native";
+import { AsyncStorage } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  createDrawerNavigator,
-} from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
   useRecoilValue,
   useRecoilTransactionObserver_UNSTABLE,
@@ -36,7 +32,6 @@ import { CustomeDrawer } from "../components";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
-// const services = createStackNavigator();
 const drawer = createDrawerNavigator();
 
 function AuthStack() {
@@ -63,12 +58,11 @@ function HomeStack() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Notification"
     >
+      <home.Screen name="Offline" component={Offline} />
       <home.Screen name="Home" component={Home} />
       <home.Screen name="DocsUpload" component={DocsUpload} />
       <home.Screen name="IdUpload" component={IdUpload} />
-      <home.Screen name="Offline" component={Offline} />
       <home.Screen name="ServiceDetails" component={ServiceDetails} />
       <home.Screen name="Notification" component={Notification} />
     </home.Navigator>
@@ -90,7 +84,6 @@ const root = createStackNavigator();
 
 function RootStack() {
   const user = useRecoilValue(userInfo);
-  console.log("alluserinfovalue", user);
 
   api.interceptors.request.use((config) => {
     const newConfig = { ...config };
@@ -114,7 +107,6 @@ function RootStack() {
       ) : (
         <root.Screen name="Drawer" component={DrawerNav} />
       )}
-      {/* <root.Screen name="auth" component={AuthStack} /> */}
     </root.Navigator>
   );
 }

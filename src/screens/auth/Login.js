@@ -16,7 +16,6 @@ export default function Signup({ navigation: { navigate } }) {
   const [loading, setLoading] = React.useState(false);
 
   const setUserInfo = useSetRecoilState(userInfo);
-  console.log("userinfo..", setUserInfo);
 
   const login = async () => {
     // const fcmToken = await messaging().getToken();

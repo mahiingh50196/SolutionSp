@@ -148,6 +148,7 @@ export default function Signup({ navigation: { navigate } }) {
     })
       .then((res) => {
         if (res.data?.data) {
+          console.warn("imageres", res);
           setResponseImage(res.data?.data.original);
         }
       })
