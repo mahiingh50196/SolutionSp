@@ -111,7 +111,6 @@ export default function Signup({ navigation: { navigate } }) {
         data: userData,
       })
         .then((res) => {
-          console.warn("signup..", res);
           const {
             data: { data },
           } = res;

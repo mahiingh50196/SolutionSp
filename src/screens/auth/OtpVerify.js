@@ -1,8 +1,11 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { userInfo, signUpInfo } from "../../store/atoms/auth";
 import { Background, Text, Touchable, Button, CodeInput } from "../../common";
 import { SCREEN_HEIGHT } from "../../config/Layout";
 import { FontFamilies, FontSizes, Colors } from "../../config/Theme";
+import { AuthStates } from "../../config/Constants";
 
 const OtpVerify = ({
   navigation: { navigate },
@@ -10,6 +13,16 @@ const OtpVerify = ({
     params: { phone },
   },
 }) => {
+  const authInfo = useRecoilValue(signUpInfo);
+  const setUserInfo = useSetRecoilState(userInfo);
+
+  const onVerify = () => {
+    setUserInfo({
+      ...authInfo,
+      authState: AuthStates.NO_LOCATION,
+    });
+  };
+
   return (
     <Background options={{ headerShown: true }}>
       <View>
@@ -17,7 +30,7 @@ const OtpVerify = ({
         <View style={styles.desc}>
           <Text style={styles.alreadyAccountLabel}>
             Check your SMS messages. We've sent you the PIN at
-            <Touchable onPress={() => navigate("Login")}>
+            <Touchable>
               <Text style={styles.loginLabel}>{phone}</Text>
             </Touchable>
           </Text>
@@ -25,13 +38,7 @@ const OtpVerify = ({
         <View style={styles.codeInput}>
           <CodeInput codeLength={4} onFullFill={(val) => {}} />
         </View>
-        <Button
-          style={styles.signUp}
-          title="Veirfy"
-          onPress={() => {
-            navigate("Location");
-          }}
-        />
+        <Button style={styles.signUp} title="Verify" onPress={onVerify} />
         <View style={styles.wrapResend}>
           <Text style={styles.resendCode}>
             Didn't receive SMS?

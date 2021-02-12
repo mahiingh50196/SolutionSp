@@ -8,9 +8,10 @@ import { useSetRecoilState } from "recoil";
 import { userInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
 import { NoAuthAPI } from "../../config/apiServices";
+import { AuthStates } from "../../config/Constants";
 // import messaging from "@react-native-firebase/messaging";
 
-export default function Signup({ navigation: { navigate } }) {
+export default function Login({ navigation: { navigate } }) {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -19,26 +20,23 @@ export default function Signup({ navigation: { navigate } }) {
 
   const login = async () => {
     // const fcmToken = await messaging().getToken();
-    const deviceType = Platform.OS === "android" ? "ANDROID" : "IPHONE";
+    // const deviceType = Platform.OS === "android" ? "ANDROID" : "IPHONE";
 
     setLoading(true);
 
     if (validateEmail(email)) {
-      let url = `/Provider/Login?email=${email}&password=${password}`;
-
-      let json = await NoAuthAPI(url, "GET");
-      if (Object.keys(json).length) {
-        console.warn("res of login", json);
-        setUserInfo(json.data);
-        setLoading(false);
-        setEmail("");
-        setPassword("");
-      } else {
-        alert("failed");
-        setEmail("");
-        setPassword("");
-        setLoading(false);
-      }
+      const {
+        data: { data },
+      } = await api({
+        method: "get",
+        url: `/Provider/Login?email=${email}&password=${password}`,
+      });
+      setUserInfo({
+        ...data,
+        authState: AuthStates.COMPLETE,
+      });
+    } else {
+      setLoading(false);
     }
   };
 

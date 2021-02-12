@@ -24,14 +24,14 @@ export default function Offline(props) {
 
   const [orderList, setOrderList] = useState([]);
 
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener("focus", () => {
-  //     if (info && !info.documentUploaded) {
-  //       navigation.navigate("DocsUpload");
-  //     }
-  //   });
-  //   return unsubscribe;
-  // }, [navigation, info]);
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (info && !info.documentUploaded) {
+        navigation.navigate("DocsUpload");
+      }
+    });
+    return unsubscribe;
+  }, [navigation, info]);
 
   useEffect(() => {
     if (info && info.documentUploaded) {
@@ -50,15 +50,14 @@ export default function Offline(props) {
     setStatus(value);
   };
 
-  const getOrderList = React.useCallback(() => {
-    api({
+  const getOrderList = React.useCallback(async () => {
+    const {
+      data: { data },
+    } = await api({
       method: "GET",
       url: "/Provider/HomePage",
-    })
-      .then((res) => {
-        setOrderList(res?.data.data);
-      })
-      .finally(() => {});
+    });
+    setOrderList(data);
   }, []);
 
   const renderItem = (item) => {

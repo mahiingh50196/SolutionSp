@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
@@ -30,6 +30,7 @@ import {
 import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
 import { CustomeDrawer } from "../components";
+import { AuthStates } from "../config/Constants";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
@@ -48,7 +49,7 @@ function AuthStack() {
       <auth.Screen name="Signup" component={Signup} />
       <auth.Screen name="CountryPicker" component={CountryPicker} />
       <auth.Screen name="OtpVerify" component={OtpVerify} />
-      <auth.Screen name="Location" component={Location} />
+      {/* <auth.Screen name="Location" component={Location} /> */}
     </auth.Navigator>
   );
 }
@@ -98,17 +99,26 @@ function RootStack() {
     return newConfig;
   });
 
+  const renderRoutes = (authState) => {
+    const { COMPLETE, NO_LOCATION, NONE } = AuthStates;
+    switch (authState) {
+      case COMPLETE:
+        return <root.Screen name="Drawer" component={DrawerNav} />;
+      case NO_LOCATION:
+        return <root.Screen name="Location" component={Location} />;
+      case NONE:
+      default:
+        return <root.Screen name="auth" component={AuthStack} />;
+    }
+  };
+
   return (
     <root.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      {!user ? (
-        <root.Screen name="auth" component={AuthStack} />
-      ) : (
-        <root.Screen name="Drawer" component={DrawerNav} />
-      )}
+      {renderRoutes(user?.authState)}
     </root.Navigator>
   );
 }

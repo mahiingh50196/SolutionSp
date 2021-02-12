@@ -7,14 +7,40 @@ import { Touchable } from "../../common";
 import { Map } from "../../assets/images";
 import { FontSizes, Colors, FontFamilies } from "../../config/Theme";
 import * as Location from "expo-location";
-import { userInfo, signUpInfo } from "../../store/atoms/auth";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { userInfo } from "../../store/atoms/auth";
+import { useSetRecoilState } from "recoil";
+import { api } from "../../services";
+import { AuthStates } from "../../config/Constants";
+
+export const getAddressString = ({
+  city,
+  country,
+  district,
+  name,
+  region,
+  street,
+  subregion,
+  postalCode,
+}) => {
+  const address = [
+    name,
+    street,
+    subregion,
+    region,
+    postalCode,
+    district,
+    city,
+    country,
+  ];
+  const nonNullAddress = address.filter((each) => !!each);
+  const addressString = nonNullAddress.join(", ");
+  return addressString;
+};
 
 const GetLocation = ({ navigation: { navigate, goBack } }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const setUserInfo = useSetRecoilState(userInfo);
-  const authInfo = useRecoilValue(signUpInfo);
 
   const getLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -24,16 +50,28 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
-    setUserInfo(authInfo);
+    const {
+      coords: { latitude, longitude },
+    } = location;
+    const coordinates = {
+      latitude,
+      longitude,
+    };
+    const addressArray = await Location.reverseGeocodeAsync(coordinates);
+    const addressObject = addressArray?.length ? addressArray[0] : null;
+    const address = getAddressString(addressObject);
+    const {
+      data: { data },
+    } = await api({
+      method: "put",
+      url: "/Provider/AddAddress",
+      data: { lat: latitude, lng: longitude, address },
+    });
+    setUserInfo({
+      ...data,
+      authState: AuthStates.COMPLETE,
+    });
   };
-
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
 
   return (
     <Background>
