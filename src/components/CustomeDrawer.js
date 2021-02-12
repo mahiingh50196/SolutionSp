@@ -17,6 +17,15 @@ export default function CustomeDrawer({ navigation: { navigate } }) {
       setUser(null);
     });
   }
+
+  const handleNavigation = (type) => {
+    if (type === "notification") {
+      navigate("Notification");
+    } else if (type === "services") {
+      navigate("MyServices");
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.maindrawerView}>
@@ -30,11 +39,22 @@ export default function CustomeDrawer({ navigation: { navigate } }) {
           </View>
         </Touchable>
         <View style={styles.belowprofiletextwrapper}>
-          <Text style={styles.profiletext}>My Service</Text>
-          <Text style={styles.profiletext}>Payment</Text>
-          <Text style={styles.profiletext}>Notifications </Text>
-          <Text style={styles.profiletext}>Privacy Policy</Text>
-          <Text style={styles.profiletext}>Terms and conditions</Text>
+          <Touchable onPress={() => handleNavigation("services")}>
+            <Text style={styles.profiletext}>My Service</Text>
+          </Touchable>
+          <Touchable onPress={() => handleNavigation("payment")}>
+            <Text style={styles.profiletext}>Payment</Text>
+          </Touchable>
+
+          <Touchable onPress={() => handleNavigation("notification")}>
+            <Text style={styles.profiletext}>Notifications </Text>
+          </Touchable>
+          <Touchable onPress={() => handleNavigation("privacy")}>
+            <Text style={styles.profiletext}>Privacy Policy</Text>
+          </Touchable>
+          <Touchable onPress={() => handleNavigation("t&c")}>
+            <Text style={styles.profiletext}>Terms and conditions</Text>
+          </Touchable>
         </View>
       </View>
 

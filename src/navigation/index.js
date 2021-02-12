@@ -25,6 +25,7 @@ import {
   Offline,
   ServiceDetails,
   Notification,
+  MyServices,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
@@ -65,6 +66,7 @@ function HomeStack() {
       <home.Screen name="IdUpload" component={IdUpload} />
       <home.Screen name="ServiceDetails" component={ServiceDetails} />
       <home.Screen name="Notification" component={Notification} />
+      <home.Screen name="MyServices" component={MyServices} />
     </home.Navigator>
   );
 }

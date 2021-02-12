@@ -94,15 +94,14 @@ const styles = StyleSheet.create({
   back: {
     paddingLeft: 8,
     width: "20%",
-    alignItems: "flex-start",
 
+    justifyContent: "center",
     alignItems: "center",
   },
   text: {
     fontSize: FontSizes.large,
     color: Colors.blue,
     fontFamily: FontFamilies.sfMedium,
-    // backgroundColor: "pink",
     width: "60%",
     textAlign: "center",
   },
@@ -111,7 +110,5 @@ const styles = StyleSheet.create({
     width: 100,
     right: 8,
   },
-  off: {
-    // backgroundColor: "red",
-  },
+  off: {},
 });

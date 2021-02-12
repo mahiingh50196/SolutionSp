@@ -36,6 +36,7 @@ import Mask from "./Mask.png";
 import License from "./License.png";
 import notification from "./notification.png";
 import NotificationClock from "./NotificationClock.png";
+import Booking from "./Booking.png";
 
 export {
   Welcome,
@@ -76,4 +77,5 @@ export {
   License,
   notification,
   NotificationClock,
+  Booking,
 };

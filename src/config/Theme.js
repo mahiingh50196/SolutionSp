@@ -16,6 +16,8 @@ export const Colors = {
   light_grey: "rgb(190,194,206)",
   dark_navyblue: "rgb(36,46,66)",
   purple: "rgb(114,33,255)",
+  lightes_Grey: "rgb(170,170,170)",
+  dark_Pink: "rgb(255,0,69)",
 };
 
 export const FontSizes = {
@@ -25,6 +27,8 @@ export const FontSizes = {
   medium: 14,
   default: 16,
   large: 18,
+  larger: 19,
+
   xLarge: 20,
   xxLarge: 24,
 };

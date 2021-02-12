@@ -24,14 +24,14 @@ export default function Offline(props) {
 
   const [orderList, setOrderList] = useState([]);
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (info && !info.documentUploaded) {
-        navigation.navigate("DocsUpload");
-      }
-    });
-    return unsubscribe;
-  }, [navigation, info]);
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     if (info && !info.documentUploaded) {
+  //       navigation.navigate("DocsUpload");
+  //     }
+  //   });
+  //   return unsubscribe;
+  // }, [navigation, info]);
 
   useEffect(() => {
     if (info && info.documentUploaded) {
@@ -125,7 +125,7 @@ export default function Offline(props) {
         }}
       />
       <View style={{ flex: 1 }}>
-        {isOnline == "false" ? (
+        {isOnline === "false" ? (
           <View style={styles.belowheader}>
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />

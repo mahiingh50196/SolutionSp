@@ -51,7 +51,7 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
         onPress={getLocation}
       />
       <Button type="transparent" title="Skip for now" />
-      <Text>{text}</Text>
+      {/* <Text>{text}</Text> */}
     </Background>
   );
 };
