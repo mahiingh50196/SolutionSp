@@ -38,7 +38,6 @@ export const getAddressString = ({
 };
 
 const GetLocation = ({ navigation: { navigate, goBack } }) => {
-  const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const setUserInfo = useSetRecoilState(userInfo);
 
