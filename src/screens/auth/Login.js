@@ -31,10 +31,17 @@ export default function Login({ navigation: { navigate } }) {
         method: "get",
         url: `/Provider/Login?email=${email}&password=${password}`,
       });
-      setUserInfo({
-        ...data,
-        authState: AuthStates.COMPLETE,
-      });
+      if (data?.location && data.location.coordinates?.length) {
+        setUserInfo({
+          ...data,
+          authState: AuthStates.COMPLETE,
+        });
+      } else {
+        setUserInfo({
+          ...data,
+          authState: AuthStates.NO_LOCATION,
+        });
+      }
     } else {
       setLoading(false);
     }

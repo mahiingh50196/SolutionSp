@@ -14,6 +14,10 @@ const globalStyles = StyleSheet.create({
     marginHorizontal: SCREEN_WIDTH * 0.04,
     borderColor: Colors.gray,
   },
+  headerMenuIcon: {
+    height: 70,
+    width: 70,
+  },
 });
 
 export default globalStyles;

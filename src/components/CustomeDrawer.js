@@ -6,8 +6,12 @@ import { api } from "../services";
 import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 import { useSetRecoilState } from "recoil";
+import { DrawerItemList } from "@react-navigation/drawer";
 
-export default function CustomeDrawer({ navigation: { navigate } }) {
+export default function CustomeDrawer(props) {
+  const {
+    navigation: { navigate },
+  } = props;
   const setUser = useSetRecoilState(userInfo);
   function logout() {
     api({
@@ -17,14 +21,6 @@ export default function CustomeDrawer({ navigation: { navigate } }) {
       setUser(null);
     });
   }
-
-  const handleNavigation = (type) => {
-    if (type === "notification") {
-      navigate("Notification");
-    } else if (type === "services") {
-      navigate("MyServices");
-    }
-  };
 
   return (
     <SafeAreaView>
@@ -38,26 +34,8 @@ export default function CustomeDrawer({ navigation: { navigate } }) {
             </View>
           </View>
         </Touchable>
-        <View style={styles.belowprofiletextwrapper}>
-          <Touchable onPress={() => handleNavigation("services")}>
-            <Text style={styles.profiletext}>My Service</Text>
-          </Touchable>
-          <Touchable onPress={() => handleNavigation("payment")}>
-            <Text style={styles.profiletext}>Payment</Text>
-          </Touchable>
-
-          <Touchable onPress={() => handleNavigation("notification")}>
-            <Text style={styles.profiletext}>Notifications </Text>
-          </Touchable>
-          <Touchable onPress={() => handleNavigation("privacy")}>
-            <Text style={styles.profiletext}>Privacy Policy</Text>
-          </Touchable>
-          <Touchable onPress={() => handleNavigation("t&c")}>
-            <Text style={styles.profiletext}>Terms and conditions</Text>
-          </Touchable>
-        </View>
+        <DrawerItemList {...props} />
       </View>
-
       <View style={styles.logout}>
         <Touchable style={styles.logoutButton} onPress={logout}>
           <Text>Logout</Text>

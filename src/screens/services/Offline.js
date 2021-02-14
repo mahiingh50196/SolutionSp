@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, FlatList, Switch } from "react-native";
 import dayjs from "dayjs";
-import { Background, Header, Touchable } from "../../common";
+import { Background, Touchable, Empty } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import {
@@ -14,15 +14,44 @@ import {
 } from "../../assets/images";
 import { api } from "../../services";
 import { userInfo } from "../../store/atoms/auth";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 export default function Offline(props) {
-  const [isOnline, setStatus] = useState("true");
   const { navigation } = props;
 
-  const info = useRecoilValue(userInfo);
+  const [info, setUserInfo] = useRecoilState(userInfo);
+  const isOnline = info?.isOnline;
 
   const [orderList, setOrderList] = useState([]);
+
+  const updateAvailability = React.useCallback(async () => {
+    const {
+      data: { data },
+    } = await api({
+      method: "PUT",
+      url: "/Provider/OnlineOffline",
+      data: { online: !isOnline === true ? "true" : "false" },
+    });
+    setUserInfo({
+      ...info,
+      ...data,
+    });
+  }, [isOnline, setUserInfo, info]);
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: "Offline",
+      headerRight: () => (
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isOnline ? Colors.white : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={updateAvailability}
+          value={isOnline}
+        />
+      ),
+    });
+  }, [navigation, isOnline, updateAvailability]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -33,22 +62,11 @@ export default function Offline(props) {
     return unsubscribe;
   }, [navigation, info]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (info && info.documentUploaded) {
       getOrderList();
-      api({
-        method: "PUT",
-        url: "/Provider/OnlineOffline",
-        data: { online: isOnline },
-      })
-        .then((res) => {})
-        .finally(() => {});
     }
-  }, [isOnline, info, getOrderList]);
-
-  const handleStatusData = (value) => {
-    setStatus(value);
-  };
+  }, [info, getOrderList]);
 
   const getOrderList = React.useCallback(async () => {
     const {
@@ -61,6 +79,7 @@ export default function Offline(props) {
   }, []);
 
   const renderItem = (item) => {
+    const serviceDate = new Date(item.date);
     return (
       <Touchable
         style={styles.flatlistwrap}
@@ -90,7 +109,9 @@ export default function Offline(props) {
           <Touchable style={styles.circle}>
             <Image source={circle} />
           </Touchable>
-          <Text style={styles.time}>{dayjs(item.date).format("llll")}</Text>
+          <Text style={styles.time}>
+            {dayjs(serviceDate).format("ddd, MMM D, YYYY h:mm A")}
+          </Text>
         </View>
         <View style={styles.direction}>
           <Touchable style={styles.circle}>
@@ -106,25 +127,9 @@ export default function Offline(props) {
   };
 
   return (
-    <Background
-      contentStyle={styles.contentStyle}
-      witNotchstyle={Colors.primary}
-    >
-      <Header
-        titleColor={Colors.white}
-        title={isOnline ? "You are Online!" : "offline"}
-        withDrawermenuIcon
-        withBack={false}
-        withDrawerIcon={false}
-        showStatusIcon={true}
-        handleStatusData={handleStatusData}
-        backgroundColor={{
-          backgroundColor: Colors.primary,
-          paddingVertical: 25,
-        }}
-      />
-      <View style={{ flex: 1 }}>
-        {isOnline === "false" ? (
+    <Background contentStyle={styles.contentStyle}>
+      <View style={styles.container}>
+        {!isOnline ? (
           <View style={styles.belowheader}>
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />
@@ -141,6 +146,7 @@ export default function Offline(props) {
               data={orderList}
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(item) => item._id}
+              ListEmptyComponent={<Empty title="No Services available" />}
             />
           </View>
         )}
@@ -150,13 +156,19 @@ export default function Offline(props) {
 }
 
 const styles = StyleSheet.create({
-  contentStyle: {
-    paddingHorizontal: 0,
+  container: {
+    marginTop: 100,
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 30,
     flex: 1,
+  },
+  contentStyle: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 0,
   },
   belowheader: {
     backgroundColor: "white",
-
     marginTop: -10,
     borderTopRightRadius: SCREEN_WIDTH * 0.05,
     borderTopLeftRadius: SCREEN_WIDTH * 0.05,
@@ -225,5 +237,6 @@ const styles = StyleSheet.create({
     width: "80%",
     color: Colors.dark_navyblue,
     fontSize: FontSizes.xSmall,
+    marginLeft: 4,
   },
 });
