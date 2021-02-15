@@ -3,13 +3,10 @@ import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { Header, Background, Touchable, Button } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function ServiceDetails(props) {
   const itemList = [1, 2];
-
-  useEffect(() => {
-    console.warn("param==", props.route.params.itemData);
-  });
 
   const renderItem = (item) => {
     return (
@@ -40,52 +37,53 @@ export default function ServiceDetails(props) {
 
   return (
     <Background>
-      <Header title="Service Details" titleColor={Colors.navy_blue} />
-      <View style={styles.mainview}>
-        <Touchable style={styles.profile}>
-          <Image source={onlineImg} />
-        </Touchable>
-        <View style={styles.profilename}>
-          <Text style={styles.profiletext}>Evan Ezuma</Text>
-          <View style={styles.ratingView}>
-            <Image source={clock} />
-            <Text style={styles.ratingtext}>4.8</Text>
+      <ScrollView style={styles.contentStyle}>
+        <View style={styles.mainview}>
+          <Touchable style={styles.profile}>
+            <Image source={onlineImg} />
+          </Touchable>
+          <View style={styles.profilename}>
+            <Text style={styles.profiletext}>Evan Ezuma</Text>
+            <View style={styles.ratingView}>
+              <Image source={clock} />
+              <Text style={styles.ratingtext}>4.8</Text>
+            </View>
+            <View style={styles.dateview}>
+              <Image source={date} />
+              <Text style={styles.datetext}>7th, oct 2020</Text>
+              <Image source={clock} />
+              <Text style={styles.timeText}>7:30 A.M</Text>
+            </View>
           </View>
-          <View style={styles.dateview}>
-            <Image source={date} />
-            <Text style={styles.datetext}>7th, oct 2020</Text>
-            <Image source={clock} />
-            <Text style={styles.timeText}>7:30 A.M</Text>
-          </View>
+          <Touchable style={styles.pendingview}>
+            <Text style={styles.pendingtext}>Pending</Text>
+          </Touchable>
         </View>
-        <Touchable style={styles.pendingview}>
-          <Text style={styles.pendingtext}>Pending</Text>
-        </Touchable>
-      </View>
-      <Text style={styles.service}>Services</Text>
-      <FlatList data={itemList} renderItem={renderItem} />
-      <Text
-        style={[
-          styles.service,
-          { paddingVertical: 10, fontSize: FontSizes.default },
-        ]}
-      >
-        Special Instructions
-      </Text>
-      <Text style={styles.longtext}>
-        Our classes is thought by our best selected teachers who are experts in
-        their subject.
-      </Text>
+        <Text style={styles.service}>Services</Text>
+        <FlatList data={itemList} renderItem={renderItem} />
+        <Text
+          style={[
+            styles.service,
+            { paddingVertical: 10, fontSize: FontSizes.default },
+          ]}
+        >
+          Special Instructions
+        </Text>
+        <Text style={styles.longtext}>
+          Our classes is thought by our best selected teachers who are experts
+          in their subject.
+        </Text>
 
-      <View style={styles.buttonStyle}>
-        <Button width={180} title="Accept" />
-        <Button
-          type="transparent"
-          width={110}
-          title="Ignore"
-          style={{ borderWidth: 1, borderColor: Colors.primary }}
-        />
-      </View>
+        <View style={styles.buttonStyle}>
+          <Button width={180} title="Accept" />
+          <Button
+            type="transparent"
+            width={110}
+            title="Ignore"
+            style={{ borderWidth: 1, borderColor: Colors.primary }}
+          />
+        </View>
+      </ScrollView>
     </Background>
   );
 }
@@ -187,5 +185,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     color: "grey",
     fontFamily: FontFamilies.sfSemiBold,
+  },
+  contentStyle: {
+    paddingTop: 50,
   },
 });

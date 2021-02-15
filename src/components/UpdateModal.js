@@ -12,10 +12,6 @@ function UpdateModal({
 }) {
   const [handleUserData, setData] = useState(Object.values(updatingData)[0]);
 
-  useEffect(() => {
-    console.warn("updatingData", updatingData);
-  });
-
   const sendData = () => {
     let key = Object.keys(updatingData)[0];
     let data = {};

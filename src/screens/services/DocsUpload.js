@@ -76,17 +76,8 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
   }
 
   return (
-    <Background
-      options={{
-        headerShown: true,
-        title: "Document Management",
-        withBack: true,
-        headerStyle: {
-          justifyContent: "center",
-        },
-      }}
-    >
-      <ScrollView>
+    <Background>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {docs.map((doc, idx) => {
           return (
             <TouchableOpacity
@@ -196,4 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   submit: { height: 60, justifyContent: "center", borderRadius: 15 },
+  scrollContainer: {
+    paddingVertical: 50,
+  },
 });

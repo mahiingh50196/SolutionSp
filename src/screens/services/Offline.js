@@ -31,6 +31,7 @@ export default function Offline(props) {
       method: "PUT",
       url: "/Provider/OnlineOffline",
       data: { online: !isOnline === true ? "true" : "false" },
+      showLoader: true,
     });
     setUserInfo({
       ...info,
@@ -40,15 +41,17 @@ export default function Offline(props) {
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: "Offline",
+      title: isOnline ? "Your are Online!" : "You are Offline!",
       headerRight: () => (
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isOnline ? Colors.white : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={updateAvailability}
-          value={isOnline}
-        />
+        <View style={styles.switchContainer}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isOnline ? Colors.white : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={updateAvailability}
+            value={isOnline}
+          />
+        </View>
       ),
     });
   }, [navigation, isOnline, updateAvailability]);
@@ -157,7 +160,7 @@ export default function Offline(props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    marginTop: 80,
     backgroundColor: Colors.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 30,
@@ -238,5 +241,8 @@ const styles = StyleSheet.create({
     color: Colors.dark_navyblue,
     fontSize: FontSizes.xSmall,
     marginLeft: 4,
+  },
+  switchContainer: {
+    paddingRight: 10,
   },
 });

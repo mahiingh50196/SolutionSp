@@ -147,7 +147,6 @@ export default function Signup({ navigation: { navigate } }) {
     })
       .then((res) => {
         if (res.data?.data) {
-          console.warn("imageres", res);
           setResponseImage(res.data?.data.original);
         }
       })
@@ -175,10 +174,7 @@ export default function Signup({ navigation: { navigate } }) {
   );
 
   return (
-    <Background
-      contentStyle={styles.contentStyle}
-      options={{ headerShown: true }}
-    >
+    <Background contentStyle={styles.contentStyle}>
       {uploadLoading && <FullScreenLoader />}
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -327,6 +323,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingHorizontal: SCREEN_WIDTH * 0.04,
+    paddingVertical: 50,
   },
   termsTextButton: {
     color: Colors.primary,

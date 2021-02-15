@@ -16,7 +16,7 @@ import { api } from "../../services";
 import dayjs from "dayjs";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const IdUpload = ({ route, navigation: { goBack } }) => {
+const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
   const [uploadLoading, setUploadLoading] = React.useState(false);
   const [pickerVisibility, setPickerVisibility] = React.useState(false);
   const [responseImage, setResponseImage] = React.useState(null);
@@ -24,6 +24,12 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
   const [docDate, setDocDate] = React.useState();
   const { docData, callback } = route.params;
   const { title } = docData;
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      title,
+    });
+  }, [navigation, title]);
 
   React.useEffect(() => {
     if (docData) {
@@ -116,7 +122,7 @@ const IdUpload = ({ route, navigation: { goBack } }) => {
   };
 
   return (
-    <Background options={{ headerShown: true, title }}>
+    <Background contentStyle={styles.contentStyle}>
       {uploadLoading && <FullScreenLoader />}
       <ImagePick
         renderOpenModalButton={renderOpenModalButton}
@@ -171,5 +177,8 @@ const styles = StyleSheet.create({
   },
   space: {
     height: 20,
+  },
+  contentStyle: {
+    paddingTop: 50,
   },
 });

@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { AsyncStorage, Image } from "react-native";
+import {
+  AsyncStorage,
+  Image,
+  ActivityIndicator,
+  View,
+  StyleSheet,
+} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
@@ -31,8 +37,9 @@ import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
-import { Touchable, globalStyles } from "../common";
+import { Touchable, globalStyles, Toast } from "../common";
 import { drawer as MenuIcon } from "../assets/images";
+import { Colors } from "../config/Theme";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
@@ -41,7 +48,10 @@ const drawer = createDrawerNavigator();
 const HeaderMenuIcon = () => {
   const { toggleDrawer } = useNavigation();
   return (
-    <Touchable onPress={toggleDrawer}>
+    <Touchable
+      hitSlop={{ top: 4, left: 20, right: 20, bottom: 10 }}
+      onPress={toggleDrawer}
+    >
       <Image
         source={MenuIcon}
         resizeMode="contain"
@@ -55,7 +65,9 @@ function AuthStack() {
   return (
     <auth.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerTitle: "",
+        headerTransparent: true,
       }}
     >
       <auth.Screen name="Welcome" component={Welcome} />
@@ -64,7 +76,6 @@ function AuthStack() {
       <auth.Screen name="Signup" component={Signup} />
       <auth.Screen name="CountryPicker" component={CountryPicker} />
       <auth.Screen name="OtpVerify" component={OtpVerify} />
-      {/* <auth.Screen name="Location" component={Location} /> */}
     </auth.Navigator>
   );
 }
@@ -89,9 +100,33 @@ function HomeStack() {
           // headerRight: () => <HeaderProfileRightIcon />,
         }}
       />
-      <home.Screen name="DocsUpload" component={DocsUpload} />
-      <home.Screen name="IdUpload" component={IdUpload} />
-      <home.Screen name="ServiceDetails" component={ServiceDetails} />
+      <home.Screen
+        name="DocsUpload"
+        component={DocsUpload}
+        options={{
+          headerTransparent: true,
+          title: "Document Management",
+          headerTintColor: Colors.blue,
+        }}
+      />
+      <home.Screen
+        name="IdUpload"
+        component={IdUpload}
+        options={{
+          headerTransparent: true,
+          // title: "Document Management",
+          headerTintColor: Colors.blue,
+        }}
+      />
+      <home.Screen
+        name="ServiceDetails"
+        component={ServiceDetails}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Service Details",
+        }}
+      />
     </home.Navigator>
   );
 }
@@ -114,9 +149,13 @@ const root = createStackNavigator();
 
 function RootStack() {
   const user = useRecoilValue(userInfo);
+  const [loading, setLoading] = React.useState();
 
   api.interceptors.request.use((config) => {
     const newConfig = { ...config };
+    if (newConfig.showLoader) {
+      setLoading(true);
+    }
     if (user) {
       newConfig.headers = {
         ...newConfig.headers,
@@ -125,6 +164,27 @@ function RootStack() {
     }
     return newConfig;
   });
+
+  api.interceptors.response.use(
+    function (response) {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      setLoading(false);
+      return response;
+    },
+    function (error) {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      setLoading(false);
+      if (error?.response?.data?.message) {
+        Toast.show({
+          text: error.response.data.message,
+          type: "error",
+        });
+      }
+      return Promise.reject(error);
+    }
+  );
 
   const renderRoutes = (authState) => {
     const { COMPLETE, NO_LOCATION, NONE } = AuthStates;
@@ -140,13 +200,24 @@ function RootStack() {
   };
 
   return (
-    <root.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      {renderRoutes(user?.authState)}
-    </root.Navigator>
+    <View style={styles.container}>
+      {loading && (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator
+            animating={true}
+            color={Colors.black}
+            size="large"
+          />
+        </View>
+      )}
+      <root.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        {renderRoutes(user?.authState)}
+      </root.Navigator>
+    </View>
   );
 }
 
@@ -182,3 +253,15 @@ const Navigation = ({ userPersistedInfo }) => {
 };
 
 export default Navigation;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loaderContainer: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    zIndex: 1,
+    justifyContent: "center",
+  },
+});

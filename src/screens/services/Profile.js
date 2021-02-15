@@ -34,23 +34,18 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
     setModalVisible(false);
   };
   const updatedValue = (val) => {
-    console.warn("updatedatacmng", val);
-
     const userData = val;
     api({
       url: "/Provider/ProfileUpdate",
       method: "PUT",
       data: userData,
     }).then((res) => {
-      console.warn("updateapiData", res);
       updateUser();
-      // udatedUser(res);
     });
 
     setModalVisible(false);
   };
 
-  // console.warn("profileInfo", profileInfo);
   if (profileInfo) {
     const {
       fullName,
@@ -201,13 +196,9 @@ export default function Home({ navigation }) {
       api({
         url: `/Provider/GetProviderDetails?providerId=${info._id}`,
         method: "GET",
-      })
-        .then((res) => {
-          setProfileInfo(res.data.data);
-        })
-        .finally((err) => {
-          // console.warn("err", err);
-        });
+      }).then((res) => {
+        setProfileInfo(res.data.data);
+      });
     }
   };
 

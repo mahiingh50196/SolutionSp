@@ -48,7 +48,7 @@ export default function Login({ navigation: { navigate } }) {
   };
 
   return (
-    <Background options={{ headerShown: true }}>
+    <Background>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSizes.xxLarge,
     fontFamily: FontFamilies.sfBold,
-    marginTop: 20,
+    marginTop: 60,
     color: Colors.black,
   },
   alreadyAccountLabel: {

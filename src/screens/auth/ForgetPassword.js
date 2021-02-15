@@ -26,14 +26,9 @@ export default function ForgetPassword({ navigation: { navigate } }) {
         data: {
           email,
         },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.warn("hi", err?.response?.data?.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      }).finally(() => {
+        setLoading(false);
+      });
     }
   }
 
