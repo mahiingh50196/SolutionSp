@@ -88,14 +88,14 @@ export default function Offline(props) {
         style={styles.flatlistwrap}
         onPress={() =>
           props.navigation.navigate("ServiceDetails", {
-            itemData: item,
+            orderId: item._id,
           })
         }
       >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            {item.profilePicture && item.profilePicture.original ? (
-              <Image source={{ uri: item.profilePicture.original }} />
+            {item.profilePicture && item.profilePicture.thumbnail ? (
+              <Image source={{ uri: item.profilePicture.thumbnail }} />
             ) : (
               <Image source={onlineImg} />
             )}
@@ -138,7 +138,7 @@ export default function Offline(props) {
               <Image source={offline} />
               <Text style={styles.offlinetext}>You are offline!</Text>
               <Text style={styles.belowofflinetext}>
-                Our classes is thaught by our best selected teachers who are
+                Our classes is taught by our best selected teachers who are
                 experts in their subject
               </Text>
             </Touchable>

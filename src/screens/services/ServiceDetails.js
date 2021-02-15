@@ -1,89 +1,123 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
-import { Header, Background, Touchable, Button } from "../../common";
+import dayjs from "dayjs";
+import { Background, Touchable, Button } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
-import { ScrollView } from "react-native-gesture-handler";
+import { api } from "../../services";
 
-export default function ServiceDetails(props) {
-  const itemList = [1, 2];
-
-  const renderItem = (item) => {
-    return (
-      <Touchable>
-        <View style={styles.mainflatlistwrapper}>
-          <Image source={Mask} />
-
-          <View>
-            <Text style={styles.self}>Self-Service Car Wash</Text>
-            <Text style={styles.deleteall}>including delete all</Text>
-            <Text style={styles.self}>$ 40</Text>
+const Header = ({ orderDetails }) => {
+  const { user_name: userName, ratings, booking_Date, status } = orderDetails;
+  const bookingDate = new Date(booking_Date);
+  return (
+    <>
+      <View style={styles.mainview}>
+        <Touchable style={styles.profile}>
+          <Image source={onlineImg} />
+        </Touchable>
+        <View style={styles.profilename}>
+          <Text style={styles.profiletext}>{userName}</Text>
+          <View style={styles.ratingView}>
+            <Image source={clock} />
+            <Text style={styles.ratingtext}>{ratings || "not available"}</Text>
           </View>
-          <View style={styles.flatlistdirection}>
-            <View style={styles.addsubWrap}>
-              <Text style={styles.text1}>-</Text>
-            </View>
-            <View style={{ paddingHorizontal: 12, paddingVertical: 8 }}>
-              <Text style={styles.text1}>1</Text>
-            </View>
-            <View style={styles.addtextwrap}>
-              <Text style={styles.text1}>+</Text>
-            </View>
+          <View style={styles.dateview}>
+            <Image source={date} />
+            <Text style={styles.datetext}>
+              {dayjs(bookingDate).format("DD MMM, YYYY")}
+            </Text>
+            <Image source={clock} />
+            <Text style={styles.timeText}>
+              {dayjs(bookingDate).format("h:mm A")}
+            </Text>
           </View>
         </View>
-      </Touchable>
+        <View style={styles.pendingview}>
+          <Text style={styles.pendingtext}>{status}</Text>
+        </View>
+      </View>
+      <Text style={styles.servicesText}>Services</Text>
+    </>
+  );
+};
+
+const Footer = ({ orderDetails }) => {
+  const { special_instruction: instructions } = orderDetails;
+  return (
+    <View>
+      <Text
+        style={[
+          styles.service,
+          { paddingVertical: 10, fontSize: FontSizes.default },
+        ]}
+      >
+        Special Instructions
+      </Text>
+      <Text style={styles.longtext}>
+        {instructions || "No special instructions"}
+      </Text>
+      <View style={styles.buttonStyle}>
+        <Button width={180} title="Accept" />
+        <Button
+          type="transparent"
+          width={110}
+          title="Ignore"
+          style={{ borderWidth: 1, borderColor: Colors.primary }}
+        />
+      </View>
+    </View>
+  );
+};
+
+export default function ServiceDetails({
+  route: {
+    params: { orderId },
+  },
+}) {
+  const [orderDetails, setOrderDetails] = React.useState(null);
+  React.useEffect(() => {
+    (async () => {
+      const {
+        data: { data },
+      } = await api({
+        method: "get",
+        url: `/Provider/BookingDetails?orderId=${orderId}`,
+        showLoader: true,
+      });
+      setOrderDetails(data[0]);
+    })();
+  }, [orderId]);
+
+  const renderItem = ({
+    item: { category, price, productName, quentity, subcategory },
+    item,
+  }) => {
+    return (
+      <View style={styles.mainflatlistwrapper}>
+        <Image source={Mask} />
+        <View style={styles.right}>
+          <Text style={styles.self}>{productName}</Text>
+          <Text style={styles.deleteall}>{subcategory}</Text>
+          <Text style={styles.self}>$ 40</Text>
+        </View>
+      </View>
     );
   };
 
+  if (!orderDetails) {
+    return <></>;
+  }
+
   return (
     <Background>
-      <ScrollView style={styles.contentStyle}>
-        <View style={styles.mainview}>
-          <Touchable style={styles.profile}>
-            <Image source={onlineImg} />
-          </Touchable>
-          <View style={styles.profilename}>
-            <Text style={styles.profiletext}>Evan Ezuma</Text>
-            <View style={styles.ratingView}>
-              <Image source={clock} />
-              <Text style={styles.ratingtext}>4.8</Text>
-            </View>
-            <View style={styles.dateview}>
-              <Image source={date} />
-              <Text style={styles.datetext}>7th, oct 2020</Text>
-              <Image source={clock} />
-              <Text style={styles.timeText}>7:30 A.M</Text>
-            </View>
-          </View>
-          <Touchable style={styles.pendingview}>
-            <Text style={styles.pendingtext}>Pending</Text>
-          </Touchable>
-        </View>
-        <Text style={styles.service}>Services</Text>
-        <FlatList data={itemList} renderItem={renderItem} />
-        <Text
-          style={[
-            styles.service,
-            { paddingVertical: 10, fontSize: FontSizes.default },
-          ]}
-        >
-          Special Instructions
-        </Text>
-        <Text style={styles.longtext}>
-          Our classes is thought by our best selected teachers who are experts
-          in their subject.
-        </Text>
-
-        <View style={styles.buttonStyle}>
-          <Button width={180} title="Accept" />
-          <Button
-            type="transparent"
-            width={110}
-            title="Ignore"
-            style={{ borderWidth: 1, borderColor: Colors.primary }}
-          />
-        </View>
-      </ScrollView>
+      <FlatList
+        contentContainerStyle={styles.contentStyle}
+        data={orderDetails.product}
+        renderItem={renderItem}
+        keyExtractor={(_, index) => index.toString()}
+        ListHeaderComponent={<Header orderDetails={orderDetails} />}
+        ListFooterComponent={<Footer orderDetails={orderDetails} />}
+      />
     </Background>
   );
 }
@@ -101,7 +135,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     backgroundColor: Colors.purple,
-    paddingHorizontal: 10,
   },
   pendingtext: {
     color: Colors.white,
@@ -114,7 +147,6 @@ const styles = StyleSheet.create({
   mainflatlistwrapper: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
     marginVertical: 10,
     backgroundColor: Colors.off_White,
   },
@@ -188,5 +220,13 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     paddingTop: 50,
+  },
+  right: {
+    paddingLeft: 12,
+  },
+  servicesText: {
+    color: Colors.blue,
+    fontFamily: FontFamilies.poppinsMedium,
+    fontSize: FontSizes.large,
   },
 });
