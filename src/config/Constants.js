@@ -5,6 +5,7 @@ export const AuthStates = {
 };
 
 export const OrderStates = {
+  Pending: "Pending",
   Accepted: "Accepted",
   Rejected: "Rejected",
   Reached: "Reached",

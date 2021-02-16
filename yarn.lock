@@ -7802,6 +7802,13 @@ react-native-screens@^2.15.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.15.1.tgz#f7512932ecff7327b57fb0bda58e49e9bf8ee5f2"
   integrity sha512-cdcBHLizteH0RNn6QSw0ftQWWsAjolte/uuISoDBfllxka7sabT1i56C2Wus25KGGowaYT3DEz0zMFunS2GNJQ==
 
+react-native-swipe-verify@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-swipe-verify/-/react-native-swipe-verify-0.1.6.tgz#332c46562fc0e9e7cc0fbac72b205e7effd53660"
+  integrity sha512-oV3k1Jr5h6ET07Il5/5Xsa59rn3Dj1FObJwhuMU5CJQyrvyjXf+eNPgQ/L6ZAUXUppiLfyatmRgs3w0ZU9M1nw==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-switch@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-switch/-/react-native-switch-2.0.0.tgz#028371b946ba0520e421f02caa7685878cf4bd4e"

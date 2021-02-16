@@ -41,7 +41,7 @@ export default function Offline(props) {
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: isOnline ? "Your are Online!" : "You are Offline!",
+      title: isOnline ? "Your are Online!" : "Offline!",
       headerRight: () => (
         <View style={styles.switchContainer}>
           <Switch

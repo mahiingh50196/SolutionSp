@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import dayjs from "dayjs";
 import { Background, Touchable, Button } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
@@ -21,7 +22,7 @@ const Header = ({ orderDetails }) => {
         <View style={styles.profilename}>
           <Text style={styles.profiletext}>{userName}</Text>
           <View style={styles.ratingView}>
-            <Image source={clock} />
+            <FontAwesome name="star" size={10} color={Colors.rating} />
             <Text style={styles.ratingtext}>{ratings || "not available"}</Text>
           </View>
           <View style={styles.dateview}>
@@ -44,11 +45,12 @@ const Header = ({ orderDetails }) => {
   );
 };
 
-const Footer = ({ orderDetails }) => {
-  const { goBack } = useNavigation();
-  const { special_instruction: instructions, _id } = orderDetails;
+const ManageOrderStates = ({ orderDetails }) => {
+  const { special_instruction: instructions, _id, status } = orderDetails;
 
-  const updateOrderStatus = async (status) => {
+  const { goBack } = useNavigation();
+
+  const updateOrderStatus = async (orderState) => {
     const {
       data: { data },
     } = await api({
@@ -56,13 +58,50 @@ const Footer = ({ orderDetails }) => {
       url: "/Provider/BookingManaged",
       data: {
         orderId: _id,
-        status,
+        status: orderState,
       },
       showLoader: true,
     });
-    console.log(data);
-    goBack();
+    return true;
   };
+
+  const handleAccept = async () => {
+    const isUpdated = await updateOrderStatus(OrderStates.Accepted);
+    if (isUpdated) {
+      goBack();
+    }
+  };
+
+  const handleReject = async () => {
+    const isUpdated = await updateOrderStatus(OrderStates.Rejected);
+    if (isUpdated) {
+      goBack();
+    }
+  };
+
+  if (status === OrderStates.Pending) {
+    return (
+      <View style={styles.buttonStyle}>
+        <Button width={180} title="Accept" onPress={handleAccept} />
+        <Button
+          type="transparent"
+          width={110}
+          title="Ignore"
+          style={{ borderWidth: 1, borderColor: Colors.primary }}
+          onPress={handleReject}
+        />
+      </View>
+    );
+  }
+  return (
+    <View>
+      <Text>SHow Info for other states</Text>
+    </View>
+  );
+};
+
+const Footer = ({ orderDetails }) => {
+  const { special_instruction: instructions, _id } = orderDetails;
 
   return (
     <View>
@@ -77,20 +116,7 @@ const Footer = ({ orderDetails }) => {
       <Text style={styles.longtext}>
         {instructions || "No special instructions"}
       </Text>
-      <View style={styles.buttonStyle}>
-        <Button
-          width={180}
-          title="Accept"
-          onPress={() => updateOrderStatus(OrderStates.Accepted)}
-        />
-        <Button
-          type="transparent"
-          width={110}
-          title="Ignore"
-          style={{ borderWidth: 1, borderColor: Colors.primary }}
-          onPress={() => updateOrderStatus(OrderStates.Rejected)}
-        />
-      </View>
+      <ManageOrderStates orderDetails={orderDetails} />
     </View>
   );
 };
@@ -114,6 +140,10 @@ export default function ServiceDetails({
     })();
   }, [orderId]);
 
+  if (!orderDetails) {
+    return <></>;
+  }
+
   const renderItem = ({ item: { productName, subcategory } }) => {
     return (
       <View style={styles.mainflatlistwrapper}>
@@ -126,10 +156,6 @@ export default function ServiceDetails({
       </View>
     );
   };
-
-  if (!orderDetails) {
-    return <></>;
-  }
 
   return (
     <Background>
@@ -190,7 +216,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamilies.sfBold,
   },
   profilename: {
-    width: "60%",
+    width: "55%",
   },
   ratingView: {
     flexDirection: "row",

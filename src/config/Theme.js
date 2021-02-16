@@ -20,6 +20,7 @@ export const Colors = {
   dark_Pink: "rgb(255,0,69)",
   graySecondary: "#eee",
   borderColor: "#a7aab3",
+  rating: "#ffaa00",
 };
 
 export const FontSizes = {
