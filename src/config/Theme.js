@@ -18,6 +18,8 @@ export const Colors = {
   purple: "rgb(114,33,255)",
   lightes_Grey: "rgb(170,170,170)",
   dark_Pink: "rgb(255,0,69)",
+  graySecondary: "#eee",
+  borderColor: "#a7aab3",
 };
 
 export const FontSizes = {

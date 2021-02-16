@@ -39,11 +39,12 @@ import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
 import { drawer as MenuIcon } from "../assets/images";
-import { Colors } from "../config/Theme";
+import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
 const drawer = createDrawerNavigator();
+const services = createStackNavigator();
 
 const HeaderMenuIcon = () => {
   const { toggleDrawer } = useNavigation();
@@ -131,6 +132,37 @@ function HomeStack() {
   );
 }
 
+function ServicesStack() {
+  return (
+    <services.Navigator>
+      <services.Screen
+        name="Services"
+        component={MyServices}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "My Services",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: FontSizes.larger,
+            fontFamily: FontFamilies.sfMedium,
+          },
+          headerLeft: () => <HeaderMenuIcon />,
+        }}
+      />
+      <services.Screen
+        name="ServiceDetails"
+        component={ServiceDetails}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Service Details",
+        }}
+      />
+    </services.Navigator>
+  );
+}
+
 function DrawerNav() {
   return (
     <drawer.Navigator
@@ -138,7 +170,7 @@ function DrawerNav() {
       drawerType="slide"
     >
       <drawer.Screen name="Home" component={HomeStack} />
-      <drawer.Screen name="MyServices" component={MyServices} />
+      <drawer.Screen name="MyServices" component={ServicesStack} />
       <drawer.Screen name="Notification" component={Notification} />
       <drawer.Screen name="Profile" component={Profile} />
     </drawer.Navigator>

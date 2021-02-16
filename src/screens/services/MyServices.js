@@ -1,108 +1,160 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet, Image } from "react-native";
-import { Header, Background, Touchable, Button } from "../../common";
-import { Booking } from "../../assets/images";
+import { View, StyleSheet, SectionList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import dayjs from "dayjs";
+import { Background, Empty, Text, Touchable } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
-import { ScrollView } from "react-native-gesture-handler";
+import { api } from "../../services";
+import { SCREEN_WIDTH } from "../../config/Layout";
 
-export default function MyServices(props) {
-  const listItem2 = [1, 2, 3, 4];
-  const listItem1 = [1];
+const Order = ({ item }) => {
+  const { navigate } = useNavigation();
+  return (
+    <Touchable
+      style={styles.card}
+      onPress={() =>
+        navigate("ServiceDetails", {
+          orderId: item._id,
+        })
+      }
+    >
+      <View style={styles.top}>
+        <Text style={styles.name}>{item.provider_name}</Text>
+        <Text style={styles.date}>
+          {dayjs(new Date(item.booking_Time)).format("MMM DD, YYYY")}
+        </Text>
+      </View>
+      <Text style={styles.bookId}>Booking Id - {item.booking_id}</Text>
+      <View style={styles.top}>
+        <View style={styles.serviceDetail}>
+          <Text style={styles.serviceName}>{item.category}</Text>
+          <Text style={styles.address}>{item.address}</Text>
+        </View>
+        <Text style={styles.status}>{item.status}</Text>
+      </View>
+    </Touchable>
+  );
+};
 
-  const renderItem = (item) => {
-    return (
-      <Touchable
-        style={styles.boxShadow}
-        onPress={() =>
-          props.navigation.navigate("ServiceDetails", {
-            itemData: item,
-          })
-        }
-      >
-        <View style={styles.direction}>
-          <Text style={styles.name}>Evan Guzman</Text>
-          <Text style={[styles.name, { fontSize: FontSizes.xSmall }]}>
-            Oct 29, 2020
-          </Text>
-        </View>
-        <View style={[styles.direction, { paddingVertical: 10 }]}>
-          <Text style={styles.booking}>Booking ID - AT345FGT</Text>
-          <Image source={Booking} />
-        </View>
-        <View style={[styles.direction, { alignItems: "center" }]}>
-          <View>
-            <Text style={styles.selfService}>Self-Service Car Wash</Text>
-            <Text style={styles.name}>Los Angeles, California, US</Text>
-          </View>
-          <Text style={styles.pending}>Pending</Text>
-        </View>
-      </Touchable>
-    );
-  };
+const OrderList = () => {
+  const [orders, setOrders] = React.useState([]);
+
+  const Data = Object.keys(orders).reduce((acc, cv) => {
+    if (cv === "Ongoing_Service") {
+      if (orders[cv].length) {
+        acc.push({
+          title: "Ongoing Services",
+          data: orders[cv],
+        });
+      }
+    }
+    if (cv === "Last_Services") {
+      if (orders[cv].length) {
+        acc.push({
+          title: "Last Services",
+          data: orders[cv],
+        });
+      }
+    }
+    return acc;
+  }, []);
+
+  React.useEffect(() => {
+    getOrders();
+  }, []);
+
+  async function getOrders() {
+    const {
+      data: { data },
+    } = await api({
+      url: "/Provider/OrderList",
+      showLoader: true,
+    });
+    setOrders(data);
+  }
 
   return (
-    <Background contentStyle={styles.contentStyle}>
-      <Header
-        titleColor={Colors.navy_blue}
-        title="My Services"
-        withDrawerIcon
-        withBack={false}
+    <Background>
+      <SectionList
+        contentContainerStyle={styles.scrollContainer}
+        sections={Data}
+        keyExtractor={(item, index) => item._id + index}
+        renderItem={({ item }) => <Order item={item} />}
+        ListEmptyComponent={
+          <Empty title="No services awaiting to be completed" />
+        }
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={styles.headerSection}>{title}</Text>
+        )}
       />
-      <ScrollView>
-        <Text style={styles.onGoingText}>Ongoing Service</Text>
-        <FlatList
-          data={listItem1}
-          renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => item._id}
-        />
-        <Text style={styles.onGoingText}>Last Service</Text>
-        <FlatList
-          data={listItem2}
-          renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => item._id}
-        />
-      </ScrollView>
     </Background>
   );
-}
+};
+
+export default OrderList;
+
 const styles = StyleSheet.create({
-  contentStyle: {
-    paddingHorizontal: 0,
-    flex: 1,
+  scrollContainer: {
+    paddingVertical: 70,
   },
-  onGoingText: {
-    fontSize: FontSizes.larger,
-    fontFamily: FontFamilies.sfRegular,
-    padding: 20,
+  navstyle: {
+    height: 100,
+    width: 100,
+    right: 14,
   },
-  direction: {
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 14,
+    shadowOffset: {
+      width: -4,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowColor: "black",
+    borderWidth: 1,
+    borderColor: Colors.graySecondary,
+    padding: 12,
+    marginBottom: 12,
+  },
+  name: {
+    fontSize: 15,
+    color: "#000",
+  },
+  date: {
+    fontSize: FontSizes.small,
+    color: Colors.black,
+  },
+  top: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  boxShadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    backgroundColor: "white",
-    margin: 20,
-    padding: 20,
-    borderRadius: 20,
+  bookId: {
+    color: Colors.gray,
+    fontSize: FontSizes.medium,
+    marginTop: 8,
   },
-  booking: {
-    color: Colors.lightes_Grey,
-    fontSize: FontSizes.xSmall,
+  serviceDetail: {
+    marginTop: 20,
+    width: SCREEN_WIDTH * 0.6,
+  },
+  serviceName: {
+    color: Colors.blue,
     fontFamily: FontFamilies.sfRegular,
   },
-  selfService: {
-    color: Colors.navy_blue,
-    fontSize: FontSizes.mediums,
-    fontFamily: FontFamilies.sfRegular,
-    paddingBottom: 10,
+  address: {
+    fontFamily: FontFamilies.sfMedium,
+    marginTop: 6,
+    fontSize: FontSizes.medium,
   },
-  pending: {
-    color: Colors.dark_Pink,
-    fontSize: FontSizes.xSmall,
-    fontFamily: FontFamilies.mediums,
+  status: {
+    color: "#ff0045",
+    marginTop: 20,
+  },
+  headerSection: {
+    fontSize: FontSizes.xLarge,
+    fontFamily: FontFamilies.medium,
+    backgroundColor: "#fff",
+    marginBottom: 20,
   },
 });

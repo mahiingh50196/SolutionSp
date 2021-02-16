@@ -1,14 +1,17 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { Background, Touchable, Button } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
+import { OrderStates } from "../../config/Constants";
 
 const Header = ({ orderDetails }) => {
   const { user_name: userName, ratings, booking_Date, status } = orderDetails;
   const bookingDate = new Date(booking_Date);
+
   return (
     <>
       <View style={styles.mainview}>
@@ -42,7 +45,25 @@ const Header = ({ orderDetails }) => {
 };
 
 const Footer = ({ orderDetails }) => {
-  const { special_instruction: instructions } = orderDetails;
+  const { goBack } = useNavigation();
+  const { special_instruction: instructions, _id } = orderDetails;
+
+  const updateOrderStatus = async (status) => {
+    const {
+      data: { data },
+    } = await api({
+      method: "put",
+      url: "/Provider/BookingManaged",
+      data: {
+        orderId: _id,
+        status,
+      },
+      showLoader: true,
+    });
+    console.log(data);
+    goBack();
+  };
+
   return (
     <View>
       <Text
@@ -57,12 +78,17 @@ const Footer = ({ orderDetails }) => {
         {instructions || "No special instructions"}
       </Text>
       <View style={styles.buttonStyle}>
-        <Button width={180} title="Accept" />
+        <Button
+          width={180}
+          title="Accept"
+          onPress={() => updateOrderStatus(OrderStates.Accepted)}
+        />
         <Button
           type="transparent"
           width={110}
           title="Ignore"
           style={{ borderWidth: 1, borderColor: Colors.primary }}
+          onPress={() => updateOrderStatus(OrderStates.Rejected)}
         />
       </View>
     </View>
@@ -88,10 +114,7 @@ export default function ServiceDetails({
     })();
   }, [orderId]);
 
-  const renderItem = ({
-    item: { category, price, productName, quentity, subcategory },
-    item,
-  }) => {
+  const renderItem = ({ item: { productName, subcategory } }) => {
     return (
       <View style={styles.mainflatlistwrapper}>
         <Image source={Mask} />

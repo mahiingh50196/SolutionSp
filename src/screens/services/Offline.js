@@ -60,16 +60,12 @@ export default function Offline(props) {
     const unsubscribe = navigation.addListener("focus", () => {
       if (info && !info.documentUploaded) {
         navigation.navigate("DocsUpload");
+      } else if (info && info.documentUploaded) {
+        getOrderList();
       }
     });
     return unsubscribe;
-  }, [navigation, info]);
-
-  React.useEffect(() => {
-    if (info && info.documentUploaded) {
-      getOrderList();
-    }
-  }, [info, getOrderList]);
+  }, [navigation, info, getOrderList]);
 
   const getOrderList = React.useCallback(async () => {
     const {
