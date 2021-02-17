@@ -5,10 +5,13 @@ import { Touchable } from "../common";
 import { api } from "../services";
 import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { DrawerItemList } from "@react-navigation/drawer";
 
 export default function CustomeDrawer(props) {
+  const user = useRecoilValue(userInfo);
+  console.log("user..", JSON.stringify(user.profilePicture, undefined, 2));
+
   const {
     navigation: { navigate },
   } = props;
@@ -27,9 +30,17 @@ export default function CustomeDrawer(props) {
       <View style={styles.maindrawerView}>
         <Touchable onPress={() => navigate("Profile")}>
           <View style={styles.imgtextwrap}>
-            <Image source={nav} />
+            {Object.keys(user).length && user.profilePicture.original ? (
+              <Image
+                source={{ uri: user.profilePicture.original }}
+                style={{ width: 50, height: 50, borderRadius: 25 }}
+              />
+            ) : (
+              <Image source={nav} />
+            )}
+            <Image source={{ uri: user.profilePicture.original }} />
             <View>
-              <Text style={styles.profiletext}>Travis Ravees</Text>
+              <Text style={styles.profiletext}>{user.fullName}</Text>
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
           </View>
@@ -66,6 +77,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamilies.sfSemiBold,
     fontSize: FontSizes.xLarge,
     paddingVertical: 15,
+    paddingHorizontal: 10,
   },
   editprofiletext: {
     color: Colors.primary,
