@@ -13,6 +13,7 @@ import FullScreenLoader from "./FullScreenLoader";
 import Dropdown from "./Dropdown";
 import Modal from "./Modal";
 import Empty from "./Empty";
+import Swiper from "./Swiper";
 
 export {
   TextInput,
@@ -30,4 +31,5 @@ export {
   Dropdown,
   Modal,
   Empty,
+  Swiper,
 };

@@ -21,7 +21,7 @@ const Order = ({ item }) => {
       <View style={styles.top}>
         <Text style={styles.name}>{item.provider_name}</Text>
         <Text style={styles.date}>
-          {dayjs(new Date(item.booking_Time)).format("MMM DD, YYYY")}
+          {dayjs(new Date(item.booking_Date)).format("MMM DD, YYYY")}
         </Text>
       </View>
       <Text style={styles.bookId}>Booking Id - {item.booking_id}</Text>
@@ -36,7 +36,7 @@ const Order = ({ item }) => {
   );
 };
 
-const OrderList = () => {
+const OrderList = ({ navigation }) => {
   const [orders, setOrders] = React.useState([]);
 
   const Data = Object.keys(orders).reduce((acc, cv) => {
@@ -60,8 +60,11 @@ const OrderList = () => {
   }, []);
 
   React.useEffect(() => {
-    getOrders();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      getOrders();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   async function getOrders() {
     const {

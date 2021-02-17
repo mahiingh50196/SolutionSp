@@ -2,15 +2,57 @@ import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import AntDesign from "react-native-vector-icons/AntDesign";
 import dayjs from "dayjs";
-import { Background, Touchable, Button } from "../../common";
+import { Background, Touchable, Button, Swiper, Toast } from "../../common";
 import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
 import { OrderStates } from "../../config/Constants";
 
+const getTime = (val) => {
+  const hours = val / 60;
+  const minutes = val % 60;
+  return `${hours < 10 ? `0${hours}` : hours}:${
+    minutes < 10 ? `0${minutes}` : minutes
+  }`;
+};
+
+const ActionIconButton = ({ title, renderIcon, type, onPress }) => {
+  const getButtonBackground = () => {
+    switch (type) {
+      case "call":
+        return Colors.primary;
+      case "message":
+        return Colors.blue;
+      default:
+        return "#bec2ce";
+    }
+  };
+
+  return (
+    <Touchable
+      onPress={onPress}
+      style={[
+        styles.actionButtonContainer,
+        { backgroundColor: getButtonBackground() },
+      ]}
+    >
+      {renderIcon && renderIcon()}
+      <Text style={styles.actionButtonIconText}>{title}</Text>
+    </Touchable>
+  );
+};
+
 const Header = ({ orderDetails }) => {
-  const { user_name: userName, ratings, booking_Date, status } = orderDetails;
+  const {
+    user_name: userName,
+    ratings,
+    booking_Date,
+    booking_Time,
+    status,
+  } = orderDetails;
   const bookingDate = new Date(booking_Date);
 
   return (
@@ -31,9 +73,7 @@ const Header = ({ orderDetails }) => {
               {dayjs(bookingDate).format("DD MMM, YYYY")}
             </Text>
             <Image source={clock} />
-            <Text style={styles.timeText}>
-              {dayjs(bookingDate).format("h:mm A")}
-            </Text>
+            <Text style={styles.timeText}>{getTime(booking_Time)}</Text>
           </View>
         </View>
         <View style={styles.pendingview}>
@@ -45,10 +85,40 @@ const Header = ({ orderDetails }) => {
   );
 };
 
-const ManageOrderStates = ({ orderDetails }) => {
-  const { special_instruction: instructions, _id, status } = orderDetails;
+const ManageOrderStates = ({ orderDetails, callback }) => {
+  const { _id, status } = orderDetails;
 
   const { goBack } = useNavigation();
+
+  const renderSwipeButtons = () => {
+    switch (orderDetails.status) {
+      case OrderStates.Confirmed:
+        return (
+          <Swiper
+            title="Swipe Right to start service"
+            onSwipe={async () => {
+              await updateOrderStatus(OrderStates.Started);
+              callback();
+              Toast.show({ text: "Service started" });
+            }}
+          />
+        );
+      case OrderStates.Started:
+        return (
+          <Swiper
+            title="Swipe Right To Reached"
+            onSwipe={async () => {
+              await updateOrderStatus(OrderStates.Reached);
+              callback();
+              Toast.show({ text: "marked as reached" });
+            }}
+          />
+        );
+
+      default:
+        break;
+    }
+  };
 
   const updateOrderStatus = async (orderState) => {
     const {
@@ -79,6 +149,13 @@ const ManageOrderStates = ({ orderDetails }) => {
     }
   };
 
+  const handleCancel = async () => {
+    const isUpdated = await updateOrderStatus(OrderStates.Canceled);
+    if (isUpdated) {
+      goBack();
+    }
+  };
+
   if (status === OrderStates.Pending) {
     return (
       <View style={styles.buttonStyle}>
@@ -95,13 +172,37 @@ const ManageOrderStates = ({ orderDetails }) => {
   }
   return (
     <View>
-      <Text>SHow Info for other states</Text>
+      <View style={styles.actionIconsContainer}>
+        <ActionIconButton
+          title="Call"
+          type="call"
+          renderIcon={() => (
+            <FontAwesome name="phone" color={Colors.white} size={20} />
+          )}
+        />
+        <ActionIconButton
+          title="Message"
+          type="message"
+          renderIcon={() => (
+            <AntDesign name="message1" color={Colors.white} size={20} />
+          )}
+        />
+        <ActionIconButton
+          title="Cancel"
+          type="cancel"
+          renderIcon={() => (
+            <AntDesign name="delete" color={Colors.white} size={20} />
+          )}
+          onPress={handleCancel}
+        />
+      </View>
+      {renderSwipeButtons()}
     </View>
   );
 };
 
-const Footer = ({ orderDetails }) => {
-  const { special_instruction: instructions, _id } = orderDetails;
+const Footer = ({ orderDetails, callback }) => {
+  const { special_instruction: instructions } = orderDetails;
 
   return (
     <View>
@@ -116,7 +217,7 @@ const Footer = ({ orderDetails }) => {
       <Text style={styles.longtext}>
         {instructions || "No special instructions"}
       </Text>
-      <ManageOrderStates orderDetails={orderDetails} />
+      <ManageOrderStates orderDetails={orderDetails} callback={callback} />
     </View>
   );
 };
@@ -127,18 +228,21 @@ export default function ServiceDetails({
   },
 }) {
   const [orderDetails, setOrderDetails] = React.useState(null);
-  React.useEffect(() => {
-    (async () => {
-      const {
-        data: { data },
-      } = await api({
-        method: "get",
-        url: `/Provider/BookingDetails?orderId=${orderId}`,
-        showLoader: true,
-      });
-      setOrderDetails(data[0]);
-    })();
+
+  const fetchOrderDetails = React.useCallback(async () => {
+    const {
+      data: { data },
+    } = await api({
+      method: "get",
+      url: `/Provider/BookingDetails?orderId=${orderId}`,
+      showLoader: true,
+    });
+    setOrderDetails(data[0]);
   }, [orderId]);
+
+  React.useEffect(() => {
+    fetchOrderDetails();
+  }, [fetchOrderDetails]);
 
   if (!orderDetails) {
     return <></>;
@@ -165,7 +269,9 @@ export default function ServiceDetails({
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
         ListHeaderComponent={<Header orderDetails={orderDetails} />}
-        ListFooterComponent={<Footer orderDetails={orderDetails} />}
+        ListFooterComponent={
+          <Footer orderDetails={orderDetails} callback={fetchOrderDetails} />
+        }
       />
     </Background>
   );
@@ -277,5 +383,33 @@ const styles = StyleSheet.create({
     color: Colors.blue,
     fontFamily: FontFamilies.poppinsMedium,
     fontSize: FontSizes.large,
+  },
+  actionIconsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 16,
+  },
+  actionButtonIconText: {
+    color: Colors.white,
+    marginTop: 8,
+  },
+  actionButtonContainer: {
+    height: 70,
+    width: 90,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+  },
+  swipeContainer: {
+    padding: 4,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    marginTop: 20,
+    borderRadius: 12,
+  },
+  swiperText: {
+    color: Colors.primary,
+    fontFamily: FontFamilies.poppinsMedium,
+    fontSize: FontSizes.medium,
   },
 });
