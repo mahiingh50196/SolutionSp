@@ -95,12 +95,10 @@ export default function Login({ navigation: { navigate } }) {
         />
         <SocialLogin desc="or Sign in with social account" />
         <View style={styles.desc1}>
-          <Text style={styles.alreadyAccountLabel}>
-            Don't have an account?
-            <Touchable onPress={() => navigate("Signup")}>
-              <Text style={styles.loginLabel}>Sign up</Text>
-            </Touchable>
-          </Text>
+          <Text style={styles.alreadyAccountLabel}>Don't have an account?</Text>
+          <Touchable onPress={() => navigate("Signup")}>
+            <Text style={styles.loginLabel}>Sign up</Text>
+          </Touchable>
         </View>
       </ScrollView>
     </Background>
@@ -117,6 +115,7 @@ const styles = StyleSheet.create({
   alreadyAccountLabel: {
     color: "#8f9bb3",
     fontSize: FontSizes.small,
+    fontFamily: FontFamilies.sfMedium,
   },
   desc: {
     marginTop: 10,
@@ -143,8 +142,9 @@ const styles = StyleSheet.create({
   loginLabel: {
     color: Colors.primary,
     fontSize: FontSizes.small,
-    top: 3,
     left: 10,
+    fontFamily: FontFamilies.sfMedium,
+    textDecorationLine: "underline",
   },
   desc1: {
     flexDirection: "row",

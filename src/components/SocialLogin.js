@@ -7,9 +7,10 @@ import { Touchable } from "../common";
 import { useSetRecoilState } from "recoil";
 
 import { userInfo } from "../store/atoms/auth";
-import { FontSizes } from "../config/Theme";
+import { FontSizes, FontFamilies } from "../config/Theme";
 import { api } from "../services";
 import * as Facebook from "expo-facebook";
+import { AuthStates } from "../config/Constants";
 
 export default function SocialLogin({ desc }) {
   const setUserInfo = useSetRecoilState(userInfo);
@@ -22,34 +23,30 @@ export default function SocialLogin({ desc }) {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
       if (type === "success") {
-        const {
-          auth: { accessToken },
-          displayName,
-          email,
-        } = user;
-        const formData = new FormData();
-        formData.append("socialKey", accessToken);
-        formData.append("fullName", displayName);
-        formData.append("email", email);
+        const { displayName, email, uid } = user;
         api({
           method: "post",
           url: "/Provider/LoginGmail",
-          data: formData,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
+          data: {
+            socialKey: uid,
+            email,
+            fullName: displayName,
           },
+          showLoader: true,
         }).then((res) => {
           const {
             data: { data },
           } = res;
           if (data) {
-            setUserInfo(res.data?.data);
+            setUserInfo({
+              ...res.data?.data,
+              authState: AuthStates.COMPLETE,
+            });
           }
         });
       }
-    } catch ({ message }) {
-      alert("login: Error:" + message);
+    } catch (err) {
+      console.warn(err);
     }
   };
 
@@ -114,6 +111,7 @@ const styles = StyleSheet.create({
     color: "#8f9bb3",
     fontSize: FontSizes.small,
     textAlign: "center",
+    fontFamily: FontFamilies.sfMedium,
   },
   socialiconwrapper: {
     flexDirection: "row",
