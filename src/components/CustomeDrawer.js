@@ -10,7 +10,6 @@ import { DrawerItemList } from "@react-navigation/drawer";
 
 export default function CustomeDrawer(props) {
   const user = useRecoilValue(userInfo);
-  console.log("user..", JSON.stringify(user.profilePicture, undefined, 2));
 
   const {
     navigation: { navigate },
@@ -30,7 +29,7 @@ export default function CustomeDrawer(props) {
       <View style={styles.maindrawerView}>
         <Touchable onPress={() => navigate("Profile")}>
           <View style={styles.imgtextwrap}>
-            {Object.keys(user).length && user.profilePicture.thumbnail ? (
+            {Object.keys(user).length && user?.profilePicture.thumbnail ? (
               <Image
                 source={{ uri: user.profilePicture.thumbnail }}
                 style={{ width: 50, height: 50, borderRadius: 25 }}

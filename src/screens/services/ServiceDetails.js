@@ -49,11 +49,13 @@ const Header = ({ orderDetails }) => {
   const {
     user_name: userName,
     ratings,
-    booking_Date,
-    booking_Time,
+    Date: booking_Date,
+    Time: booking_Time,
     status,
   } = orderDetails;
   const bookingDate = new Date(booking_Date);
+
+  console.log(orderDetails);
 
   return (
     <>
@@ -91,30 +93,45 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
   const { goBack } = useNavigation();
 
   const renderSwipeButtons = () => {
+    console.warn(orderDetails.status);
     switch (orderDetails.status) {
+      case OrderStates.Accepted:
       case OrderStates.Confirmed:
         return (
           <Swiper
-            title="Swipe Right to start service"
-            onSwipe={async () => {
-              await updateOrderStatus(OrderStates.Started);
+            title="Swipe Right to Reached"
+            onSwipe={async (swiperRef) => {
+              await updateOrderStatus(OrderStates.Reached);
+              swiperRef.current.reset();
               callback();
               Toast.show({ text: "Service started" });
+            }}
+          />
+        );
+      case OrderStates.Reached:
+        return (
+          <Swiper
+            title="Swipe Right To Start"
+            onSwipe={async (swiperRef) => {
+              await updateOrderStatus(OrderStates.Started);
+              swiperRef.current.reset();
+              callback();
+              Toast.show({ text: "marked as reached" });
             }}
           />
         );
       case OrderStates.Started:
         return (
           <Swiper
-            title="Swipe Right To Reached"
-            onSwipe={async () => {
-              await updateOrderStatus(OrderStates.Reached);
+            title="Swipe Right To Complete"
+            onSwipe={async (swiperRef) => {
+              await updateOrderStatus(OrderStates.Completed);
+              swiperRef.current.reset();
               callback();
-              Toast.show({ text: "marked as reached" });
+              Toast.show({ text: "marked as complete" });
             }}
           />
         );
-
       default:
         break;
     }
@@ -187,14 +204,17 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
             <AntDesign name="message1" color={Colors.white} size={20} />
           )}
         />
-        <ActionIconButton
-          title="Cancel"
-          type="cancel"
-          renderIcon={() => (
-            <AntDesign name="delete" color={Colors.white} size={20} />
-          )}
-          onPress={handleCancel}
-        />
+        {status !== OrderStates.Canceled ||
+          (status !== OrderStates.Rejected && (
+            <ActionIconButton
+              title="Cancel"
+              type="cancel"
+              renderIcon={() => (
+                <AntDesign name="delete" color={Colors.white} size={20} />
+              )}
+              onPress={handleCancel}
+            />
+          ))}
       </View>
       {renderSwipeButtons()}
     </View>
@@ -234,7 +254,7 @@ export default function ServiceDetails({
       data: { data },
     } = await api({
       method: "get",
-      url: `/Provider/BookingDetails?orderId=${orderId}`,
+      url: `/Provider/OrderDetails?orderId=${orderId}`,
       showLoader: true,
     });
     setOrderDetails(data[0]);

@@ -22,6 +22,7 @@ import {
   OtpVerify,
   Location,
   ForgetPassword,
+  TermsInfo,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
 import {
@@ -77,6 +78,7 @@ function AuthStack() {
       <auth.Screen name="Signup" component={Signup} />
       <auth.Screen name="CountryPicker" component={CountryPicker} />
       <auth.Screen name="OtpVerify" component={OtpVerify} />
+      <auth.Screen name="TermsInfo" component={TermsInfo} />
     </auth.Navigator>
   );
 }

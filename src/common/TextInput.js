@@ -6,7 +6,7 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { Colors, FontSizes } from "../config/Theme";
+import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 import Text from "./Text";
 import { Cross } from "../assets/images";
 import Feather from "react-native-vector-icons/Feather";
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 8,
     color: Colors.black,
+    fontFamily: FontFamilies.sfSemiBold,
   },
   cross: {
     position: "absolute",

@@ -6,17 +6,21 @@ import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 import { Swiper as SwiperIcon } from "../assets/images";
 
 const Swiper = ({ title, onSwipe }) => {
+  const swiperRef = React.useRef(null);
   return (
     <View style={styles.swipeContainer}>
       <RNSwipeVerify
+        ref={swiperRef}
         width={SCREEN_WIDTH * 0.6}
         buttonSize={44}
         borderColor="#fff"
         buttonColor="#fff"
         backgroundColor="#fff"
         textColor="#37474F"
-        okButton={{ visible: false, duration: 400 }}
-        onVerified={onSwipe}
+        okButton={{ visible: true, duration: 400 }}
+        onVerified={() => {
+          onSwipe(swiperRef);
+        }}
         icon={
           <Image
             source={SwiperIcon}
