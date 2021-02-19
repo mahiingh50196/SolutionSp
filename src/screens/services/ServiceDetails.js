@@ -93,7 +93,6 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
   const { goBack } = useNavigation();
 
   const renderSwipeButtons = () => {
-    console.warn(orderDetails.status);
     switch (orderDetails.status) {
       case OrderStates.Accepted:
       case OrderStates.Confirmed:

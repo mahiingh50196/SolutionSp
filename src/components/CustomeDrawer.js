@@ -29,16 +29,18 @@ export default function CustomeDrawer(props) {
       <View style={styles.maindrawerView}>
         <Touchable onPress={() => navigate("Profile")}>
           <View style={styles.imgtextwrap}>
-            {Object.keys(user).length && user?.profilePicture.thumbnail ? (
+            {!!user &&
+            Object.keys(user).length &&
+            user?.profilePicture.thumbnail ? (
               <Image
-                source={{ uri: user.profilePicture.thumbnail }}
+                source={{ uri: user?.profilePicture.thumbnail }}
                 style={{ width: 50, height: 50, borderRadius: 25 }}
               />
             ) : (
               <Image source={nav} />
             )}
             <View>
-              <Text style={styles.profiletext}>{user.fullName}</Text>
+              <Text style={styles.profiletext}>{user?.fullName}</Text>
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
           </View>
