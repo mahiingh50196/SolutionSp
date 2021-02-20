@@ -38,23 +38,18 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   };
   const updatedValue = (val) => {
     const userData = val;
-    console.warn("body", userData);
     api({
       url: "/Provider/ProfileUpdate",
       method: "PUT",
       data: userData,
-    })
-      .then((res) => {
-        console.warn("res", res);
-        updateUser();
-      })
-      .catch((err) => console.warn("err", err));
+    }).then((res) => {
+      updateUser();
+    });
 
     setModalVisible(false);
   };
 
   const onPickSuccess = (image) => {
-    console.warn("image selected", image);
     const formData = new FormData();
     formData.append("image", {
       uri: image.path,

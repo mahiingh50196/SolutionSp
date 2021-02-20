@@ -11,12 +11,13 @@ const Button = ({
   onPress = () => {},
   style = {},
   isLoading = false,
+  disabled = false,
 }) => {
   const renderButton = () => {
     switch (type) {
       case "primary":
         return (
-          <Touchable onPress={onPress}>
+          <Touchable onPress={onPress} disabled={disabled}>
             <View
               style={[
                 styles.wrapPrimary,
@@ -32,7 +33,7 @@ const Button = ({
         );
       case "secondary":
         return (
-          <Touchable onPress={onPress}>
+          <Touchable onPress={onPress} disabled={disabled}>
             <View
               style={[
                 styles.wrapSecondary,
@@ -48,7 +49,7 @@ const Button = ({
         );
       case "transparent":
         return (
-          <Touchable onPress={onPress}>
+          <Touchable onPress={onPress} disabled={disabled}>
             <View
               style={[
                 styles.wrapTranaparent,

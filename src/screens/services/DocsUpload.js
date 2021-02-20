@@ -23,7 +23,7 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
     },
     {
       type: "id",
-      title: "Identity Proof",
+      title: "Identification Cards",
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -40,6 +40,8 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
     });
     setDocs(updatedDocs);
   };
+
+  const uploadedDocs = docs.filter((each) => each.docUri).length;
 
   async function handleDocsUpload() {
     const addressDoc = docs.find((each) => each.type === "address");
@@ -120,7 +122,13 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
       </ScrollView>
       <View style={{ marginTop: 50 }}>
         <Button
-          style={styles.submit}
+          disabled={!uploadedDocs}
+          style={[
+            styles.submit,
+            {
+              backgroundColor: uploadedDocs ? Colors.primary : Colors.gray,
+            },
+          ]}
           isLoading={loading}
           title="Submit"
           onPress={handleDocsUpload}
@@ -141,12 +149,12 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     fontSize: FontSizes.xLarge,
-    color: Colors.primary,
+    color: Colors.blue,
     fontFamily: FontFamilies.sfBold,
   },
   overLay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 8,
   },
   touchable: {
@@ -156,12 +164,13 @@ const styles = StyleSheet.create({
   uploadText: {
     color: Colors.white,
     position: "absolute",
-    fontSize: FontSizes.xxLarge,
+    fontSize: FontSizes.xLarge,
     fontFamily: FontFamilies.sfBold,
-    top: 80,
-    left: SCREEN_WIDTH * 0.3,
+    // top: 80,
     elevation: 4,
     zIndex: 4,
+    alignSelf: "center",
+    top: 80,
   },
   docImage: {
     height: 160,

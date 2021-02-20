@@ -18,6 +18,7 @@ const ImagePick = ({ renderOpenModalButton, onPickSuccess }) => {
       height: 400,
       cropping: true,
     }).then((image) => {
+      setVisible(false);
       onPickSuccess(image);
     });
   };

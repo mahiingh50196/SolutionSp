@@ -11,7 +11,7 @@ import {
   Toast,
 } from "../../common";
 import { ImagePick } from "../../components";
-import { Colors, FontSizes } from "../../config/Theme";
+import { Colors, FontSizes, FontFamilies } from "../../config/Theme";
 import { api } from "../../services";
 import dayjs from "dayjs";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -50,7 +50,7 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
           source={responseImage ? { uri: responseImage } : Drivinglicence}
           style={styles.image}
         />
-        <Text style={styles.upload}>Upload</Text>
+        {!responseImage && <Text style={styles.upload}>Upload Photo</Text>}
       </Touchable>
     );
   }
@@ -151,6 +151,7 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
             is24Hour={true}
             display="default"
             onChange={onChangeDate}
+            minimumDate={new Date()}
           />
         )}
       </Touchable>
@@ -170,10 +171,11 @@ const styles = StyleSheet.create({
   },
   upload: {
     position: "absolute",
-    bottom: 10,
+    bottom: 18,
     alignSelf: "center",
-    color: Colors.primary,
-    fontSize: FontSizes.xxLarge,
+    color: Colors.blue,
+    fontSize: FontSizes.xLarge,
+    fontFamily: FontFamilies.sfSemiBold,
   },
   space: {
     height: 20,
