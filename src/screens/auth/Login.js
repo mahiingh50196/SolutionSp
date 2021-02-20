@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ScrollView, Platform } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { Background, Text, Button, Touchable, TextInput } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SocialLogin } from "../../components";
@@ -7,13 +7,13 @@ import { api } from "../../services";
 import { useSetRecoilState } from "recoil";
 import { userInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
-import { NoAuthAPI } from "../../config/apiServices";
 import { AuthStates } from "../../config/Constants";
 // import messaging from "@react-native-firebase/messaging";
 
 export default function Login({ navigation: { navigate } }) {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   const setUserInfo = useSetRecoilState(userInfo);
 
@@ -21,16 +21,16 @@ export default function Login({ navigation: { navigate } }) {
     // const fcmToken = await messaging().getToken();
     // const deviceType = Platform.OS === "android" ? "ANDROID" : "IPHONE";
 
+    setLoading(true);
+
     if (validateEmail(email)) {
       const {
         data: { data },
       } = await api({
         method: "get",
         url: `/Provider/Login?email=${email}&password=${password}`,
-        showLoader: true,
       });
       if (data?.location && data.location.coordinates?.length) {
-        console.log(data);
         setUserInfo({
           ...data,
           authState: AuthStates.COMPLETE,
@@ -41,6 +41,8 @@ export default function Login({ navigation: { navigate } }) {
           authState: AuthStates.NO_LOCATION,
         });
       }
+    } else {
+      setLoading(false);
     }
   };
 
@@ -84,7 +86,12 @@ export default function Login({ navigation: { navigate } }) {
         </View>
         <View style={styles.space} />
         <View style={styles.space} />
-        <Button style={styles.signUp} title="Sign In" onPress={login} />
+        <Button
+          style={styles.signUp}
+          title="Sign In"
+          onPress={login}
+          isLoading={loading}
+        />
         <SocialLogin desc="or Sign in with social account" />
         <View style={styles.desc1}>
           <Text style={styles.alreadyAccountLabel}>Don't have an account?</Text>

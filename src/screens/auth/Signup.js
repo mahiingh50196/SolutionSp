@@ -34,6 +34,18 @@ export default function Signup({ navigation: { navigate } }) {
   const [uploadLoading, setUploadLoading] = React.useState(false);
   const [responseImage, setResponseImage] = React.useState(null);
   const setAuthInfo = useSetRecoilState(signUpInfo);
+  const [termsInfo, setTermsInfo] = React.useState(null);
+
+  const getTerms = React.useCallback(async () => {
+    const {
+      data: { data },
+    } = await api.get("/Provider/PolicyTermsCondtions");
+    setTermsInfo(data);
+  }, [setTermsInfo]);
+
+  React.useEffect(() => {
+    getTerms();
+  }, [getTerms]);
 
   const getErrorInfo = () => {
     if (!name) {
@@ -181,10 +193,10 @@ export default function Signup({ navigation: { navigate } }) {
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.title}>Create Your Account</Text>
+        <Text style={styles.title}>Create your account</Text>
         <View style={styles.desc}>
           <Text style={styles.alreadyAccountLabel}>
-            Already have an account
+            Already have an account?
           </Text>
           <Touchable onPress={() => navigate("Login")}>
             <Text style={styles.loginLabel}>Login?</Text>
@@ -222,6 +234,7 @@ export default function Signup({ navigation: { navigate } }) {
             placeholder="Enter your password"
           />
           <View style={styles.space} />
+          <Text style={styles.label}>Phone Number</Text>
           <PhoneInput
             onChangeText={(val) => {
               setPhone(val);
@@ -231,6 +244,7 @@ export default function Signup({ navigation: { navigate } }) {
             }}
           />
           <View style={styles.space} />
+          <Text style={styles.label}>Categories</Text>
           <Touchable
             style={[
               styles.dropdowncontainer,
@@ -259,7 +273,7 @@ export default function Signup({ navigation: { navigate } }) {
         <Button
           isLoading={loading}
           style={styles.signUp}
-          title="Sign Up"
+          title="Sign up"
           onPress={initSignUp}
         />
         <SocialLogin desc="Or sign up with social account" />
@@ -267,12 +281,26 @@ export default function Signup({ navigation: { navigate } }) {
           <Text style={styles.terms}>
             By Clicking "SignUp" you agree to our{" "}
           </Text>
-          <Touchable>
+          <Touchable
+            onPress={() =>
+              navigate("TermsInfo", {
+                info: termsInfo?.termsCondition,
+                title: "Terms and Conditions",
+              })
+            }
+          >
             <Text style={styles.termsTextButton}>Terms and conditions</Text>
           </Touchable>
-          <Text style={styles.terms}>as well as</Text>
-          <Touchable>
-            <Text style={styles.termsTextButton}>our privacy</Text>
+          <Text style={styles.terms}>as well as our</Text>
+          <Touchable
+            onPress={() =>
+              navigate("TermsInfo", {
+                info: termsInfo?.policy,
+                title: "Privacy Policy",
+              })
+            }
+          >
+            <Text style={styles.termsTextButton}>privacy policy</Text>
           </Touchable>
         </View>
       </ScrollView>
@@ -294,10 +322,13 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: FontSizes.small,
     marginLeft: 12,
+    fontFamily: FontFamilies.sfSemiBold,
+    top: 1,
   },
   alreadyAccountLabel: {
     color: "#8f9bb3",
     fontSize: FontSizes.small,
+    fontFamily: FontFamilies.sfSemiBold,
   },
   desc: {
     marginTop: 8,
@@ -331,6 +362,7 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.small,
     marginHorizontal: 8,
     lineHeight: 22,
+    textDecorationLine: "underline",
   },
   terms: {
     color: Colors.gray,
@@ -350,5 +382,10 @@ const styles = StyleSheet.create({
   },
   downarrowimg: {
     alignItems: "flex-end",
+  },
+  label: {
+    marginBottom: 8,
+    color: Colors.black,
+    fontFamily: FontFamilies.sfSemiBold,
   },
 });

@@ -110,7 +110,6 @@ function HomeStack() {
           headerTransparent: true,
           title: "Document Management",
           headerTintColor: Colors.blue,
-          headerTitleAlign: "center",
         }}
       />
       <home.Screen
@@ -188,7 +187,6 @@ function RootStack() {
 
   api.interceptors.request.use((config) => {
     const newConfig = { ...config };
-    console.log(user);
     if (newConfig.showLoader) {
       setLoading(true);
     }
