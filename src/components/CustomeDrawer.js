@@ -7,6 +7,7 @@ import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { DrawerItemList } from "@react-navigation/drawer";
+import { SCREEN_WIDTH } from "../config/Layout";
 
 export default function CustomeDrawer(props) {
   const user = useRecoilValue(userInfo);
@@ -44,33 +45,44 @@ export default function CustomeDrawer(props) {
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
           </View>
+          <View style={styles.line} />
         </Touchable>
-        <DrawerItemList {...props} />
+        <DrawerItemList
+          {...{
+            ...props,
+            labelStyle: {
+              fontSize: FontSizes.xLarge,
+              color: Colors.black,
+              fontFamily: FontFamilies.sfSemiBold,
+            },
+          }}
+        />
       </View>
-      <View style={styles.logout}>
-        <Touchable style={styles.logoutButton} onPress={logout}>
-          <Text>Logout</Text>
-        </Touchable>
-      </View>
+      <Touchable style={styles.logoutButton} onPress={logout}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </Touchable>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  logout: {
-    marginTop: 100,
-  },
   logoutButton: {
     padding: 8,
-    alignSelf: "center",
+    alignSelf: "flex-start",
+    marginLeft: SCREEN_WIDTH * 0.06,
+  },
+  logoutText: {
+    fontFamily: FontFamilies.sfSemiBold,
+    fontSize: FontSizes.default,
   },
   maindrawerView: {
     padding: 10,
+    paddingBottom: 100,
   },
   imgtextwrap: {
     flexDirection: "row",
-
     alignItems: "center",
+    marginVertical: 30,
   },
   profiletext: {
     color: Colors.dark_black,
@@ -87,5 +99,10 @@ const styles = StyleSheet.create({
   belowprofiletextwrapper: {
     paddingVertical: 55,
     paddingHorizontal: 12,
+  },
+  line: {
+    elevation: 1,
+    height: 0.5,
+    marginBottom: 20,
   },
 });
