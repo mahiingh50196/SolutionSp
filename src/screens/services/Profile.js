@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, View, ScrollView } from "react-native";
 import { Background, Text, Header, Touchable } from "../../common";
+import { ImagePick } from "../../components";
 import { userInfo } from "../../store/atoms/auth";
 import { useRecoilValue } from "recoil";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
@@ -15,6 +16,7 @@ import {
   message,
   License,
   Tick,
+  Avatar,
 } from "../../assets/images";
 import { api } from "../../services";
 import { UpdateModal } from "../../components";
@@ -24,6 +26,7 @@ const tabNames = ["Personal Details", "Documents"];
 const PersonalDetails = ({ profileInfo, updateUser }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatingData, setUpdateData] = useState("");
+  const [imgStatus, setImgStatus] = useState(false);
 
   const updatkey = (value) => {
     setUpdateData(value);
@@ -35,15 +38,46 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   };
   const updatedValue = (val) => {
     const userData = val;
+    console.warn("body", userData);
     api({
       url: "/Provider/ProfileUpdate",
       method: "PUT",
       data: userData,
-    }).then((res) => {
-      updateUser();
-    });
+    })
+      .then((res) => {
+        console.warn("res", res);
+        updateUser();
+      })
+      .catch((err) => console.warn("err", err));
 
     setModalVisible(false);
+  };
+
+  const onPickSuccess = (image) => {
+    console.warn("image selected", image);
+    const formData = new FormData();
+    formData.append("image", {
+      uri: image.path,
+      type: image.mime,
+      name: "image.jpg",
+    });
+    updatedValue(formData);
+  };
+
+  const renderOpenModalButton = (handlePresentModalPress) => {
+    return (
+      <Touchable onPress={handlePresentModalPress}>
+        <Image
+          resizeMode="cover"
+          source={
+            profileInfo && profileInfo.profilePicture
+              ? { uri: profileInfo.profilePicture.thumbnail }
+              : Avatar
+          }
+          style={styles.avatar}
+        />
+      </Touchable>
+    );
   };
 
   if (profileInfo) {
@@ -65,7 +99,7 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
               width: 150,
             }}
           >
-            {profilePicture ? (
+            {/* {profilePicture ? (
               <Image
                 source={{ uri: profilePicture.thumbnail }}
                 style={{ width: "100%", height: "100%", borderRadius: 75 }}
@@ -75,10 +109,17 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
                 source={profile}
                 style={{ width: "100%", height: "100%", borderRadius: 75 }}
               />
-            )}
-            <Touchable style={{ position: "absolute", right: -60 }}>
+            )} */}
+            {/* <Touchable
+              style={{ position: "absolute", right: -60 }}
+              onPress={() => setImgStatus(true)}
+            >
               <Image source={Camera} />
-            </Touchable>
+            </Touchable> */}
+            <ImagePick
+              renderOpenModalButton={renderOpenModalButton}
+              onPickSuccess={onPickSuccess}
+            />
           </Touchable>
         </View>
         <View style={styles.userinfowrapper}>
@@ -356,5 +397,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 20,
+  },
+  avatar: {
+    alignSelf: "center",
+    marginTop: 20,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
 });

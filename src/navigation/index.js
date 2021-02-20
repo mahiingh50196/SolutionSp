@@ -86,6 +86,7 @@ function AuthStack() {
 function HomeStack() {
   return (
     <home.Navigator
+      initialRouteName="DocsUpload"
       screenOptions={{
         headerShown: true,
       }}
@@ -103,7 +104,7 @@ function HomeStack() {
           // headerRight: () => <HeaderProfileRightIcon />,
         }}
       />
-      <home.Screen
+      {/* <home.Screen
         name="DocsUpload"
         component={DocsUpload}
         options={{
@@ -111,8 +112,8 @@ function HomeStack() {
           title: "Document Management",
           headerTintColor: Colors.blue,
         }}
-      />
-      <home.Screen
+      /> */}
+      {/* <home.Screen
         name="IdUpload"
         component={IdUpload}
         options={{
@@ -120,7 +121,7 @@ function HomeStack() {
           // title: "Document Management",
           headerTintColor: Colors.blue,
         }}
-      />
+      /> */}
       <home.Screen
         name="ServiceDetails"
         component={ServiceDetails}

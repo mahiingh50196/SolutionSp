@@ -12,6 +12,9 @@ const OtpVerify = ({
   route: {
     params: { phone },
   },
+  route: {
+    params: { code },
+  },
 }) => {
   const authInfo = useRecoilValue(signUpInfo);
   const setUserInfo = useSetRecoilState(userInfo);
@@ -24,14 +27,16 @@ const OtpVerify = ({
   };
 
   return (
-    <Background options={{ headerShown: true }}>
-      <View>
+    <Background>
+      <View style={{ marginVertical: 50 }}>
         <Text style={styles.title}>Verify phone number</Text>
         <View style={styles.desc}>
           <Text style={styles.alreadyAccountLabel}>
-            Check your SMS messages. We've sent you the PIN at
+            Check your SMS messages. We've sent you the PIN
             <Touchable>
-              <Text style={styles.loginLabel}>{phone}</Text>
+              <Text style={styles.loginLabel}>
+                <Text style={styles.atText}>at</Text> ( +{code}){phone}
+              </Text>
             </Touchable>
           </Text>
         </View>
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSizes.xxLarge,
     fontFamily: FontFamilies.sfBold,
+    color: Colors.dark_black,
     marginTop: 20,
   },
   alreadyAccountLabel: {
@@ -79,7 +85,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: FontSizes.small,
     top: 4,
-    left: 8,
+    left: 3,
   },
   signUp: { height: 60, justifyContent: "center", borderRadius: 15 },
   codeInput: {
@@ -93,5 +99,8 @@ const styles = StyleSheet.create({
   wrapResend: {
     marginTop: SCREEN_HEIGHT * 0.05,
     alignSelf: "center",
+  },
+  atText: {
+    color: "#8f9bb3",
   },
 });
