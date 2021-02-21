@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MapView from "react-native-maps";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import dayjs from "dayjs";
@@ -10,6 +11,7 @@ import { onlineImg, date, clock, Mask } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
 import { OrderStates } from "../../config/Constants";
+import { SCREEN_WIDTH } from "../../config/Layout";
 
 const getTime = (val) => {
   const hours = val / 60;
@@ -221,10 +223,32 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
 };
 
 const Footer = ({ orderDetails, callback }) => {
-  const { special_instruction: instructions } = orderDetails;
-
+  const { special_instruction: instructions, location } = orderDetails;
   return (
     <View>
+      <Text
+        style={[
+          styles.service,
+          { paddingVertical: 10, fontSize: FontSizes.default },
+        ]}
+      >
+        Tracking Details
+      </Text>
+      <View
+        style={{
+          height: 100,
+          width: SCREEN_WIDTH,
+        }}
+      >
+        <MapView
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      </View>
       <Text
         style={[
           styles.service,

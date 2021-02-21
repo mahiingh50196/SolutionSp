@@ -13,7 +13,6 @@ import { AuthStates } from "../../config/Constants";
 export default function Login({ navigation: { navigate } }) {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
 
   const setUserInfo = useSetRecoilState(userInfo);
 
@@ -21,14 +20,13 @@ export default function Login({ navigation: { navigate } }) {
     // const fcmToken = await messaging().getToken();
     // const deviceType = Platform.OS === "android" ? "ANDROID" : "IPHONE";
 
-    setLoading(true);
-
     if (validateEmail(email)) {
       const {
         data: { data },
       } = await api({
         method: "get",
         url: `/Provider/Login?email=${email}&password=${password}`,
+        showLoader: true,
       });
       if (data?.location && data.location.coordinates?.length) {
         setUserInfo({
@@ -41,8 +39,6 @@ export default function Login({ navigation: { navigate } }) {
           authState: AuthStates.NO_LOCATION,
         });
       }
-    } else {
-      setLoading(false);
     }
   };
 
@@ -86,12 +82,7 @@ export default function Login({ navigation: { navigate } }) {
         </View>
         <View style={styles.space} />
         <View style={styles.space} />
-        <Button
-          style={styles.signUp}
-          title="Sign In"
-          onPress={login}
-          isLoading={loading}
-        />
+        <Button style={styles.signUp} title="Sign In" onPress={login} />
         <SocialLogin desc="or Sign in with social account" />
         <View style={styles.desc1}>
           <Text style={styles.alreadyAccountLabel}>Don't have an account?</Text>
