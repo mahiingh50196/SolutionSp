@@ -38,6 +38,7 @@ import notification from "./notification.png";
 import NotificationClock from "./NotificationClock.png";
 import Booking from "./Booking.png";
 import Swiper from "./Swiper.png";
+import Pin from "./Pin.png";
 
 export {
   Welcome,
@@ -80,4 +81,5 @@ export {
   NotificationClock,
   Booking,
   Swiper,
+  Pin,
 };

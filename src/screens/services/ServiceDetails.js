@@ -6,8 +6,15 @@ import MapView from "react-native-maps";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import dayjs from "dayjs";
-import { Background, Touchable, Button, Swiper, Toast } from "../../common";
-import { onlineImg, date, clock, Mask } from "../../assets/images";
+import {
+  Background,
+  Touchable,
+  Button,
+  Swiper,
+  Toast,
+  Map,
+} from "../../common";
+import { onlineImg, date, clock, Mask, Pin } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
 import { OrderStates } from "../../config/Constants";
@@ -224,6 +231,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
 
 const Footer = ({ orderDetails, callback }) => {
   const { special_instruction: instructions, location } = orderDetails;
+  console.warn(location);
   return (
     <View>
       <Text
@@ -240,13 +248,16 @@ const Footer = ({ orderDetails, callback }) => {
           width: SCREEN_WIDTH,
         }}
       >
-        <MapView
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+        <Map
+          initialLocation={{
+            latitude: location[1],
+            longitude: location[0],
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001,
           }}
+          renderPin={() => (
+            <Image resizeMode="contain" source={Pin} style={styles.pin} />
+          )}
         />
       </View>
       <Text
@@ -454,5 +465,14 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontFamily: FontFamilies.poppinsMedium,
     fontSize: FontSizes.medium,
+  },
+  pin: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 80,
+    height: 80,
+    marginLeft: SCREEN_WIDTH * 0.33,
+    top: 8,
   },
 });

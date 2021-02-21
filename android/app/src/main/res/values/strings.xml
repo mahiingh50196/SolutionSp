@@ -2,4 +2,5 @@
     <string name="app_name">SolutionSp</string>
     <string name="facebook_app_id">410420650170978</string>
     <string name="fb_login_protocol_scheme">fb410420650170978</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc</string>
 </resources>

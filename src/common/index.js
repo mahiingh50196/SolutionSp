@@ -14,6 +14,7 @@ import Dropdown from "./Dropdown";
 import Modal from "./Modal";
 import Empty from "./Empty";
 import Swiper from "./Swiper";
+import Map from "./Map";
 
 export {
   TextInput,
@@ -32,4 +33,5 @@ export {
   Modal,
   Empty,
   Swiper,
+  Map,
 };
