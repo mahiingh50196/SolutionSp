@@ -33,6 +33,7 @@ import {
   Notification,
   MyServices,
   ServiceDetails,
+  TrackingDetails,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
@@ -130,6 +131,15 @@ function HomeStack() {
           title: "Service Details",
         }}
       />
+      <home.Screen
+        name="TrackingDetails"
+        component={TrackingDetails}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Tracking Details",
+        }}
+      />
     </home.Navigator>
   );
 }
@@ -159,6 +169,15 @@ function ServicesStack() {
           headerTransparent: true,
           headerTintColor: Colors.blue,
           title: "Service Details",
+        }}
+      />
+      <services.Screen
+        name="TrackingDetails"
+        component={TrackingDetails}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Tracking Details",
         }}
       />
     </services.Navigator>

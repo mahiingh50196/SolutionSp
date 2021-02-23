@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import MapView from "react-native-maps";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import dayjs from "dayjs";
@@ -63,8 +62,6 @@ const Header = ({ orderDetails }) => {
     status,
   } = orderDetails;
   const bookingDate = new Date(booking_Date);
-
-  console.log(orderDetails);
 
   return (
     <>
@@ -230,8 +227,9 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
 };
 
 const Footer = ({ orderDetails, callback }) => {
-  const { special_instruction: instructions, location } = orderDetails;
-  console.warn(location);
+  const { specialInstruction: instructions, location } = orderDetails;
+  const { navigate } = useNavigation();
+
   return (
     <View>
       <Text
@@ -242,11 +240,9 @@ const Footer = ({ orderDetails, callback }) => {
       >
         Tracking Details
       </Text>
-      <View
-        style={{
-          height: 100,
-          width: SCREEN_WIDTH,
-        }}
+      <Touchable
+        style={styles.mapContainer}
+        onPress={() => navigate("TrackingDetails", { orderDetails })}
       >
         <Map
           initialLocation={{
@@ -259,7 +255,7 @@ const Footer = ({ orderDetails, callback }) => {
             <Image resizeMode="contain" source={Pin} style={styles.pin} />
           )}
         />
-      </View>
+      </Touchable>
       <Text
         style={[
           styles.service,
@@ -474,5 +470,9 @@ const styles = StyleSheet.create({
     height: 80,
     marginLeft: SCREEN_WIDTH * 0.33,
     top: 8,
+  },
+  mapContainer: {
+    height: 100,
+    width: SCREEN_WIDTH,
   },
 });

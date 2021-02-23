@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import * as Location from "expo-location";
-import { globalStyles, Toast } from ".";
+import Toast from "./Toast";
+import globalStyles from "./globalStyles";
 
 import MapView from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
 
 let defaultLocation = {
   latitude: 37.78825,
@@ -16,9 +18,13 @@ export default function Home({
   onChangeLocation = () => null,
   renderPin,
   initialLocation,
+  from,
+  to,
 }) {
   const locationRef = useRef(null);
   const [bottomMargin, setBottomMargin] = React.useState(1);
+
+  console.warn(from, to);
 
   const getLocation = React.useCallback(async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -85,6 +91,15 @@ export default function Home({
         }}
       />
       {!!renderPin && renderPin()}
+      {!!from && !!to && (
+        <MapViewDirections
+          origin={from}
+          destination={to}
+          apikey={"AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc"}
+          strokeWidth={3}
+          strokeColor="hotpink"
+        />
+      )}
     </View>
   );
 }

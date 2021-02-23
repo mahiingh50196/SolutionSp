@@ -5,6 +5,7 @@ import Offline from "./Offline";
 import ServiceDetails from "./ServiceDetails";
 import Notification from "./Notification";
 import MyServices from "./MyServices";
+import TrackingDetails from "./TrackingDetails";
 
 export {
   Profile,
@@ -14,4 +15,5 @@ export {
   Offline,
   Notification,
   MyServices,
+  TrackingDetails,
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, FlatList, Switch } from "react-native";
 import dayjs from "dayjs";
-import { Background, Touchable, Empty } from "../../common";
+import { Background, Touchable, Empty, globalStyles } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import {
@@ -79,6 +79,7 @@ export default function Offline(props) {
 
   const renderItem = (item) => {
     const serviceDate = new Date(item.date);
+    console.log("ypp", item.ProfilePicture?.thumbnail);
     return (
       <Touchable
         style={styles.flatlistwrap}
@@ -90,8 +91,12 @@ export default function Offline(props) {
       >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            {item.profilePicture && item.profilePicture.thumbnail ? (
-              <Image source={{ uri: item.profilePicture.thumbnail }} />
+            {item.ProfilePicture?.thumbnail ? (
+              <Image
+                source={{ uri: item.ProfilePicture.thumbnail }}
+                resizeMode="cover"
+                style={styles.profileImage}
+              />
             ) : (
               <Image source={onlineImg} />
             )}
@@ -240,5 +245,10 @@ const styles = StyleSheet.create({
   },
   switchContainer: {
     paddingRight: 10,
+  },
+  profileImage: {
+    height: 40,
+    width: 40,
+    borderRadius: 30,
   },
 });
