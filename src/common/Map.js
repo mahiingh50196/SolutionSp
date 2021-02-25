@@ -14,7 +14,7 @@ let defaultLocation = {
   longitudeDelta: 0.001,
 };
 
-export default function Home({
+export default function Map({
   onChangeLocation = () => null,
   renderPin,
   initialLocation,

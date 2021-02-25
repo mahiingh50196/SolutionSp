@@ -228,8 +228,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
 
 const Footer = ({ orderDetails, callback }) => {
   const { specialInstruction: instructions, location } = orderDetails;
-  const { navigate } = useNavigation();
-
+  // console.warn(location);
   return (
     <View>
       <Text

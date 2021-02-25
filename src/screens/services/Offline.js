@@ -91,12 +91,8 @@ export default function Offline(props) {
       >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            {item.ProfilePicture?.thumbnail ? (
-              <Image
-                source={{ uri: item.ProfilePicture.thumbnail }}
-                resizeMode="cover"
-                style={styles.profileImage}
-              />
+            {item.ProfilePicture && item.ProfilePicture.thumbnail ? (
+              <Image source={{ uri: item.ProfilePicture.thumbnail }} />
             ) : (
               <Image source={onlineImg} />
             )}
