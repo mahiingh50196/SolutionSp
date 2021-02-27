@@ -24,8 +24,6 @@ export default function Map({
   const locationRef = useRef(null);
   const [bottomMargin, setBottomMargin] = React.useState(1);
 
-  console.warn(from, to);
-
   const getLocation = React.useCallback(async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {

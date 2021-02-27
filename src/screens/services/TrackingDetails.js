@@ -17,7 +17,6 @@ const TrackingDetails = ({
   const {
     location: { coordinates },
   } = userDetails;
-  console.warn(JSON.stringify(coordinates, undefined, 2));
   const {
     location,
     address,

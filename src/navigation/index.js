@@ -34,6 +34,7 @@ import {
   MyServices,
   ServiceDetails,
   TrackingDetails,
+  ServiceProof,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
@@ -140,6 +141,15 @@ function HomeStack() {
           title: "Tracking Details",
         }}
       />
+      <home.Screen
+        name="ServiceProof"
+        component={ServiceProof}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Upload proof of service",
+        }}
+      />
     </home.Navigator>
   );
 }
@@ -178,6 +188,15 @@ function ServicesStack() {
           headerTransparent: true,
           headerTintColor: Colors.blue,
           title: "Tracking Details",
+        }}
+      />
+      <services.Screen
+        name="ServiceProof"
+        component={ServiceProof}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "Upload proof of service",
         }}
       />
     </services.Navigator>

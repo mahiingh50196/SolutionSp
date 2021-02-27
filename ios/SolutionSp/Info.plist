@@ -2,6 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow HandWash to use the camera</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow HandWash to use image library</string>
+<key>CFBundleURLTypes</key>
+<array>
+<dict>
+  	<key>CFBundleURLSchemes</key>
+  	<array>
+    	<string>fb410420650170978</string>
+  	</array>
+</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>410420650170978</string>
+	<key>FacebookDisplayName</key>
+	<string>SolutionSP</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -38,7 +55,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>Location is needed to show restraunts near you</string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

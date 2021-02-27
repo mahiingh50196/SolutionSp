@@ -117,8 +117,8 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || docDate;
-    setPickerVisibility(Platform.OS === "ios");
     setDocDate(currentDate);
+    setPickerVisibility(Platform.OS === "ios");
   };
 
   return (
@@ -136,17 +136,19 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
         defaultValue={docNumber}
       />
       <Touchable onPress={() => setPickerVisibility(!pickerVisibility)}>
-        <TextInput
-          editable={false}
-          onChangeText={setDocDate}
-          label="Expiration Date"
-          placeholder="MM/DD/YYYY"
-          value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : null}
-        />
+        <View pointerEvents="none">
+          <TextInput
+            editable={false}
+            onChangeText={setDocDate}
+            label="Expiration Date"
+            placeholder="MM/DD/YYYY"
+            value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : null}
+          />
+        </View>
         {pickerVisibility && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : new Date()}
+            value={docDate ? docDate : new Date()}
             mode="date"
             is24Hour={true}
             display="default"

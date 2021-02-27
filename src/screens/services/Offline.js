@@ -28,7 +28,7 @@ export default function Offline(props) {
     const {
       data: { data },
     } = await api({
-      method: "PUT",
+      method: "put",
       url: "/Provider/OnlineOffline",
       data: { online: !isOnline === true ? "true" : "false" },
       showLoader: true,

@@ -78,7 +78,10 @@ export default function SocialLogin({ desc }) {
           data: { data },
         } = res;
         if (data) {
-          setUserInfo(res.data?.data);
+          setUserInfo({
+            ...res.data?.data,
+            authState: AuthStates.COMPLETE,
+          });
         }
       });
     } else {

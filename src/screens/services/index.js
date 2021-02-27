@@ -6,6 +6,7 @@ import ServiceDetails from "./ServiceDetails";
 import Notification from "./Notification";
 import MyServices from "./MyServices";
 import TrackingDetails from "./TrackingDetails";
+import ServiceProof from "./ServiceProof";
 
 export {
   Profile,
@@ -16,4 +17,5 @@ export {
   Notification,
   MyServices,
   TrackingDetails,
+  ServiceProof,
 };

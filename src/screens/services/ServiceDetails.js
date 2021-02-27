@@ -96,7 +96,7 @@ const Header = ({ orderDetails }) => {
 const ManageOrderStates = ({ orderDetails, callback }) => {
   const { _id, status } = orderDetails;
 
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   const renderSwipeButtons = () => {
     switch (orderDetails.status) {
@@ -121,7 +121,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
               await updateOrderStatus(OrderStates.Started);
               swiperRef.current.reset();
               callback();
-              Toast.show({ text: "marked as reached" });
+              Toast.show({ text: "marked as started" });
             }}
           />
         );
@@ -130,10 +130,15 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
           <Swiper
             title="Swipe Right To Complete"
             onSwipe={async (swiperRef) => {
-              await updateOrderStatus(OrderStates.Completed);
-              swiperRef.current.reset();
-              callback();
-              Toast.show({ text: "marked as complete" });
+              navigate("ServiceProof", {
+                callback: async () => {
+                  await updateOrderStatus(OrderStates.Completed);
+                  swiperRef.current.reset();
+                  callback();
+                  Toast.show({ text: "marked as complete" });
+                },
+                orderId: orderDetails._id,
+              });
             }}
           />
         );
@@ -228,7 +233,8 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
 
 const Footer = ({ orderDetails, callback }) => {
   const { specialInstruction: instructions, location } = orderDetails;
-  // console.warn(location);
+  const { navigate } = useNavigation();
+
   return (
     <View>
       <Text
