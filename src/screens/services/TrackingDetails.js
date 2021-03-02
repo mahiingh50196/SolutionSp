@@ -23,11 +23,10 @@ const TrackingDetails = ({
     user_name: userName,
     profilePicture,
   } = orderDetails;
-  console.log(orderDetails);
   return (
     <Background contentStyle={styles.contentStyle}>
       <View style={globalStyles.flexOne}>
-        <View style={{ flex: 6, backgroundColor: "pink" }}>
+        <View style={{ flex: 6 }}>
           <Map
             initialLocation={{
               latitude: location[1],
