@@ -26,7 +26,6 @@ const tabNames = ["Personal Details", "Documents"];
 const PersonalDetails = ({ profileInfo, updateUser }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatingData, setUpdateData] = useState("");
-  const [imgStatus, setImgStatus] = useState(false);
 
   const updatkey = (value) => {
     setUpdateData(value);
@@ -36,12 +35,11 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   const handleModalVisible = () => {
     setModalVisible(false);
   };
-  const updatedValue = (val) => {
-    const userData = val;
+  const updatedValue = (updatedData) => {
     api({
       url: "/Provider/ProfileUpdate",
       method: "PUT",
-      data: userData,
+      data: updatedData,
     }).then((res) => {
       updateUser();
     });
@@ -49,14 +47,29 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
     setModalVisible(false);
   };
 
-  const onPickSuccess = (image) => {
+  const onPickSuccess = async (image) => {
     const formData = new FormData();
     formData.append("image", {
       uri: image.path,
       type: image.mime,
       name: "image.jpg",
     });
-    updatedValue(formData);
+
+    const {
+      data: { data },
+    } = await api({
+      baseURL: "http://52.39.158.82:8001",
+      url: "/api/uploadImage",
+      method: "post",
+      data: formData,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    updatedValue({
+      profilePicture: data.original,
+    });
   };
 
   const renderOpenModalButton = (handlePresentModalPress) => {

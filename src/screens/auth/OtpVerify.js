@@ -35,7 +35,8 @@ const OtpVerify = ({
             Check your SMS messages. We've sent you the PIN
             <Touchable>
               <Text style={styles.loginLabel}>
-                <Text style={styles.atText}>at</Text> ( +{code}){phone}
+                <Text style={styles.alreadyAccountLabel}>at</Text> +{code}
+                {phone}
               </Text>
             </Touchable>
           </Text>
@@ -45,12 +46,12 @@ const OtpVerify = ({
         </View>
         <Button style={styles.signUp} title="Verify" onPress={onVerify} />
         <View style={styles.wrapResend}>
-          <Text style={styles.resendCode}>
-            Didn't receive SMS?
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.resendCode}>Didn't receive SMS?</Text>
             <Touchable onPress={() => navigate("Login")}>
               <Text style={styles.resendLabel}>Resend Code</Text>
             </Touchable>
-          </Text>
+          </View>
         </View>
       </View>
     </Background>
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
   alreadyAccountLabel: {
     color: "#8f9bb3",
     fontSize: FontSizes.small,
-    lineHeight: 18,
+    fontFamily: FontFamilies.sfSemiBold,
+    lineHeight: 20,
   },
   desc: {
     marginTop: 10,
@@ -78,29 +80,25 @@ const styles = StyleSheet.create({
   loginLabel: {
     color: Colors.primary,
     fontSize: FontSizes.small,
-    top: 6,
-    left: 8,
   },
   resendLabel: {
     color: Colors.primary,
     fontSize: FontSizes.small,
-    top: 4,
-    left: 3,
+    marginLeft: 4,
   },
   signUp: { height: 60, justifyContent: "center", borderRadius: 15 },
   codeInput: {
     marginBottom: SCREEN_HEIGHT * 0.1,
   },
   resendCode: {
-    color: "#8f9bb3",
+    // color: "#8f9bb3",
+    color: "#222b45",
     fontSize: FontSizes.small,
     lineHeight: 18,
+    fontFamily: FontFamilies.sfRegular,
   },
   wrapResend: {
     marginTop: SCREEN_HEIGHT * 0.05,
     alignSelf: "center",
-  },
-  atText: {
-    color: "#8f9bb3",
   },
 });
