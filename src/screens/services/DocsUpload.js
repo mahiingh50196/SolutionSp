@@ -126,7 +126,7 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
           style={[
             styles.submit,
             {
-              backgroundColor: uploadedDocs ? Colors.primary : Colors.gray,
+              backgroundColor: uploadedDocs ? Colors.primary : "#7f7f7f",
             },
           ]}
           isLoading={loading}
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
   },
   overLay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    borderRadius: 8,
+    backgroundColor: "#7f7f7f",
+    borderRadius: 2,
   },
   touchable: {
     marginTop: 20,
-    borderRadius: 8,
+    borderRadius: 2,
   },
   uploadText: {
     color: Colors.white,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   doc: {
     borderColor: "rgb(228, 233, 242)",
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 2,
   },
   submit: { height: 60, justifyContent: "center", borderRadius: 15 },
   scrollContainer: {

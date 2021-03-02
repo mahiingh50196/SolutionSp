@@ -8,8 +8,6 @@ import { useRecoilValue } from "recoil";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import {
-  Camera,
-  profile,
   profiledetail,
   san,
   phone,

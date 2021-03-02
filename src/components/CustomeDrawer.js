@@ -34,13 +34,22 @@ export default function CustomeDrawer(props) {
             Object.keys(user).length &&
             user?.profilePicture.thumbnail ? (
               <Image
+                resizeMode="cover"
                 source={{ uri: user?.profilePicture.thumbnail }}
-                style={{ width: 50, height: 50, borderRadius: 25 }}
+                style={{ width: 80, height: 80, borderRadius: 40 }}
               />
             ) : (
-              <Image source={nav} />
+              <Image
+                source={nav}
+                resizeMode="cover"
+                style={{ width: 80, height: 80, borderRadius: 40 }}
+              />
             )}
-            <View>
+            <View
+              style={{
+                bottom: 8,
+              }}
+            >
               <Text style={styles.profiletext}>{user?.fullName}</Text>
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
@@ -82,14 +91,12 @@ const styles = StyleSheet.create({
   imgtextwrap: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 30,
+    marginTop: 30,
   },
   profiletext: {
     color: Colors.dark_black,
     fontFamily: FontFamilies.sfSemiBold,
     fontSize: FontSizes.xLarge,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
   },
   editprofiletext: {
     color: Colors.primary,

@@ -8,7 +8,7 @@ import { Map } from "../../assets/images";
 import { FontSizes, Colors, FontFamilies } from "../../config/Theme";
 import * as Location from "expo-location";
 import { userInfo } from "../../store/atoms/auth";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { api } from "../../services";
 import { AuthStates } from "../../config/Constants";
 
@@ -39,7 +39,7 @@ export const getAddressString = ({
 
 const GetLocation = ({ navigation: { navigate, goBack } }) => {
   const [errorMsg, setErrorMsg] = useState(null);
-  const setUserInfo = useSetRecoilState(userInfo);
+  const [userData, setUserInfo] = useRecoilState(userInfo);
 
   const getLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -87,7 +87,16 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
         title="Allow access"
         onPress={getLocation}
       />
-      <Button type="transparent" title="Skip for now" />
+      <Button
+        type="transparent"
+        title="Skip for now"
+        onPress={() => {
+          setUserInfo({
+            ...userData,
+            authState: AuthStates.COMPLETE,
+          });
+        }}
+      />
       {/* <Text>{text}</Text> */}
     </Background>
   );

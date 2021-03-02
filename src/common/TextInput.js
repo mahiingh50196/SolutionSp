@@ -19,6 +19,7 @@ const TextInput = ({
   errorMessage,
   withEye = false,
   dafaultValue,
+  labelStyle,
   ...props
 }) => {
   const [value, setValue] = React.useState("");
@@ -44,7 +45,7 @@ const TextInput = ({
 
   return (
     <View>
-      {!!label && <Text style={styles.label}>{label}</Text>}
+      {!!label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
       <View style={inputContainer}>
         <RNInput
           focusBorderColor="#41d5fb"

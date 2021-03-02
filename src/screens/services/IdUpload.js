@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, View, Platform } from "react-native";
 import { Drivinglicence } from "../../assets/images";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import {
   Background,
   FullScreenLoader,
@@ -131,6 +132,7 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
       <TextInput
         onChangeText={(val) => setDocNumber(val)}
         label={`${title} Number`}
+        labelStyle={{ color: "#bec2ce" }}
         placeholder="12345678XXXXXXXXXXXX"
         keyboardType="number-pad"
         defaultValue={docNumber}
@@ -140,10 +142,21 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
           <TextInput
             editable={false}
             onChangeText={setDocDate}
+            labelStyle={{ color: "#bec2ce" }}
             label="Expiration Date"
             placeholder="MM/DD/YYYY"
             value={docDate ? dayjs(docDate).format("MM/DD/YYYY") : null}
           />
+          <View style={styles.wrapIcon}>
+            <AntDesign
+              name="right"
+              size={18}
+              style={{
+                top: 10,
+                color: "#bec2ce",
+              }}
+            />
+          </View>
         </View>
         {pickerVisibility && (
           <DateTimePicker
@@ -158,7 +171,7 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
         )}
       </Touchable>
       <View style={styles.space} />
-      <Button onPress={handleSubmit} />
+      <Button style={styles.submitButton} onPress={handleSubmit} />
     </Background>
   );
 };
@@ -184,5 +197,16 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     paddingTop: 50,
+  },
+  submitButton: {
+    height: 60,
+    justifyContent: "center",
+    borderRadius: 20,
+  },
+  wrapIcon: {
+    position: "absolute",
+    right: 14,
+    height: "100%",
+    justifyContent: "center",
   },
 });
