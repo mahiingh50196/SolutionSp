@@ -210,8 +210,20 @@ function DrawerNav() {
       drawerType="slide"
     >
       <drawer.Screen name="Home" component={HomeStack} />
-      <drawer.Screen name="MyServices" component={ServicesStack} />
-      <drawer.Screen name="Notification" component={Notification} />
+      <drawer.Screen
+        name="MyServices"
+        component={ServicesStack}
+        options={{
+          drawerLabel: "My Services",
+        }}
+      />
+      <drawer.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          drawerLabel: "Notifications",
+        }}
+      />
       <drawer.Screen name="Profile" component={Profile} />
     </drawer.Navigator>
   );

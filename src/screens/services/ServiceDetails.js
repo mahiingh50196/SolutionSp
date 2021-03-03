@@ -63,11 +63,22 @@ const Header = ({ orderDetails }) => {
   } = orderDetails;
   const bookingDate = new Date(booking_Date);
 
+  console.warn(orderDetails);
+
   return (
     <>
       <View style={styles.mainview}>
         <Touchable style={styles.profile}>
-          <Image source={onlineImg} />
+          <Image
+            style={styles.image}
+            source={
+              orderDetails?.profilePicture?.thumbnail
+                ? {
+                    uri: orderDetails.profilePicture.thumbnail,
+                  }
+                : onlineImg
+            }
+          />
         </Touchable>
         <View style={styles.profilename}>
           <Text style={styles.profiletext}>{userName}</Text>
@@ -479,5 +490,10 @@ const styles = StyleSheet.create({
   mapContainer: {
     height: 100,
     width: SCREEN_WIDTH,
+  },
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 11,
   },
 });

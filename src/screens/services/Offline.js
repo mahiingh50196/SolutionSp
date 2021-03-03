@@ -92,9 +92,17 @@ export default function Offline(props) {
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
             {item.ProfilePicture && item.ProfilePicture.thumbnail ? (
-              <Image source={{ uri: item.ProfilePicture.thumbnail }} />
+              <Image
+                resizeMode="cover"
+                style={styles.profilePicture}
+                source={{ uri: item.ProfilePicture.thumbnail }}
+              />
             ) : (
-              <Image source={onlineImg} />
+              <Image
+                source={onlineImg}
+                style={styles.profilePicture}
+                resizeMode="cover"
+              />
             )}
           </Touchable>
           <View style={styles.nametext}>
@@ -134,10 +142,6 @@ export default function Offline(props) {
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />
               <Text style={styles.offlinetext}>You are offline!</Text>
-              <Text style={styles.belowofflinetext}>
-                Our classes is taught by our best selected teachers who are
-                experts in their subject
-              </Text>
             </Touchable>
           </View>
         ) : (
@@ -246,5 +250,10 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
+  },
+  profilePicture: {
+    height: 44,
+    width: 44,
+    borderRadius: 22,
   },
 });

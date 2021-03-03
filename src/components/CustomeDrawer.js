@@ -12,6 +12,10 @@ import { SCREEN_WIDTH } from "../config/Layout";
 export default function CustomeDrawer(props) {
   const user = useRecoilValue(userInfo);
 
+  const { state, ...rest } = props;
+  const newState = { ...state }; //copy from state before applying any filter. do not change original state
+  newState.routes = newState.routes.filter((item) => item.name !== "Profile"); //replace "Login' with your route name
+
   const {
     navigation: { navigate },
   } = props;
@@ -20,6 +24,7 @@ export default function CustomeDrawer(props) {
     api({
       method: "PUT",
       url: "/Provider/logout",
+      showLoader: true,
     }).then((res) => {
       setUser(null);
     });
@@ -57,8 +62,9 @@ export default function CustomeDrawer(props) {
           <View style={styles.line} />
         </Touchable>
         <DrawerItemList
+          state={newState}
           {...{
-            ...props,
+            ...rest,
             labelStyle: {
               fontSize: FontSizes.xLarge,
               color: Colors.black,
