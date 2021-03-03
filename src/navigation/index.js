@@ -41,7 +41,7 @@ import { api } from "../services";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
-import { drawer as MenuIcon } from "../assets/images";
+import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 
 const auth = createStackNavigator();
@@ -49,7 +49,7 @@ const home = createStackNavigator();
 const drawer = createDrawerNavigator();
 const services = createStackNavigator();
 
-const HeaderMenuIcon = () => {
+const HeaderMenuIcon = ({ tintColor = "white" }) => {
   const { toggleDrawer } = useNavigation();
   return (
     <Touchable
@@ -59,7 +59,7 @@ const HeaderMenuIcon = () => {
       <Image
         source={MenuIcon}
         resizeMode="contain"
-        style={[globalStyles.headerMenuIcon]}
+        style={[globalStyles.headerMenuIcon, { tintColor }]}
       />
     </Touchable>
   );
@@ -169,7 +169,7 @@ function ServicesStack() {
             fontSize: FontSizes.larger,
             fontFamily: FontFamilies.sfMedium,
           },
-          headerLeft: () => <HeaderMenuIcon />,
+          headerLeft: () => <HeaderMenuIcon tintColor="#000" />,
         }}
       />
       <services.Screen

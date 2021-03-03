@@ -15,10 +15,9 @@ const globalStyles = StyleSheet.create({
     borderColor: Colors.gray,
   },
   headerMenuIcon: {
-    height: 80,
-    width: 80,
-    right: 8,
-    top: 4,
+    height: 18,
+    width: 18,
+    marginLeft: 12,
   },
 });
 

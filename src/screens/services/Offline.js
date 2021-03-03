@@ -78,8 +78,9 @@ export default function Offline(props) {
   }, []);
 
   const renderItem = (item) => {
+    // console.warn("item", item);
     const serviceDate = new Date(item.date);
-    console.log("ypp", item.ProfilePicture?.thumbnail);
+    console.warn("ypp", item.ProfilePicture?.original);
     return (
       <Touchable
         style={styles.flatlistwrap}
