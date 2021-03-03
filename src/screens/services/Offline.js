@@ -136,7 +136,7 @@ export default function Offline(props) {
               <Image source={offline} />
               <Text style={styles.offlinetext}>You are offline!</Text>
               <Text style={styles.belowofflinetext}>
-                Our classes is taught by our best selected teachers who are
+                Our classes is thaught by our best selected teachers who are
                 experts in their subject
               </Text>
             </Touchable>
