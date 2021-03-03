@@ -41,7 +41,7 @@ import { api } from "../services";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
-import { drawer as MenuIcon } from "../assets/images";
+import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 
 const auth = createStackNavigator();
@@ -211,7 +211,7 @@ function DrawerNav() {
     >
       <drawer.Screen name="Home" component={HomeStack} />
       <drawer.Screen name="MyServices" component={ServicesStack} />
-      <drawer.Screen name="Notification" component={Notification} />
+      <drawer.Screen name="Notifications" component={Notification} />
       <drawer.Screen name="Profile" component={Profile} />
     </drawer.Navigator>
   );

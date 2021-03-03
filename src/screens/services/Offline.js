@@ -78,8 +78,9 @@ export default function Offline(props) {
   }, []);
 
   const renderItem = (item) => {
+    // console.warn("item", item);
     const serviceDate = new Date(item.date);
-    console.log("ypp", item.ProfilePicture?.thumbnail);
+    console.warn("ypp", item.ProfilePicture?.original);
     return (
       <Touchable
         style={styles.flatlistwrap}
@@ -91,8 +92,8 @@ export default function Offline(props) {
       >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            {item.ProfilePicture && item.ProfilePicture.thumbnail ? (
-              <Image source={{ uri: item.ProfilePicture.thumbnail }} />
+            {item.ProfilePicture?.original ? (
+              <Image source={{ item: item.ProfilePicture?.original }} />
             ) : (
               <Image source={onlineImg} />
             )}
