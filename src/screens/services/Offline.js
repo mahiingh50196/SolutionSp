@@ -25,18 +25,26 @@ export default function Offline(props) {
   const [orderList, setOrderList] = useState([]);
 
   const updateAvailability = React.useCallback(async () => {
-    const {
-      data: { data },
-    } = await api({
-      method: "put",
-      url: "/Provider/OnlineOffline",
-      data: { online: !isOnline === true ? "true" : "false" },
-      showLoader: true,
-    });
+    const newStatus = !isOnline;
     setUserInfo({
       ...info,
-      ...data,
+      isOnline: newStatus,
     });
+    try {
+      const {
+        data: { data },
+      } = await api({
+        method: "put",
+        url: "/Provider/OnlineOffline",
+        data: { online: !isOnline === true ? "true" : "false" },
+        showLoader: true,
+      });
+    } catch (error) {
+      setUserInfo({
+        ...info,
+        isOnline: !newStatus,
+      });
+    }
   }, [isOnline, setUserInfo, info]);
 
   React.useEffect(() => {
@@ -78,9 +86,7 @@ export default function Offline(props) {
   }, []);
 
   const renderItem = (item) => {
-    // console.warn("item", item);
     const serviceDate = new Date(item.date);
-    console.warn("ypp", item.ProfilePicture?.original);
     return (
       <Touchable
         style={styles.flatlistwrap}

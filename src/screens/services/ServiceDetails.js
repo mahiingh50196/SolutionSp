@@ -63,8 +63,6 @@ const Header = ({ orderDetails }) => {
   } = orderDetails;
   const bookingDate = new Date(booking_Date);
 
-  console.warn(orderDetails);
-
   return (
     <>
       <View style={styles.mainview}>

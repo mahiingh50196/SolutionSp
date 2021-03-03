@@ -87,13 +87,8 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   };
 
   if (profileInfo) {
-    const {
-      fullName,
-      email,
-      phoneNumber,
-      address,
-      profilePicture,
-    } = profileInfo;
+    const { fullName, email, phoneNumber, address } = profileInfo;
+
     return (
       <View>
         <View style={styles.personalDetailsContainer}>
@@ -105,30 +100,13 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
               width: 150,
             }}
           >
-            {/* {profilePicture ? (
-              <Image
-                source={{ uri: profilePicture.thumbnail }}
-                style={{ width: "100%", height: "100%", borderRadius: 75 }}
-              />
-            ) : (
-              <Image
-                source={profile}
-                style={{ width: "100%", height: "100%", borderRadius: 75 }}
-              />
-            )} */}
-            {/* <Touchable
-              style={{ position: "absolute", right: -60 }}
-              onPress={() => setImgStatus(true)}
-            >
-              <Image source={Camera} />
-            </Touchable> */}
             <ImagePick
               renderOpenModalButton={renderOpenModalButton}
               onPickSuccess={onPickSuccess}
             />
           </Touchable>
         </View>
-        <View style={styles.userinfowrapper}>
+        <View style={[styles.userinfowrapper]}>
           <Text style={styles.profiledetailtext}>Profile Detail </Text>
           <View style={styles.userinfowrap}>
             <Touchable style={styles.userinfoimg}>
@@ -194,23 +172,30 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   }
 };
 
-const DocumentList = () => {
+const DocumentList = ({ profileInfo }) => {
   return (
     <View>
       <View style={{ paddingTop: 10 }}>
         <View style={styles.userinfowrapper}>
-          <Image source={License} />
+          <Image
+            style={styles.docImage}
+            resizeMode="cover"
+            source={{ uri: profileInfo?.addressProof?.original }}
+          />
           <View style={styles.tickproofview}>
             <Text>Adress Proof</Text>
             <Image source={Tick} />
           </View>
 
-          <Image source={License} />
+          <Image
+            style={styles.docImage}
+            resizeMode="cover"
+            source={{ uri: profileInfo?.identicard?.original }}
+          />
           <View style={styles.tickproofview}>
             <Text>Identification cards</Text>
             <Image source={Tick} />
           </View>
-          <Image source={License} />
         </View>
       </View>
     </View>
@@ -301,14 +286,16 @@ export default function Home({ navigation }) {
               );
             })}
           </View>
-          {activeTab === tabNames[0] ? (
-            <PersonalDetails
-              profileInfo={profileInfo}
-              updateUser={updateUser}
-            />
-          ) : (
-            <DocumentList />
-          )}
+          <View>
+            {activeTab === tabNames[0] ? (
+              <PersonalDetails
+                profileInfo={profileInfo}
+                updateUser={updateUser}
+              />
+            ) : (
+              <DocumentList profileInfo={profileInfo} />
+            )}
+          </View>
         </View>
       </ScrollView>
     </Background>
@@ -410,5 +397,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+  },
+  docImage: {
+    height: 100,
+    width: SCREEN_WIDTH * 0.8,
   },
 });
