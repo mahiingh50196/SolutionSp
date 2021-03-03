@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import { Touchable, Button } from "../common";
+import { View, Text, StyleSheet } from "react-native";
+import { Button, TextInput } from "../common";
 
 import Modal from "react-native-modal";
 
@@ -28,14 +28,15 @@ function UpdateModal({
       >
         <View style={styles.modalView}>
           <View style={styles.modalContainer}>
-            <Text>{"Enter " + Object.keys(updatingData)[0]}</Text>
             <TextInput
+              autoFocus
+              label={"Update " + Object.keys(updatingData)[0]}
               value={handleUserData}
               onChangeText={(e) => setData(e)}
             />
             <Button
               title="save"
-              style={{ marginHorizontal: 40 }}
+              style={{ marginTop: 30 }}
               onPress={() => sendData()}
             />
           </View>
@@ -52,9 +53,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalContainer: {
-    height: "70%",
-    width: "90%",
+    width: "100%",
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 12,
+    padding: 20,
+    justifyContent: "space-between",
   },
 });
