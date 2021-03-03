@@ -25,6 +25,7 @@ function UpdateModal({
         isVisible={isModalVisible}
         animationIn="bounceIn"
         onBackdropPress={handleModalVisible}
+        onBackButtonPress={handleModalVisible}
       >
         <View style={styles.modalView}>
           <View style={styles.modalContainer}>
