@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     color: Colors.dark_black,
     fontFamily: FontFamilies.sfSemiBold,
     fontSize: FontSizes.xLarge,
-    width: "80%",
+    width: "99%",
   },
   editprofiletext: {
     color: Colors.primary,

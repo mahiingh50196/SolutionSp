@@ -173,6 +173,7 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
 };
 
 const DocumentList = ({ profileInfo }) => {
+  console.warn(profileInfo?.addressProof?.original);
   return (
     <View>
       <View style={{ paddingTop: 10 }}>
@@ -183,7 +184,7 @@ const DocumentList = ({ profileInfo }) => {
             source={{ uri: profileInfo?.addressProof?.original }}
           />
           <View style={styles.tickproofview}>
-            <Text>Adress Proof</Text>
+            <Text>Address Proof</Text>
             <Image source={Tick} />
           </View>
 

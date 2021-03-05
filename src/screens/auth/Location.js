@@ -40,9 +40,12 @@ export const getAddressString = ({
 const GetLocation = ({ navigation: { navigate, goBack } }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [userData, setUserInfo] = useRecoilState(userInfo);
+  const [loading, setLoading] = useState(false);
 
   const getLocation = async () => {
+    setLoading(true);
     let { status } = await Location.requestPermissionsAsync();
+    setLoading(false);
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
       return;
@@ -85,6 +88,7 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
       <Button
         style={styles.signUp}
         title="Allow access"
+        isLoading={loading}
         onPress={getLocation}
       />
       <Button
@@ -97,7 +101,6 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
           });
         }}
       />
-      {/* <Text>{text}</Text> */}
     </Background>
   );
 };
