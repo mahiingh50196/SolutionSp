@@ -4,6 +4,14 @@ import ImagePicker from "react-native-image-crop-picker";
 import { globalStyles, Text, Modal } from "../common";
 import { Colors, FontFamilies } from "../config/Theme";
 
+const imagePickerOptions = {
+  width: 600,
+  height: 800,
+  cropping: true,
+  includeBase64: true,
+  compressImageQuality: 0.7,
+};
+
 const ImagePick = ({ renderOpenModalButton, onPickSuccess }) => {
   const [visible, setVisible] = useState(false);
 
@@ -13,22 +21,14 @@ const ImagePick = ({ renderOpenModalButton, onPickSuccess }) => {
   }, []);
 
   const openCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then((image) => {
+    ImagePicker.openCamera(imagePickerOptions).then((image) => {
       setVisible(false);
       onPickSuccess(image);
     });
   };
 
   const openGalary = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then((image) => {
+    ImagePicker.openPicker(imagePickerOptions).then((image) => {
       setVisible(false);
       onPickSuccess(image);
     });

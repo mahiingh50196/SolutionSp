@@ -79,7 +79,6 @@ export default function Offline(props) {
     const {
       data: { data },
     } = await api({
-      method: "GET",
       url: "/Provider/HomePage",
     });
     setOrderList(data);

@@ -45,7 +45,9 @@ export default function SocialLogin({ desc }) {
           }
         });
       }
-    } catch (err) {}
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   async function facebookLogin() {
