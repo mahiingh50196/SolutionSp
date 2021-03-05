@@ -5,12 +5,12 @@ import { Touchable } from "../common";
 import { api } from "../services";
 import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { DrawerItemList } from "@react-navigation/drawer";
 import { SCREEN_WIDTH } from "../config/Layout";
 
 export default function CustomeDrawer(props) {
-  const user = useRecoilValue(userInfo);
+  const [user, setUser] = useRecoilState(userInfo);
 
   const { state, ...rest } = props;
   const newState = { ...state }; //copy from state before applying any filter. do not change original state
@@ -19,7 +19,7 @@ export default function CustomeDrawer(props) {
   const {
     navigation: { navigate },
   } = props;
-  const setUser = useSetRecoilState(userInfo);
+
   function logout() {
     api({
       method: "PUT",

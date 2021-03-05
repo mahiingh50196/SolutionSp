@@ -6,6 +6,7 @@ import globalStyles from "./globalStyles";
 
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
+import { Colors } from "../config/Theme";
 
 let defaultLocation = {
   latitude: 37.78825,
@@ -87,17 +88,18 @@ export default function Map({
         onRegionChangeComplete={(event) => {
           onChangeLocation(event);
         }}
-      />
+      >
+        {!!from && !!to && (
+          <MapViewDirections
+            origin={from}
+            destination={to}
+            apikey={"AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc"}
+            strokeWidth={4}
+            strokeColor={Colors.primary}
+          />
+        )}
+      </MapView>
       {!!renderPin && renderPin()}
-      {!!from && !!to && (
-        <MapViewDirections
-          origin={from}
-          destination={to}
-          apikey={"AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc"}
-          strokeWidth={3}
-          strokeColor="hotpink"
-        />
-      )}
     </View>
   );
 }
