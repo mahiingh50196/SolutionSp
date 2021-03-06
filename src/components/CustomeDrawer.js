@@ -37,7 +37,7 @@ export default function CustomeDrawer(props) {
           <View style={styles.imgtextwrap}>
             {!!user &&
             Object.keys(user).length &&
-            user?.profilePicture.thumbnail ? (
+            user?.profilePicture?.thumbnail ? (
               <Image
                 resizeMode="cover"
                 source={{ uri: user?.profilePicture.thumbnail }}
