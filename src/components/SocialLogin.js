@@ -37,10 +37,20 @@ export default function SocialLogin({ desc }) {
           const {
             data: { data },
           } = res;
-          if (data) {
+
+          const registrationData = Array.isArray(data) ? data[0] : data;
+          if (
+            registrationData.location &&
+            registrationData.location.coordinates?.length
+          ) {
             setUserInfo({
-              ...res.data?.data,
+              ...registrationData,
               authState: AuthStates.COMPLETE,
+            });
+          } else {
+            setUserInfo({
+              ...registrationData,
+              authState: AuthStates.NO_LOCATION,
             });
           }
         });
@@ -79,15 +89,24 @@ export default function SocialLogin({ desc }) {
         const {
           data: { data },
         } = res;
-        if (data) {
+        const registrationData = Array.isArray(data) ? data[0] : data;
+        console.log("tetsttsts",registrationData);
+        if (
+          registrationData.location &&
+          registrationData.location.coordinates?.length
+        ) {
           setUserInfo({
-            ...res.data?.data,
+            ...registrationData,
             authState: AuthStates.COMPLETE,
+          });
+        } else {
+          setUserInfo({
+            ...registrationData,
+            authState: AuthStates.NO_LOCATION,
           });
         }
       });
     } else {
-      // type === 'cancel'
     }
   }
 

@@ -37,12 +37,13 @@ import {
   ServiceProof,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
-import { api } from "../services";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
 import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
+
+export const navigationRef = React.createRef();
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
@@ -150,6 +151,9 @@ function HomeStack() {
           title: "Upload proof of service",
         }}
       />
+      <home.Screen options={{
+        headerShown: false,
+      }} name="Location" component={Location} />
     </home.Navigator>
   );
 }
@@ -286,7 +290,7 @@ const Navigation = ({ userPersistedInfo }) => {
   }, [setUserInfo]);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <RootStack />
     </NavigationContainer>
   );

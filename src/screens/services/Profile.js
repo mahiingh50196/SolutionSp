@@ -229,7 +229,9 @@ export default function Home({ navigation }) {
         url: `/Provider/GetProviderDetails?providerId=${info._id}`,
         method: "GET",
       }).then((res) => {
-        setProfileInfo(res.data.data);
+        const registrationData = Array.isArray(res.data.data) ?  res.data.data[0] : res.data.data;
+        console.log(registrationData);
+        setProfileInfo(registrationData);
       });
     }
   };

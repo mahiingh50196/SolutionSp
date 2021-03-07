@@ -22,6 +22,7 @@ const Interceptor = () => {
    console.log(Array.isArray(userData));
 
    api.interceptors.request.use((config) => {
+     console.log(userData?.accessToken);
     const newConfig = { ...config };
     if (newConfig.showLoader) {
       setLoading(true);

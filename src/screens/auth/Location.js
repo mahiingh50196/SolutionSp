@@ -11,6 +11,7 @@ import { userInfo } from "../../store/atoms/auth";
 import { useRecoilState } from "recoil";
 import { api } from "../../services";
 import { AuthStates } from "../../config/Constants";
+import { navigationRef } from "../../navigation/index";
 
 export const getAddressString = ({
   city,
@@ -41,6 +42,7 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [userData, setUserInfo] = useRecoilState(userInfo);
   const [loading, setLoading] = useState(false);
+
 
   const getLocation = async () => {
     setLoading(true);
@@ -101,6 +103,9 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
             ...userData,
             authState: AuthStates.COMPLETE,
           });
+          if (navigationRef.current?.canGoBack()) {
+            goBack();
+          }
         }}
       />
     </Background>

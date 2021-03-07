@@ -28,14 +28,15 @@ export default function Login({ navigation: { navigate } }) {
         url: `/Provider/Login?email=${email}&password=${password}`,
         showLoader: true,
       });
-      if (data?.location && data.location.coordinates?.length) {
+      const registrationData = Array.isArray(data) ? data[0] : data;
+      if (registrationData.location && registrationData.location.coordinates?.length) {
         setUserInfo({
-          ...data,
+          ...registrationData,
           authState: AuthStates.COMPLETE,
         });
       } else {
         setUserInfo({
-          ...data,
+          ...registrationData,
           authState: AuthStates.NO_LOCATION,
         });
       }
