@@ -29,6 +29,8 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useRecoilState(userInfo);
 
+  console.log(user);
+
   const handleCallBack = (info) => {
     const updatedDocs = docs.map((doc) => {
       if (doc.type === info.type) {

@@ -173,7 +173,6 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
 };
 
 const DocumentList = ({ profileInfo }) => {
-  console.warn(profileInfo?.addressProof?.original);
   return (
     <View>
       <View style={{ paddingTop: 10 }}>

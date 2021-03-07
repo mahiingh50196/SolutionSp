@@ -117,7 +117,6 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
   };
 
   const onChangeDate = (event, selectedDate) => {
-    console.warn(event.type);
     const currentDate = selectedDate || docDate;
     setDocDate(currentDate);
     setPickerVisibility(Platform.OS === "ios");

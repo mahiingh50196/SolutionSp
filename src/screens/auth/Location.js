@@ -68,9 +68,11 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
       method: "put",
       url: "/Provider/AddAddress",
       data: { lat: latitude, lng: longitude, address },
+      showLoader: true,
     });
+    const registrationData = Array.isArray(data) ? data[0] : data;
     setUserInfo({
-      ...data,
+      ...registrationData,
       authState: AuthStates.COMPLETE,
     });
   };

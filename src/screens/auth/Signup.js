@@ -127,7 +127,8 @@ export default function Signup({ navigation: { navigate } }) {
             data: { data },
           } = res;
           if (data) {
-            setAuthInfo(res.data?.data);
+            const registrationData = Array.isArray(res.data?.data) ? res.data?.data[0] : res.data?.data;
+            setAuthInfo(registrationData);
             navigate("OtpVerify", {
               phone,
               code,
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     borderColor: Colors.primary,
-    height: 40,
+    height: 50,
     justifyContent: "center",
     paddingLeft: 20,
   },

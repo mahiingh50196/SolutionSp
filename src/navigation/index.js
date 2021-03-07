@@ -9,9 +9,9 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
-  useRecoilValue,
   useRecoilTransactionObserver_UNSTABLE,
   useSetRecoilState,
+  useRecoilState,
 } from "recoil";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -232,43 +232,7 @@ function DrawerNav() {
 const root = createStackNavigator();
 
 function RootStack() {
-  const user = useRecoilValue(userInfo);
-  const [loading, setLoading] = React.useState();
-
-  api.interceptors.request.use((config) => {
-    const newConfig = { ...config };
-    if (newConfig.showLoader) {
-      setLoading(true);
-    }
-    if (user) {
-      newConfig.headers = {
-        ...newConfig.headers,
-        Authorization: `Bearer ${user?.accessToken}`,
-      };
-    }
-    return newConfig;
-  });
-
-  api.interceptors.response.use(
-    function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      setLoading(false);
-      return response;
-    },
-    function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      setLoading(false);
-      if (error?.response?.data?.message) {
-        Toast.show({
-          text: error.response.data.message,
-          type: "error",
-        });
-      }
-      return Promise.reject(error);
-    }
-  );
+  const [user] = useRecoilState(userInfo);
 
   const renderRoutes = (authState) => {
     const { COMPLETE, NO_LOCATION, NONE } = AuthStates;
@@ -283,17 +247,9 @@ function RootStack() {
     }
   };
 
+
   return (
     <View style={styles.container}>
-      {loading && (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator
-            animating={true}
-            color={Colors.black}
-            size="large"
-          />
-        </View>
-      )}
       <root.Navigator
         screenOptions={{
           headerShown: false,
@@ -341,11 +297,5 @@ export default Navigation;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loaderContainer: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    zIndex: 1,
-    justifyContent: "center",
   },
 });
