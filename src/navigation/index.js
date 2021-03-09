@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  AsyncStorage,
-  Image,
-  ActivityIndicator,
-  View,
-  StyleSheet,
-} from "react-native";
+import { AsyncStorage, Image, View, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
@@ -151,9 +145,13 @@ function HomeStack() {
           title: "Upload proof of service",
         }}
       />
-      <home.Screen options={{
-        headerShown: false,
-      }} name="Location" component={Location} />
+      <home.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Location"
+        component={Location}
+      />
     </home.Navigator>
   );
 }
@@ -251,7 +249,6 @@ function RootStack() {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <root.Navigator
@@ -277,18 +274,8 @@ function PersistenceObserver() {
   });
 }
 
-const Navigation = ({ userPersistedInfo }) => {
+const Navigation = () => {
   PersistenceObserver();
-  const setUserInfo = useSetRecoilState(userInfo);
-
-  useEffect(() => {
-    AsyncStorage.getItem(userInfo.key).then((res) => {
-      if (res) {
-        setUserInfo(JSON.parse(res).value);
-      }
-    });
-  }, [setUserInfo]);
-
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack />

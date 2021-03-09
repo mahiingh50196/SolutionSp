@@ -4,7 +4,7 @@ import { Image, StyleSheet, View, ScrollView } from "react-native";
 import { Background, Text, Header, Touchable } from "../../common";
 import { ImagePick } from "../../components";
 import { userInfo } from "../../store/atoms/auth";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import {
@@ -21,9 +21,10 @@ import { UpdateModal } from "../../components";
 
 const tabNames = ["Personal Details", "Documents"];
 
-const PersonalDetails = ({ profileInfo, updateUser }) => {
+const PersonalDetails = ({ updateUser }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatingData, setUpdateData] = useState("");
+  const profileInfo = useRecoilValue(userInfo);
 
   const updatkey = (value) => {
     setUpdateData(value);
@@ -38,9 +39,7 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
       url: "/Provider/ProfileUpdate",
       method: "PUT",
       data: updatedData,
-    }).then((res) => {
-      updateUser();
-    });
+    }).then((res) => {});
 
     setModalVisible(false);
   };
@@ -172,7 +171,9 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   }
 };
 
-const DocumentList = ({ profileInfo }) => {
+const DocumentList = () => {
+  const profileInfo = useRecoilValue(userInfo);
+  console.log(profileInfo, "yoo");
   return (
     <View>
       <View style={{ paddingTop: 10 }}>
@@ -180,7 +181,7 @@ const DocumentList = ({ profileInfo }) => {
           <Image
             style={styles.docImage}
             resizeMode="cover"
-            source={{ uri: profileInfo?.addressProof?.original }}
+            source={{ uri: profileInfo?.addproof?.original }}
           />
           <View style={styles.tickproofview}>
             <Text>Address Proof</Text>
@@ -189,7 +190,7 @@ const DocumentList = ({ profileInfo }) => {
 
           <Image
             style={styles.docImage}
-            resizeMode="cover"
+            resizeMode="contain"
             source={{ uri: profileInfo?.identicard?.original }}
           />
           <View style={styles.tickproofview}>
@@ -203,35 +204,26 @@ const DocumentList = ({ profileInfo }) => {
 };
 
 export default function Home({ navigation }) {
-  const info = useRecoilValue(userInfo);
-
   const [activeTab, setActiveTab] = useState(tabNames[0]);
-  const [profileInfo, setProfileInfo] = useState(null);
-
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener("focus", () => {
-  //     getUserDetails();
-  //     // if (info && !info.documentUploaded) {
-  //     //   navigation.navigate("DocsUpload");
-  //     // }
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation, info]);
+  const [profileInfo, setProfileInfo] = useRecoilState(userInfo);
 
   useEffect(() => {
     getData();
   }, []);
 
   const getData = () => {
-    if (info && info._id) {
+    if (profileInfo && profileInfo._id) {
       api({
-        url: `/Provider/GetProviderDetails?providerId=${info._id}`,
+        url: `/Provider/GetProviderDetails?providerId=${profileInfo._id}`,
         method: "GET",
       }).then((res) => {
-        const registrationData = Array.isArray(res.data.data) ?  res.data.data[0] : res.data.data;
-        console.log(registrationData);
-        setProfileInfo(registrationData);
+        const registrationData = Array.isArray(res.data.data)
+          ? res.data.data[0]
+          : res.data.data;
+        setProfileInfo({
+          ...profileInfo,
+          ...registrationData,
+        });
       });
     }
   };
@@ -290,12 +282,9 @@ export default function Home({ navigation }) {
           </View>
           <View>
             {activeTab === tabNames[0] ? (
-              <PersonalDetails
-                profileInfo={profileInfo}
-                updateUser={updateUser}
-              />
+              <PersonalDetails updateUser={updateUser} />
             ) : (
-              <DocumentList profileInfo={profileInfo} />
+              <DocumentList />
             )}
           </View>
         </View>

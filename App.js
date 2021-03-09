@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import Navigation from "./src/navigation";
-import { RecoilRoot, useRecoilValue } from "recoil";
+import { RecoilRoot, useRecoilState } from "recoil";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import ErrorBoundary from "react-native-error-boundary";
@@ -11,26 +11,19 @@ import { Colors } from "./src/config/Theme";
 import { Toast } from "./src/common";
 import { SCREEN_HEIGHT } from "./src/config/Layout";
 
-let userData;
-
 const Interceptor = () => {
-   const user = useRecoilValue(userInfo);
-   const [loading, setLoading] = React.useState();
+  const [user, setUser] = useRecoilState(userInfo);
+  const [loading, setLoading] = React.useState();
 
-   userData = user;
-
-   console.log(Array.isArray(userData));
-
-   api.interceptors.request.use((config) => {
-     console.log(userData?.accessToken);
+  api.interceptors.request.use((config) => {
     const newConfig = { ...config };
     if (newConfig.showLoader) {
       setLoading(true);
     }
-    if (userData) {
+    if (user) {
       newConfig.headers = {
         ...newConfig.headers,
-        Authorization: `Bearer ${userData?.accessToken}`,
+        Authorization: `Bearer ${user?.accessToken}`,
       };
     }
     return newConfig;
@@ -47,6 +40,9 @@ const Interceptor = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       setLoading(false);
+      // if (error?.response?.data?.statusCode === 401) {
+      //   setUser(null);
+      // }
       if (error?.response?.data?.message) {
         Toast.show({
           text: error.response.data.message,
@@ -85,8 +81,8 @@ export default function App() {
           <RootSiblingParent>
             <RecoilRoot>
               <>
-              <Interceptor />
-              <Navigation />
+                <Interceptor />
+                <Navigation />
               </>
             </RecoilRoot>
           </RootSiblingParent>
