@@ -124,7 +124,7 @@ export default function SocialLogin({ desc }) {
 
       const result = await response.json();
       const formData = new FormData();
-      formData.append("socialKey", token);
+      formData.append("socialKey", result.id);
       formData.append("fullName", result.name);
       api({
         method: "post",
@@ -134,6 +134,7 @@ export default function SocialLogin({ desc }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
         },
+        showLoader: true,
       }).then((res) => {
         const {
           data: { data },

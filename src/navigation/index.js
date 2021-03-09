@@ -34,8 +34,6 @@ import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 import { SCREEN_WIDTH } from "../config/Layout";
 
-export const navigationRef = React.createRef();
-
 const auth = createStackNavigator();
 const home = createStackNavigator();
 const drawer = createDrawerNavigator();
@@ -278,7 +276,7 @@ function RootStack() {
 const Navigation = () => {
   // PersistenceObserver();
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer>
       <RootStack />
     </NavigationContainer>
   );

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, FlatList, Switch, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  Switch,
+  Alert,
+} from "react-native";
 import dayjs from "dayjs";
 import { Background, Touchable, Empty, globalStyles } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
@@ -21,7 +29,6 @@ export default function Offline(props) {
 
   const [info, setUserInfo] = useRecoilState(userInfo);
   const isOnline = info?.isOnline;
-
 
   const [orderList, setOrderList] = useState([]);
 
@@ -94,13 +101,15 @@ export default function Offline(props) {
               text: "Cancel",
               style: "cancel",
             },
-            { text: "Enable Now", onPress: () => navigation.navigate("Location") },
+            {
+              text: "Enable Now",
+              onPress: () => navigation.navigate("Location"),
+            },
           ],
           { cancelable: false }
         );
       }
     }
-
   }, []);
 
   const renderItem = (item) => {

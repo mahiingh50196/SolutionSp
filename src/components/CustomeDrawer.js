@@ -57,7 +57,7 @@ export default function CustomeDrawer(props) {
               }}
             >
               <Text style={styles.profiletext} numberOfLines={2}>
-                {user?.fullName}faksfuashfhafhahfhaf
+                {user?.fullName}
               </Text>
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
