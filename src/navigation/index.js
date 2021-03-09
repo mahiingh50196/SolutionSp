@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
-import { AsyncStorage, Image, View, StyleSheet } from "react-native";
+import React from "react";
+import { Image, View, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import {
-  useRecoilTransactionObserver_UNSTABLE,
-  useSetRecoilState,
-  useRecoilState,
-} from "recoil";
+import { useRecoilState } from "recoil";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
@@ -36,6 +32,7 @@ import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
 import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
+import { SCREEN_WIDTH } from "../config/Layout";
 
 export const navigationRef = React.createRef();
 
@@ -210,6 +207,10 @@ function DrawerNav() {
     <drawer.Navigator
       drawerContent={(props) => <CustomeDrawer {...props} />}
       drawerType="slide"
+      drawerStyle={{
+        backgroundColor: "#fff",
+        width: SCREEN_WIDTH * 0.7,
+      }}
     >
       <drawer.Screen name="Home" component={HomeStack} />
       <drawer.Screen
@@ -262,20 +263,20 @@ function RootStack() {
   );
 }
 
-function PersistenceObserver() {
-  useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
-    const loadable = snapshot.getLoadable(userInfo);
-    if (loadable.state === "hasValue") {
-      AsyncStorage.setItem(
-        userInfo.key,
-        JSON.stringify({ value: loadable.contents })
-      );
-    }
-  });
-}
+// function PersistenceObserver() {
+//   useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
+//     const loadable = snapshot.getLoadable(userInfo);
+//     if (loadable.state === "hasValue") {
+//       AsyncStorage.setItem(
+//         userInfo.key,
+//         JSON.stringify({ value: loadable.contents })
+//       );
+//     }
+//   });
+// }
 
 const Navigation = () => {
-  PersistenceObserver();
+  // PersistenceObserver();
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack />

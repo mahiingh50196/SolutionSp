@@ -24,7 +24,7 @@ const tabNames = ["Personal Details", "Documents"];
 const PersonalDetails = ({ updateUser }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatingData, setUpdateData] = useState("");
-  const profileInfo = useRecoilValue(userInfo);
+  const [profileInfo, setProfileInfo] = useRecoilState(userInfo);
 
   const updatkey = (value) => {
     setUpdateData(value);
@@ -35,12 +35,21 @@ const PersonalDetails = ({ updateUser }) => {
     setModalVisible(false);
   };
   const updatedValue = (updatedData) => {
+    console.log(updatedData);
     api({
       url: "/Provider/ProfileUpdate",
-      method: "PUT",
+      method: "put",
       data: updatedData,
-    }).then((res) => {});
-
+      showLoader: true,
+    }).then((res) => {
+      const {
+        data: { data },
+      } = res;
+      setProfileInfo({
+        ...profileInfo,
+        ...data,
+      });
+    });
     setModalVisible(false);
   };
 
@@ -75,7 +84,7 @@ const PersonalDetails = ({ updateUser }) => {
         <Image
           resizeMode="cover"
           source={
-            profileInfo && profileInfo.profilePicture
+            profileInfo && profileInfo?.profilePicture?.thumbnail
               ? { uri: profileInfo.profilePicture.thumbnail }
               : Avatar
           }
@@ -180,7 +189,7 @@ const DocumentList = () => {
         <View style={styles.userinfowrapper}>
           <Image
             style={styles.docImage}
-            resizeMode="cover"
+            resizeMode="contain"
             source={{ uri: profileInfo?.addproof?.original }}
           />
           <View style={styles.tickproofview}>

@@ -10,6 +10,7 @@ import { api } from "./src/services";
 import { Colors } from "./src/config/Theme";
 import { Toast } from "./src/common";
 import { SCREEN_HEIGHT } from "./src/config/Layout";
+import Persister from "./src/store/Persister";
 
 const Interceptor = () => {
   const [user, setUser] = useRecoilState(userInfo);
@@ -80,10 +81,10 @@ export default function App() {
         <BottomSheetModalProvider>
           <RootSiblingParent>
             <RecoilRoot>
-              <>
+              <Persister>
                 <Interceptor />
                 <Navigation />
-              </>
+              </Persister>
             </RecoilRoot>
           </RootSiblingParent>
         </BottomSheetModalProvider>

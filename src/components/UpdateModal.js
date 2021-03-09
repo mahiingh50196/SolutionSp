@@ -35,11 +35,7 @@ function UpdateModal({
               value={handleUserData}
               onChangeText={(e) => setData(e)}
             />
-            <Button
-              title="save"
-              style={{ marginTop: 30 }}
-              onPress={() => sendData()}
-            />
+            <Button title="save" style={{ marginTop: 30 }} onPress={sendData} />
           </View>
         </View>
       </Modal>

@@ -10,6 +10,7 @@ const Persister = ({ children }) => {
 
   const hydrateRecoil = useCallback(async () => {
     const value = await AsyncStorage.getItem(userInfo.key);
+    console.warn(value);
     if (value) {
       setUserInfo(JSON.parse(value));
     }
