@@ -1,9 +1,9 @@
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Platform, Linking } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useRecoilValue } from "recoil";
 import { nav } from "../../assets/images";
-import { Background, globalStyles, Map, Text } from "../../common";
+import { Background, globalStyles, Map, Text, Touchable } from "../../common";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { userInfo } from "../../store/atoms/auth";
@@ -44,18 +44,30 @@ const TrackingDetails = ({
             }}
           />
           <View style={styles.actionIcons}>
-            <Ionicons
-              name="call"
-              size={22}
-              color={Colors.blue}
-              style={styles.icon}
-            />
-            <Ionicons
-              name="chatbox-ellipses"
-              size={22}
-              color={Colors.blue}
-              style={styles.icon}
-            />
+            <Touchable
+              onPress={() => Linking.openURL(`tel:${orderDetails.phoneNumber}`)}
+            >
+              <Ionicons
+                name="call"
+                size={22}
+                color={Colors.blue}
+                style={styles.icon}
+              />
+            </Touchable>
+            <Touchable>
+              <Ionicons
+                onPress={() => {
+                  const url = `sms:${orderDetails.phoneNumber}${
+                    Platform.OS === "ios" ? "&" : "?"
+                  }body=${""}`;
+                  Linking.openURL(url);
+                }}
+                name="chatbox-ellipses"
+                size={22}
+                color={Colors.blue}
+                style={styles.icon}
+              />
+            </Touchable>
           </View>
         </View>
         <View style={styles.bottomView}>
