@@ -77,8 +77,14 @@ const OrderList = ({ navigation }) => {
   }
 
   return (
-    <Background>
+    <Background
+      contentStyle={{
+        paddingHorizontal: 0,
+      }}
+    >
       <SectionList
+        onRefresh={getOrders}
+        refreshing={false}
         contentContainerStyle={styles.scrollContainer}
         sections={Data}
         keyExtractor={(item, index) => item._id + index}
@@ -99,6 +105,7 @@ export default OrderList;
 const styles = StyleSheet.create({
   scrollContainer: {
     paddingVertical: 70,
+    paddingHorizontal: SCREEN_WIDTH * 0.04,
   },
   navstyle: {
     height: 100,

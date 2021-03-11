@@ -69,7 +69,7 @@ export default function CustomeDrawer(props) {
           {...{
             ...rest,
             labelStyle: {
-              fontSize: FontSizes.xLarge,
+              fontSize: FontSizes.large,
               color: Colors.black,
               fontFamily: FontFamilies.sfSemiBold,
             },

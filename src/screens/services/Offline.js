@@ -29,6 +29,7 @@ export default function Offline(props) {
 
   const [info, setUserInfo] = useRecoilState(userInfo);
   const isOnline = info?.isOnline;
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const [orderList, setOrderList] = useState([]);
 
@@ -84,14 +85,18 @@ export default function Offline(props) {
   }, [navigation, info, getOrderList]);
 
   const getOrderList = React.useCallback(async () => {
+    setRefreshing(true);
     try {
       const {
         data: { data },
       } = await api({
         url: "/Provider/HomePage",
+        showLoader: true,
       });
       setOrderList(data);
+      setRefreshing(false);
     } catch (error) {
+      setRefreshing(false);
       if (error?.response?.data?.type === "NO_LOCATION") {
         Alert.alert(
           "No Location",
@@ -181,6 +186,8 @@ export default function Offline(props) {
         ) : (
           <View>
             <FlatList
+              onRefresh={getOrderList}
+              refreshing={refreshing}
               data={orderList}
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(item) => item._id}

@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  Linking,
+  Platform,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -210,6 +218,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
     <View>
       <View style={styles.actionIconsContainer}>
         <ActionIconButton
+          onPress={() => Linking.openURL(`tel:${orderDetails.phoneNumber}`)}
           title="Call"
           type="call"
           renderIcon={() => (
@@ -217,6 +226,12 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
           )}
         />
         <ActionIconButton
+          onPress={() => {
+            const url = `sms:${orderDetails.phoneNumber}${
+              Platform.OS === "ios" ? "&" : "?"
+            }body=${""}`;
+            Linking.openURL(url);
+          }}
           title="Message"
           type="message"
           renderIcon={() => (
@@ -312,22 +327,27 @@ export default function ServiceDetails({
     return <></>;
   }
 
-  const renderItem = ({ item: { productName, subcategory } }) => {
+  const renderItem = ({
+    item: { productName, subcategory, price, product },
+  }) => {
     return (
       <View style={styles.mainflatlistwrapper}>
         <Image source={Mask} />
         <View style={styles.right}>
-          <Text style={styles.self}>{productName}</Text>
+          <Text style={styles.self}>{product}</Text>
           <Text style={styles.deleteall}>{subcategory}</Text>
-          <Text style={styles.self}>$ 40</Text>
+          <Text style={styles.self}>$ {price}</Text>
         </View>
       </View>
     );
   };
 
+  console.log(orderDetails);
+
   return (
     <Background>
       <FlatList
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentStyle}
         data={orderDetails.product}
         renderItem={renderItem}

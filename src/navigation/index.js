@@ -13,6 +13,7 @@ import {
   Location,
   ForgetPassword,
   TermsInfo,
+  Privacy,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
 import {
@@ -223,6 +224,23 @@ function DrawerNav() {
         component={Notification}
         options={{
           drawerLabel: "Notifications",
+        }}
+      />
+      <drawer.Screen
+        name="Privacy Policy"
+        component={Privacy}
+        options={{
+          headerShown: true,
+          headerTitle: "Privacy Policy",
+        }}
+      />
+      <drawer.Screen
+        name="Terms and Condition"
+        component={Privacy}
+        initialParams={{ type: "terms" }}
+        options={{
+          headerShown: true,
+          headerTitle: "Terms And Condition",
         }}
       />
       <drawer.Screen name="Profile" component={Profile} />
