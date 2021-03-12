@@ -18,9 +18,9 @@ const Swiper = ({ title, onSwipe }) => {
         backgroundColor="#fff"
         textColor="#37474F"
         okButton={{ visible: true, duration: 400 }}
-        onSwipe={() => alert("hey")}
+        // onSwipe={() => alert("hey")}
         onVerified={() => {
-          // onSwipe(swiperRef);
+          onSwipe(swiperRef);
         }}
         icon={
           <Image

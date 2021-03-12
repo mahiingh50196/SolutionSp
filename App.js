@@ -11,6 +11,7 @@ import { Colors } from "./src/config/Theme";
 import { Toast } from "./src/common";
 import { SCREEN_HEIGHT } from "./src/config/Layout";
 import Persister from "./src/store/Persister";
+import DebugObserver from "./src/store/debugObserver";
 
 const Interceptor = () => {
   const [user, setUser] = useRecoilState(userInfo);
@@ -41,9 +42,9 @@ const Interceptor = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       setLoading(false);
-      // if (error?.response?.data?.statusCode === 401) {
-      //   setUser(null);
-      // }
+      if (error?.response?.data?.type === "UNAUTHORIZED") {
+        setUser(null);
+      }
       if (error?.response?.data?.message) {
         Toast.show({
           text: error.response.data.message,
@@ -82,6 +83,7 @@ export default function App() {
           <RootSiblingParent>
             <RecoilRoot>
               <Persister>
+                <DebugObserver />
                 <Interceptor />
                 <Navigation />
               </Persister>

@@ -214,6 +214,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
       </View>
     );
   }
+
   return (
     <View>
       <View style={styles.actionIconsContainer}>
@@ -238,17 +239,17 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
             <AntDesign name="message1" color={Colors.white} size={20} />
           )}
         />
-        {status !== OrderStates.Canceled ||
-          (status !== OrderStates.Rejected && (
-            <ActionIconButton
-              title="Cancel"
-              type="cancel"
-              renderIcon={() => (
-                <AntDesign name="delete" color={Colors.white} size={20} />
-              )}
-              onPress={handleCancel}
-            />
-          ))}
+        {(status !== OrderStates.Canceled ||
+          status !== OrderStates.Rejected) && (
+          <ActionIconButton
+            title="Cancel"
+            type="cancel"
+            renderIcon={() => (
+              <AntDesign name="delete" color={Colors.white} size={20} />
+            )}
+            onPress={handleCancel}
+          />
+        )}
       </View>
       {renderSwipeButtons()}
     </View>
@@ -328,13 +329,16 @@ export default function ServiceDetails({
   }
 
   const renderItem = ({
-    item: { productName, subcategory, price, product },
+    item: { productName, subcategory, price, product, picture, quentity },
   }) => {
     return (
       <View style={styles.mainflatlistwrapper}>
-        <Image source={Mask} />
+        <Image
+          source={{ uri: picture?.original }}
+          style={styles.productImage}
+        />
         <View style={styles.right}>
-          <Text style={styles.self}>{product}</Text>
+          <Text style={styles.self}>{`${product} x ${quentity}`}</Text>
           <Text style={styles.deleteall}>{subcategory}</Text>
           <Text style={styles.self}>$ {price}</Text>
         </View>
@@ -457,8 +461,13 @@ const styles = StyleSheet.create({
     color: "grey",
     fontFamily: FontFamilies.sfSemiBold,
   },
+  qty: {
+    fontSize: 12,
+    color: "grey",
+    bottom: 4,
+  },
   contentStyle: {
-    paddingTop: 50,
+    paddingVertical: 50,
   },
   right: {
     paddingLeft: 12,
@@ -513,5 +522,11 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 11,
+  },
+  productImage: {
+    height: "100%",
+    width: 70,
+    borderTopLeftRadius: 11,
+    borderBottomLeftRadius: 11,
   },
 });
