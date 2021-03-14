@@ -200,7 +200,7 @@ export default function Signup({ navigation: { navigate } }) {
             Already have an account?
           </Text>
           <Touchable onPress={() => navigate("Login")}>
-            <Text style={styles.loginLabel}>Login?</Text>
+            <Text style={styles.loginLabel}>Login</Text>
           </Touchable>
         </View>
         <ImagePick

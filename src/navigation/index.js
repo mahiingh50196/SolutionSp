@@ -26,6 +26,7 @@ import {
   ServiceDetails,
   TrackingDetails,
   ServiceProof,
+  ServiceComplete,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { CustomeDrawer } from "../components";
@@ -195,6 +196,15 @@ function ServicesStack() {
           headerTransparent: true,
           headerTintColor: Colors.blue,
           title: "Upload proof of service",
+        }}
+      />
+      <services.Screen
+        name="ServiceComplete"
+        component={ServiceComplete}
+        options={{
+          headerTransparent: true,
+          headerTintColor: Colors.blue,
+          title: "",
         }}
       />
     </services.Navigator>

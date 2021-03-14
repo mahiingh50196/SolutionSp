@@ -16,7 +16,11 @@ const ImagePick = ({ renderOpenModalButton, onPickSuccess }) => {
   const [visible, setVisible] = useState(false);
 
   // callbacks
-  const handlePresentModalPress = useCallback(() => {
+  const handlePresentModalPress = useCallback((onlyCamera = false) => {
+    if (onlyCamera) {
+      openCamera();
+      return;
+    }
     setVisible(true);
   }, []);
 

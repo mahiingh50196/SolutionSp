@@ -35,6 +35,22 @@ const getTime = (val) => {
   }`;
 };
 
+const shouldShowCancel = (status) => {
+  switch (status) {
+    case OrderStates.Started:
+      return true;
+    case OrderStates.Rejected:
+      return false;
+    case OrderStates.Canceled:
+      return false;
+    case OrderStates.Completed:
+      return false;
+
+    default:
+      return true;
+  }
+};
+
 const ActionIconButton = ({ title, renderIcon, type, onPress }) => {
   const getButtonBackground = () => {
     switch (type) {
@@ -152,6 +168,7 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
                   await updateOrderStatus(OrderStates.Completed);
                   swiperRef.current.reset();
                   callback();
+                  navigate("ServiceComplete");
                   Toast.show({ text: "marked as complete" });
                 },
                 orderId: orderDetails._id,
@@ -215,6 +232,8 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
     );
   }
 
+  console.warn(status === OrderStates.Completed);
+
   return (
     <View>
       <View style={styles.actionIconsContainer}>
@@ -239,8 +258,8 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
             <AntDesign name="message1" color={Colors.white} size={20} />
           )}
         />
-        {(status !== OrderStates.Canceled ||
-          status !== OrderStates.Rejected) && (
+
+        {shouldShowCancel(status) && (
           <ActionIconButton
             title="Cancel"
             type="cancel"
@@ -345,8 +364,6 @@ export default function ServiceDetails({
       </View>
     );
   };
-
-  console.log(orderDetails);
 
   return (
     <Background>
