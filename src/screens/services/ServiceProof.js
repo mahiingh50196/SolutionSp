@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    paddingBottom: 50,
   },
   proofOfService: {
     height: SCREEN_HEIGHT * 0.6,

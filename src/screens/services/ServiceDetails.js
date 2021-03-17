@@ -169,7 +169,6 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
                   swiperRef.current.reset();
                   callback();
                   navigate("ServiceComplete");
-                  Toast.show({ text: "marked as complete" });
                 },
                 orderId: orderDetails._id,
               });

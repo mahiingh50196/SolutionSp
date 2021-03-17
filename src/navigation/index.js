@@ -138,7 +138,7 @@ function HomeStack() {
         component={ServiceProof}
         options={{
           headerTransparent: true,
-          headerTintColor: Colors.blue,
+          headerTintColor: "#fff",
           title: "Upload proof of service",
         }}
       />
@@ -194,8 +194,9 @@ function ServicesStack() {
         component={ServiceProof}
         options={{
           headerTransparent: true,
-          headerTintColor: Colors.blue,
-          title: "Upload proof of service",
+          headerTintColor: Colors.white,
+          title: "Proof of service",
+          headerTitleAlign: "center",
         }}
       />
       <services.Screen
