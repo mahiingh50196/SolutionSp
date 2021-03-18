@@ -13,23 +13,39 @@ import { SCREEN_HEIGHT } from "./src/config/Layout";
 import Persister from "./src/store/Persister";
 import DebugObserver from "./src/store/debugObserver";
 
+const getNewConfig = (config, user) => {
+  const newConfig = { ...config };
+  if (user?.accessToken) {
+    newConfig.headers = {
+      ...newConfig.headers,
+      Authorization: `Bearer ${user?.accessToken}`,
+    };
+    return newConfig;
+  }
+  newConfig.headers = {
+    ...newConfig.headers,
+    Authorization: "",
+  };
+  return newConfig;
+};
+
 const Interceptor = () => {
   const [user, setUser] = useRecoilState(userInfo);
   const [loading, setLoading] = React.useState();
 
-  api.interceptors.request.use((config) => {
-    const newConfig = { ...config };
-    if (newConfig.showLoader) {
-      setLoading(true);
-    }
-    if (user) {
-      newConfig.headers = {
-        ...newConfig.headers,
-        Authorization: `Bearer ${user?.accessToken}`,
-      };
-    }
-    return newConfig;
-  });
+  // Remove the existing interceptor when either the user or refreshAccessToken change.
+  React.useEffect(() => {
+    const authInterceptor = api.interceptors.request.use(function (config) {
+      const newConfig = getNewConfig(config, user);
+      if (newConfig.showLoader) {
+        setLoading(true);
+      }
+      return newConfig;
+    });
+    return () => {
+      api.interceptors.request.eject(authInterceptor);
+    };
+  }, [user]);
 
   api.interceptors.response.use(
     function (response) {

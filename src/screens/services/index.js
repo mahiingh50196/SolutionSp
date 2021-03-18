@@ -8,6 +8,7 @@ import MyServices from "./MyServices";
 import TrackingDetails from "./TrackingDetails";
 import ServiceProof from "./ServiceProof";
 import ServiceComplete from "./ServiceComplete";
+import RateOrder from "./RateOrder";
 
 export {
   Profile,
@@ -20,4 +21,5 @@ export {
   TrackingDetails,
   ServiceProof,
   ServiceComplete,
+  RateOrder,
 };

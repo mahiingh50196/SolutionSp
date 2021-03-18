@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 import AntDesign from "react-native-vector-icons/AntDesign";
 import dayjs from "dayjs";
 import {
@@ -21,7 +20,8 @@ import {
   Toast,
   Map,
 } from "../../common";
-import { onlineImg, date, clock, Mask, Pin } from "../../assets/images";
+
+import { onlineImg, date, clock, Pin } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
 import { OrderStates } from "../../config/Constants";
@@ -230,8 +230,6 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
       </View>
     );
   }
-
-  console.warn(status === OrderStates.Completed);
 
   return (
     <View>

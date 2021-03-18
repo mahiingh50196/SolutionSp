@@ -27,12 +27,13 @@ import {
   TrackingDetails,
   ServiceProof,
   ServiceComplete,
+  RateOrder,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
-import { menu as MenuIcon } from "../assets/images";
+import { menu as MenuIcon, offline } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 import { SCREEN_WIDTH } from "../config/Layout";
 
