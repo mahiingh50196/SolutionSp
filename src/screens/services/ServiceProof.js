@@ -68,7 +68,7 @@ const ServiceProof = ({
           style={styles.proofOfService}
         />
       ) : (
-        <Touchable onPress={() => handlePresentModalPress(true)}>
+        <Touchable onPress={() => handlePresentModalPress()}>
           <Image
             resizeMode="contain"
             source={TakePhoto}

@@ -9,9 +9,9 @@ import { userInfo } from "./src/store/atoms/auth";
 import { api } from "./src/services";
 import { Colors } from "./src/config/Theme";
 import { Toast } from "./src/common";
-import { SCREEN_HEIGHT } from "./src/config/Layout";
 import Persister from "./src/store/Persister";
 import DebugObserver from "./src/store/debugObserver";
+import { SCREEN_HEIGHT } from "./src/config/Layout";
 
 const getNewConfig = (config, user) => {
   const newConfig = { ...config };

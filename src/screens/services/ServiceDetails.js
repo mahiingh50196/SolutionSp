@@ -20,8 +20,7 @@ import {
   Toast,
   Map,
 } from "../../common";
-
-import { onlineImg, date, clock, Pin } from "../../assets/images";
+import { onlineImg, date, clock, Mask, Pin } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { api } from "../../services";
 import { OrderStates } from "../../config/Constants";
@@ -37,13 +36,17 @@ const getTime = (val) => {
 
 const shouldShowCancel = (status) => {
   switch (status) {
-    case OrderStates.Started:
+    case OrderStates.Accepted:
       return true;
     case OrderStates.Rejected:
       return false;
     case OrderStates.Canceled:
       return false;
     case OrderStates.Completed:
+      return false;
+    case OrderStates.Reached:
+      return false;
+    case OrderStates.Started:
       return false;
 
     default:
@@ -168,7 +171,9 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
                   await updateOrderStatus(OrderStates.Completed);
                   swiperRef.current.reset();
                   callback();
-                  navigate("ServiceComplete");
+                  navigate("ServiceComplete", {
+                    orderDetails,
+                  });
                 },
                 orderId: orderDetails._id,
               });
@@ -322,6 +327,7 @@ export default function ServiceDetails({
   route: {
     params: { orderId },
   },
+  navigation,
 }) {
   const [orderDetails, setOrderDetails] = React.useState(null);
 
@@ -375,6 +381,16 @@ export default function ServiceDetails({
           <Footer orderDetails={orderDetails} callback={fetchOrderDetails} />
         }
       />
+      {/* {orderDetails.status === OrderStates.Completed && (
+        <Button
+          title="Rate Customer"
+          onPress={() => {
+            navigation.navigate("RateOrder", {
+              orderDetails,
+            });
+          }}
+        />
+      )} */}
     </Background>
   );
 }

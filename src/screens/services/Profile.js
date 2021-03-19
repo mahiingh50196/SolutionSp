@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, View, ScrollView } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Background, Text, Header, Touchable } from "../../common";
 import { ImagePick } from "../../components";
 import { userInfo } from "../../store/atoms/auth";
@@ -12,7 +19,6 @@ import {
   san,
   phone,
   message,
-  License,
   Tick,
   Avatar,
 } from "../../assets/images";
@@ -35,7 +41,6 @@ const PersonalDetails = ({ updateUser }) => {
     setModalVisible(false);
   };
   const updatedValue = (updatedData) => {
-    console.log(updatedData);
     api({
       url: "/Provider/ProfileUpdate",
       method: "put",
@@ -179,35 +184,73 @@ const PersonalDetails = ({ updateUser }) => {
     return <Text>No Data</Text>;
   }
 };
-
-const DocumentList = () => {
+const DocumentList = ({ onPress }) => {
   const profileInfo = useRecoilValue(userInfo);
+  const [image, setImage] = useState("");
+  const [viewDocument, setViewDocument] = useState(false);
+  const openModal = ({ data }) => {
+    setImage(data);
+    setViewDocument(true);
+  };
+
+  const closeModal = () => {
+    setViewDocument(true);
+  };
   console.log(profileInfo, "yoo");
   return (
     <View>
       <View style={{ paddingTop: 10 }}>
         <View style={styles.userinfowrapper}>
-          <Image
-            style={styles.docImage}
-            resizeMode="contain"
-            source={{ uri: profileInfo?.addproof?.original }}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              setImage(profileInfo?.addproof?.original);
+              setViewDocument(true);
+            }}
+          >
+            <Image
+              style={styles.docImage}
+              resizeMode="contain"
+              source={{ uri: profileInfo?.addproof?.original }}
+            />
+          </TouchableOpacity>
           <View style={styles.tickproofview}>
             <Text>Address Proof</Text>
             <Image source={Tick} />
           </View>
-
-          <Image
-            style={styles.docImage}
-            resizeMode="contain"
-            source={{ uri: profileInfo?.identicard?.original }}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              setImage(profileInfo?.identicard?.original);
+              setViewDocument(true);
+            }}
+          >
+            <Image
+              style={styles.docImage}
+              resizeMode="contain"
+              source={{ uri: profileInfo?.identicard?.original }}
+            />
+          </TouchableOpacity>
           <View style={styles.tickproofview}>
             <Text>Identification cards</Text>
             <Image source={Tick} />
           </View>
         </View>
       </View>
+      <Modal
+        onRequestClose={() => setViewDocument(false)}
+        visible={viewDocument}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => setViewDocument(false)}
+        >
+          <Image
+            source={{ uri: image }}
+            resizeMode="contain"
+            style={{ height: "100%", width: "100%" }}
+          />
+        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={closeModal}></TouchableOpacity> */}
+      </Modal>
     </View>
   );
 };

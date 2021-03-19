@@ -7,6 +7,7 @@ import {
   FlatList,
   Switch,
   Alert,
+  RefreshControl,
 } from "react-native";
 import dayjs from "dayjs";
 import { Background, Touchable, Empty, globalStyles } from "../../common";
@@ -189,6 +190,12 @@ export default function Offline(props) {
               onRefresh={getOrderList}
               refreshing={refreshing}
               data={orderList}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={getOrderList}
+                />
+              }
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(item) => item._id}
               ListEmptyComponent={<Empty title="No Services available" />}

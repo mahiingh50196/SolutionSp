@@ -4,9 +4,17 @@ import { Success } from "../../assets/images";
 import { Background, Button, Text } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 
-const OrderSuccess = ({ navigation }) => {
+const OrderSuccess = ({
+  navigation,
+  route: {
+    params: { orderDetails },
+  },
+}) => {
   const onPressDetail = () => {
     // navigation.reset({ index: 0, routes: [{ name: "Orders" }] });
+    navigation.navigate("RateOrder", {
+      orderDetails,
+    });
   };
   return (
     <Background>

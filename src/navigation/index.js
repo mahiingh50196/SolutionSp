@@ -33,7 +33,7 @@ import { userInfo } from "../store/atoms/auth";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
-import { menu as MenuIcon, offline } from "../assets/images";
+import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
 import { SCREEN_WIDTH } from "../config/Layout";
 
@@ -105,6 +105,7 @@ function HomeStack() {
           headerTransparent: true,
           title: "Document Management",
           headerTintColor: Colors.blue,
+          headerShown: false,
         }}
       />
       <home.Screen
@@ -207,6 +208,13 @@ function ServicesStack() {
           headerTransparent: true,
           headerTintColor: Colors.blue,
           title: "",
+        }}
+      />
+      <services.Screen
+        name="RateOrder"
+        component={RateOrder}
+        options={{
+          headerTransparent: false,
         }}
       />
     </services.Navigator>

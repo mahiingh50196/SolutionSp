@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet } from "react-native";
 
 import { Background, Button, Text } from "../../common";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -84,33 +84,35 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
 
   return (
     <Background>
-      <Touchable onPress={goBack}>
-        <Ionicons name="close" size={40} />
-      </Touchable>
-      <Image style={styles.map} source={Map} />
-      <Text style={styles.title}>Enable Location</Text>
-      <Text style={styles.desc}>
-        Choose your location to start find the request around you.
-      </Text>
-      <Button
-        style={styles.signUp}
-        title="Allow access"
-        isLoading={loading}
-        onPress={getLocation}
-      />
-      <Button
-        type="transparent"
-        title="Skip for now"
-        onPress={() => {
-          setUserInfo({
-            ...userData,
-            authState: AuthStates.COMPLETE,
-          });
-          if (index > 0) {
-            goBack();
-          }
-        }}
-      />
+      <ScrollView>
+        <Touchable onPress={goBack}>
+          <Ionicons name="close" size={40} />
+        </Touchable>
+        <Image style={styles.map} source={Map} />
+        <Text style={styles.title}>Enable Location</Text>
+        <Text style={styles.desc}>
+          Choose your location to start find the request around you.
+        </Text>
+        <Button
+          style={styles.signUp}
+          title="Allow access"
+          isLoading={loading}
+          onPress={getLocation}
+        />
+        <Button
+          type="transparent"
+          title="Skip for now"
+          onPress={() => {
+            setUserInfo({
+              ...userData,
+              authState: AuthStates.COMPLETE,
+            });
+            if (index > 0) {
+              goBack();
+            }
+          }}
+        />
+      </ScrollView>
     </Background>
   );
 };

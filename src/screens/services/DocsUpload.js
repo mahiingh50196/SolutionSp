@@ -7,7 +7,7 @@ import {
   View,
   ScrollView,
 } from "react-native";
-import { Background, Button, Toast } from "../../common";
+import { Background, Button, Header, Toast } from "../../common";
 import { Drivinglicence, Tick } from "../../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
@@ -28,7 +28,6 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
   ]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useRecoilState(userInfo);
-
 
   const handleCallBack = (info) => {
     const updatedDocs = docs.map((doc) => {
@@ -81,6 +80,21 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
   return (
     <Background>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <Text
+        style={{
+          color: "rgb(0,100,156)",
+          fontFamily: FontFamilies.poppinsMedium,
+          fontSize: 18,
+          alignSelf: "center",
+          marginTop: 16,
+        }}
+      >
+        Document Management
+      </Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
         {docs.map((doc, idx) => {
           return (
             <TouchableOpacity
@@ -135,6 +149,22 @@ export default function DocsUpload({ navigation: { navigate, popToTop } }) {
           onPress={handleDocsUpload}
         />
       </View>
+
+        <View style={{ marginTop: 50 }}>
+          <Button
+            disabled={!uploadedDocs}
+            style={[
+              styles.submit,
+              {
+                backgroundColor: uploadedDocs ? Colors.primary : "#7f7f7f",
+              },
+            ]}
+            isLoading={loading}
+            title="Submit"
+            onPress={handleDocsUpload}
+          />
+        </View>
+      </ScrollView>
     </Background>
   );
 }
@@ -198,6 +228,6 @@ const styles = StyleSheet.create({
   },
   submit: { height: 60, justifyContent: "center", borderRadius: 15 },
   scrollContainer: {
-    paddingVertical: 50,
+    paddingVertical: 10,
   },
 });

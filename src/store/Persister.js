@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from "react";
-import { ActivityIndicator, AsyncStorage } from "react-native";
+import { ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSetRecoilState } from "recoil";
 
 import { userInfo } from "./atoms/auth";
