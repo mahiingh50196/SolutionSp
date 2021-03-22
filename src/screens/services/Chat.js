@@ -1,14 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, Image, Text, StyleSheet, Linking } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import {
-  GiftedChat,
-  Send,
-  Bubble,
-  Actions,
-  ActionsProps,
-  Chat,
-} from "react-native-gifted-chat";
+import { GiftedChat, Send, Bubble, Actions } from "react-native-gifted-chat";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import Icon from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -43,22 +36,24 @@ export default function App({
       const {
         data: { data },
       } = res;
-      const updatedMessages = data.map((each) => {
-        console.warn(each._id);
-        const info = {
-          _id: each._id,
-          text: each.message,
-          // image: each.picture,
-          user: {
-            _id: each.userId,
-          },
-        };
-        if (each.picture) {
-          info.image = each.picture;
-        }
-        console.log(info);
-        return info;
-      });
+      const updatedMessages = data
+        .map((each) => {
+          console.warn(each._id);
+          const info = {
+            _id: each._id,
+            text: each.message,
+            // image: each.picture,
+            user: {
+              _id: each.userId,
+            },
+          };
+          if (each.picture) {
+            info.image = each.picture;
+          }
+          console.log(info);
+          return info;
+        })
+        .reverse();
       setMessages(updatedMessages);
     });
   }, []);
@@ -169,7 +164,17 @@ export default function App({
             <Icon name="arrow-back" size={30} color="white" />
           </Touchable>
           <View style={styles.row}>
-            <Image source={onlineImg} style={styles.onlineImage} />
+            <Image
+              source={
+                order?.profilePicture?.thumbnail
+                  ? {
+                      uri: order?.profilePicture?.thumbnail,
+                    }
+                  : onlineImg
+              }
+              resizeMode="contain"
+              style={styles.onlineImage}
+            />
             <View style={{ marginLeft: 20 }}>
               <Text style={styles.guyName}>{order.user_name}</Text>
               {/* <Text style={styles.onlineText}>online</Text> */}
