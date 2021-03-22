@@ -1,18 +1,8 @@
-import React, { useEffect } from "react";
-import {
-  AsyncStorage,
-  Image,
-  ActivityIndicator,
-  View,
-  StyleSheet,
-} from "react-native";
+import React from "react";
+import { Image, View, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import {
-  useRecoilValue,
-  useRecoilTransactionObserver_UNSTABLE,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilState } from "recoil";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
@@ -23,6 +13,7 @@ import {
   Location,
   ForgetPassword,
   TermsInfo,
+  Privacy,
 } from "../screens/auth";
 import { CountryPicker } from "../components";
 import {
@@ -38,19 +29,19 @@ import {
   Chat,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
-import { api } from "../services";
 import { CustomeDrawer } from "../components";
 import { AuthStates } from "../config/Constants";
 import { Touchable, globalStyles, Toast } from "../common";
 import { menu as MenuIcon } from "../assets/images";
 import { Colors, FontFamilies, FontSizes } from "../config/Theme";
+import { SCREEN_WIDTH } from "../config/Layout";
 
 const auth = createStackNavigator();
 const home = createStackNavigator();
 const drawer = createDrawerNavigator();
 const services = createStackNavigator();
 
-const HeaderMenuIcon = () => {
+const HeaderMenuIcon = ({ tintColor = "white" }) => {
   const { toggleDrawer } = useNavigation();
   return (
     <Touchable
@@ -60,7 +51,7 @@ const HeaderMenuIcon = () => {
       <Image
         source={MenuIcon}
         resizeMode="contain"
-        style={[globalStyles.headerMenuIcon]}
+        style={[globalStyles.headerMenuIcon, { tintColor }]}
       />
     </Touchable>
   );
@@ -151,6 +142,13 @@ function HomeStack() {
           title: "Upload proof of service",
         }}
       />
+      <home.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Location"
+        component={Location}
+      />
     </home.Navigator>
   );
 }
@@ -170,7 +168,7 @@ function ServicesStack() {
             fontSize: FontSizes.larger,
             fontFamily: FontFamilies.sfMedium,
           },
-          headerLeft: () => <HeaderMenuIcon />,
+          headerLeft: () => <HeaderMenuIcon tintColor="#000" />,
         }}
       />
       <services.Screen
@@ -209,10 +207,43 @@ function DrawerNav() {
     <drawer.Navigator
       drawerContent={(props) => <CustomeDrawer {...props} />}
       drawerType="slide"
+      drawerStyle={{
+        backgroundColor: "#fff",
+        width: SCREEN_WIDTH * 0.7,
+      }}
     >
       <drawer.Screen name="Home" component={HomeStack} />
-      <drawer.Screen name="MyServices" component={ServicesStack} />
-      <drawer.Screen name="Notifications" component={Notification} />
+      <drawer.Screen
+        name="MyServices"
+        component={ServicesStack}
+        options={{
+          drawerLabel: "My Services",
+        }}
+      />
+      <drawer.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          drawerLabel: "Notifications",
+        }}
+      />
+      <drawer.Screen
+        name="Privacy Policy"
+        component={Privacy}
+        options={{
+          headerShown: true,
+          headerTitle: "Privacy Policy",
+        }}
+      />
+      <drawer.Screen
+        name="Terms and Condition"
+        component={Privacy}
+        initialParams={{ type: "terms" }}
+        options={{
+          headerShown: true,
+          headerTitle: "Terms And Condition",
+        }}
+      />
       <drawer.Screen name="Profile" component={Profile} />
     </drawer.Navigator>
   );
@@ -221,43 +252,7 @@ function DrawerNav() {
 const root = createStackNavigator();
 
 function RootStack() {
-  const user = useRecoilValue(userInfo);
-  const [loading, setLoading] = React.useState();
-
-  api.interceptors.request.use((config) => {
-    const newConfig = { ...config };
-    if (newConfig.showLoader) {
-      setLoading(true);
-    }
-    if (user) {
-      newConfig.headers = {
-        ...newConfig.headers,
-        Authorization: `Bearer ${user?.accessToken}`,
-      };
-    }
-    return newConfig;
-  });
-
-  api.interceptors.response.use(
-    function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      setLoading(false);
-      return response;
-    },
-    function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      setLoading(false);
-      if (error?.response?.data?.message) {
-        Toast.show({
-          text: error.response.data.message,
-          type: "error",
-        });
-      }
-      return Promise.reject(error);
-    }
-  );
+  const [user] = useRecoilState(userInfo);
 
   const renderRoutes = (authState) => {
     const { COMPLETE, NO_LOCATION, NONE } = AuthStates;
@@ -274,15 +269,6 @@ function RootStack() {
 
   return (
     <View style={styles.container}>
-      {loading && (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator
-            animating={true}
-            color={Colors.black}
-            size="large"
-          />
-        </View>
-      )}
       <root.Navigator
         screenOptions={{
           headerShown: false,
@@ -294,30 +280,20 @@ function RootStack() {
   );
 }
 
-function PersistenceObserver() {
-  useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
-    const loadable = snapshot.getLoadable(userInfo);
-    if (loadable.state === "hasValue") {
-      AsyncStorage.setItem(
-        userInfo.key,
-        JSON.stringify({ value: loadable.contents })
-      );
-    }
-  });
-}
+// function PersistenceObserver() {
+//   useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
+//     const loadable = snapshot.getLoadable(userInfo);
+//     if (loadable.state === "hasValue") {
+//       AsyncStorage.setItem(
+//         userInfo.key,
+//         JSON.stringify({ value: loadable.contents })
+//       );
+//     }
+//   });
+// }
 
-const Navigation = ({ userPersistedInfo }) => {
-  PersistenceObserver();
-  const setUserInfo = useSetRecoilState(userInfo);
-
-  useEffect(() => {
-    AsyncStorage.getItem(userInfo.key).then((res) => {
-      if (res) {
-        setUserInfo(JSON.parse(res).value);
-      }
-    });
-  }, [setUserInfo]);
-
+const Navigation = () => {
+  // PersistenceObserver();
   return (
     <NavigationContainer>
       <RootStack />
@@ -330,11 +306,5 @@ export default Navigation;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loaderContainer: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    zIndex: 1,
-    justifyContent: "center",
   },
 });

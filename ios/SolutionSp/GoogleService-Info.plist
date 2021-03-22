@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>478152961296-n7ag1n9bsll4ibb362i2bg64dsmtiioj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.478152961296-n7ag1n9bsll4ibb362i2bg64dsmtiioj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>478152961296-4npioj633vr7b92ir1go8ncij00d1fl6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDghwPNzxr5L8MWYWpY2IhYm4O6Iy95oEM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>478152961296</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.name.SolutionSp</string>
+	<key>PROJECT_ID</key>
+	<string>handwash-solutio-1610912056218</string>
+	<key>STORAGE_BUCKET</key>
+	<string>handwash-solutio-1610912056218.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:478152961296:ios:482fff7cace49b1d7e8995</string>
+</dict>
+</plist>

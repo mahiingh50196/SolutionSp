@@ -5,21 +5,26 @@ import { Touchable } from "../common";
 import { api } from "../services";
 import { userInfo } from "../store/atoms/auth";
 import { Colors, FontSizes, FontFamilies } from "../config/Theme";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { DrawerItemList } from "@react-navigation/drawer";
 import { SCREEN_WIDTH } from "../config/Layout";
 
 export default function CustomeDrawer(props) {
-  const user = useRecoilValue(userInfo);
+  const [user, setUser] = useRecoilState(userInfo);
+
+  const { state, ...rest } = props;
+  const newState = { ...state }; //copy from state before applying any filter. do not change original state
+  newState.routes = newState.routes.filter((item) => item.name !== "Profile"); //replace "Login' with your route name
 
   const {
     navigation: { navigate },
   } = props;
-  const setUser = useSetRecoilState(userInfo);
+
   function logout() {
     api({
       method: "PUT",
       url: "/Provider/logout",
+      showLoader: true,
     }).then((res) => {
       setUser(null);
     });
@@ -32,35 +37,39 @@ export default function CustomeDrawer(props) {
           <View style={styles.imgtextwrap}>
             {!!user &&
             Object.keys(user).length &&
-            user?.profilePicture.thumbnail ? (
+            user?.profilePicture?.thumbnail ? (
               <Image
                 resizeMode="cover"
                 source={{ uri: user?.profilePicture.thumbnail }}
-                style={{ width: 80, height: 80, borderRadius: 40 }}
+                style={{ width: 60, height: 60, borderRadius: 40 }}
               />
             ) : (
               <Image
                 source={nav}
                 resizeMode="cover"
-                style={{ width: 80, height: 80, borderRadius: 40 }}
+                style={{ width: 60, height: 60, borderRadius: 40 }}
               />
             )}
             <View
               style={{
                 bottom: 8,
+                marginLeft: 16,
               }}
             >
-              <Text style={styles.profiletext}>{user?.fullName}</Text>
+              <Text style={styles.profiletext} numberOfLines={2}>
+                {user?.fullName}
+              </Text>
               <Text style={styles.editprofiletext}>Edit Profile</Text>
             </View>
           </View>
           <View style={styles.line} />
         </Touchable>
         <DrawerItemList
+          state={newState}
           {...{
-            ...props,
+            ...rest,
             labelStyle: {
-              fontSize: FontSizes.xLarge,
+              fontSize: FontSizes.large,
               color: Colors.black,
               fontFamily: FontFamilies.sfSemiBold,
             },
@@ -91,12 +100,15 @@ const styles = StyleSheet.create({
   imgtextwrap: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 30,
+    paddingTop: 40,
+    paddingBottom: 30,
+    // marginTop: 30,
   },
   profiletext: {
     color: Colors.dark_black,
     fontFamily: FontFamilies.sfSemiBold,
     fontSize: FontSizes.xLarge,
+    width: SCREEN_WIDTH * 0.4,
   },
   editprofiletext: {
     color: Colors.primary,

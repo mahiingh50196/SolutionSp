@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { Background, Text, Button, Touchable, TextInput } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SocialLogin } from "../../components";
 import { api } from "../../services";
 import { useSetRecoilState } from "recoil";
-import { userInfo } from "../../store/atoms/auth";
+import { rCategoryData, userInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
 import { AuthStates } from "../../config/Constants";
 // import messaging from "@react-native-firebase/messaging";
@@ -13,8 +13,29 @@ import { AuthStates } from "../../config/Constants";
 export default function Login({ navigation: { navigate } }) {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
+  const setCategoryData = useSetRecoilState(rCategoryData);
 
   const setUserInfo = useSetRecoilState(userInfo);
+
+  useEffect(() => {
+    api({
+      method: "GET",
+      url: "/Provider/ListCategories",
+      headers: {
+        Accept: "application/json",
+      },
+    }).then((res) => {
+      if (res.data && res.data.data.length) {
+        const categories = res.data.data.map((item) => {
+          return {
+            label: item.name,
+            value: item._id,
+          };
+        });
+        setCategoryData(categories);
+      }
+    });
+  }, [setCategoryData]);
 
   const login = async () => {
     // const fcmToken = await messaging().getToken();
@@ -28,14 +49,18 @@ export default function Login({ navigation: { navigate } }) {
         url: `/Provider/Login?email=${email}&password=${password}`,
         showLoader: true,
       });
-      if (data?.location && data.location.coordinates?.length) {
+      const registrationData = Array.isArray(data) ? data[0] : data;
+      if (
+        registrationData.location &&
+        registrationData.location.coordinates?.length
+      ) {
         setUserInfo({
-          ...data,
+          ...registrationData,
           authState: AuthStates.COMPLETE,
         });
       } else {
         setUserInfo({
-          ...data,
+          ...registrationData,
           authState: AuthStates.NO_LOCATION,
         });
       }

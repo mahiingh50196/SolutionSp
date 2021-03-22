@@ -7808,6 +7808,11 @@ react-native-cross-actionsheet@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-cross-actionsheet/-/react-native-cross-actionsheet-1.0.1.tgz#d9c58cf10aec512868c2d6eb0fd4644814a4e75f"
   integrity sha512-GbLLHKNrdlm1AZm3EJO1AGclaYbbZEqpp4zGAFGuHclNg9O9z2RnHX6JwVj79SlfeYMc/cT+jM5KtJZU3x4eTg==
 
+react-native-error-boundary@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-error-boundary/-/react-native-error-boundary-1.1.6.tgz#5e649d4bfebab48b7789824141d26b7ac393ea69"
+  integrity sha512-IqNcD0Qigx2Dk4fP+OcTYLH8XjbijPEmLZqCh2flLijUkEo8G/D151tRcUV6DHU0IL0ZHOB+/wF2kEUT+liPdg==
+
 react-native-gesture-handler@^1.8.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.9.0.tgz#e441b1c0277c3fd4ca3e5c58fdd681e2f0ceddf0"

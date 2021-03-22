@@ -15,8 +15,8 @@ import { ImagePick, SocialLogin } from "../../components";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import { api } from "../../services";
-import { useSetRecoilState } from "recoil";
-import { signUpInfo } from "../../store/atoms/auth";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { rCategoryData, signUpInfo } from "../../store/atoms/auth";
 import { validateEmail } from "../../common/Validation";
 
 export default function Signup({ navigation: { navigate } }) {
@@ -27,9 +27,7 @@ export default function Signup({ navigation: { navigate } }) {
   const [password, setPassword] = React.useState(null);
   const [phone, setPhone] = React.useState(null);
   const [code, setCode] = React.useState(91);
-  const [CategoryData, setCategoryData] = React.useState([
-    { label: "", value: "" },
-  ]);
+  const [CategoryData, setCategoryData] = useRecoilState(rCategoryData);
   const [categoryId, setCategoryId] = React.useState("");
   const [uploadLoading, setUploadLoading] = React.useState(false);
   const [responseImage, setResponseImage] = React.useState(null);
@@ -97,7 +95,7 @@ export default function Signup({ navigation: { navigate } }) {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [setCategoryData]);
 
   function initSignUp() {
     const error = getErrorInfo();
@@ -127,7 +125,10 @@ export default function Signup({ navigation: { navigate } }) {
             data: { data },
           } = res;
           if (data) {
-            setAuthInfo(res.data?.data);
+            const registrationData = Array.isArray(res.data?.data)
+              ? res.data?.data[0]
+              : res.data?.data;
+            setAuthInfo(registrationData);
             navigate("OtpVerify", {
               phone,
               code,
@@ -379,6 +380,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     borderColor: Colors.primary,
+    height: 50,
+    justifyContent: "center",
+    paddingLeft: 20,
   },
   downarrowimg: {
     alignItems: "flex-end",

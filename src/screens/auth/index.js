@@ -5,6 +5,7 @@ import OtpVerify from "./OtpVerify";
 import Location from "./Location";
 import ForgetPassword from "./ForgetPassword";
 import TermsInfo from "./TermsInfo";
+import Privacy from "./Privacy";
 
 export {
   Login,
@@ -14,4 +15,5 @@ export {
   Location,
   ForgetPassword,
   TermsInfo,
+  Privacy,
 };

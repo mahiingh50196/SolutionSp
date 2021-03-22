@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, FlatList, Switch } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  Switch,
+  Alert,
+} from "react-native";
 import dayjs from "dayjs";
 import { Background, Touchable, Empty, globalStyles } from "../../common";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
@@ -21,22 +29,31 @@ export default function Offline(props) {
 
   const [info, setUserInfo] = useRecoilState(userInfo);
   const isOnline = info?.isOnline;
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const [orderList, setOrderList] = useState([]);
 
   const updateAvailability = React.useCallback(async () => {
-    const {
-      data: { data },
-    } = await api({
-      method: "put",
-      url: "/Provider/OnlineOffline",
-      data: { online: !isOnline === true ? "true" : "false" },
-      showLoader: true,
-    });
+    const newStatus = !isOnline;
     setUserInfo({
       ...info,
-      ...data,
+      isOnline: newStatus,
     });
+    try {
+      const {
+        data: { data },
+      } = await api({
+        method: "put",
+        url: "/Provider/OnlineOffline",
+        data: { online: !isOnline === true ? "true" : "false" },
+        showLoader: true,
+      });
+    } catch (error) {
+      setUserInfo({
+        ...info,
+        isOnline: !newStatus,
+      });
+    }
   }, [isOnline, setUserInfo, info]);
 
   React.useEffect(() => {
@@ -68,19 +85,40 @@ export default function Offline(props) {
   }, [navigation, info, getOrderList]);
 
   const getOrderList = React.useCallback(async () => {
-    const {
-      data: { data },
-    } = await api({
-      method: "GET",
-      url: "/Provider/HomePage",
-    });
-    setOrderList(data);
+    setRefreshing(true);
+    try {
+      const {
+        data: { data },
+      } = await api({
+        url: "/Provider/HomePage",
+        showLoader: true,
+      });
+      setOrderList(data);
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
+      if (error?.response?.data?.type === "NO_LOCATION") {
+        Alert.alert(
+          "No Location",
+          "Please Enable Location to get services",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Enable Now",
+              onPress: () => navigation.navigate("Location"),
+            },
+          ],
+          { cancelable: false }
+        );
+      }
+    }
   }, []);
 
   const renderItem = (item) => {
-    // console.warn("item", item);
     const serviceDate = new Date(item.date);
-    console.warn("ypp", item.ProfilePicture?.original);
     return (
       <Touchable
         style={styles.flatlistwrap}
@@ -92,10 +130,18 @@ export default function Offline(props) {
       >
         <View style={styles.imgnamerightarrowwrap}>
           <Touchable style={styles.flatlistimg}>
-            {item.ProfilePicture?.original ? (
-              <Image source={{ item: item.ProfilePicture?.original }} />
+            {item.ProfilePicture && item.ProfilePicture.thumbnail ? (
+              <Image
+                resizeMode="cover"
+                style={styles.profilePicture}
+                source={{ uri: item.ProfilePicture.thumbnail }}
+              />
             ) : (
-              <Image source={onlineImg} />
+              <Image
+                source={onlineImg}
+                style={styles.profilePicture}
+                resizeMode="cover"
+              />
             )}
           </Touchable>
           <View style={styles.nametext}>
@@ -135,15 +181,13 @@ export default function Offline(props) {
             <Touchable style={styles.Imagestyle}>
               <Image source={offline} />
               <Text style={styles.offlinetext}>You are offline!</Text>
-              <Text style={styles.belowofflinetext}>
-                Our classes is thaught by our best selected teachers who are
-                experts in their subject
-              </Text>
             </Touchable>
           </View>
         ) : (
           <View>
             <FlatList
+              onRefresh={getOrderList}
+              refreshing={refreshing}
               data={orderList}
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(item) => item._id}
@@ -247,5 +291,10 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
+  },
+  profilePicture: {
+    height: 44,
+    width: 44,
+    borderRadius: 22,
   },
 });

@@ -19,7 +19,7 @@ const Order = ({ item }) => {
       }
     >
       <View style={styles.top}>
-        <Text style={styles.name}>{item.provider_name}</Text>
+        <Text style={styles.name}>{item.user_Name}</Text>
         <Text style={styles.date}>
           {dayjs(new Date(item.booking_Date)).format("MMM DD, YYYY")}
         </Text>
@@ -77,8 +77,14 @@ const OrderList = ({ navigation }) => {
   }
 
   return (
-    <Background>
+    <Background
+      contentStyle={{
+        paddingHorizontal: 0,
+      }}
+    >
       <SectionList
+        onRefresh={getOrders}
+        refreshing={false}
         contentContainerStyle={styles.scrollContainer}
         sections={Data}
         keyExtractor={(item, index) => item._id + index}
@@ -99,6 +105,7 @@ export default OrderList;
 const styles = StyleSheet.create({
   scrollContainer: {
     paddingVertical: 70,
+    paddingHorizontal: SCREEN_WIDTH * 0.04,
   },
   navstyle: {
     height: 100,
@@ -123,6 +130,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     color: "#000",
+    fontFamily: FontFamilies.sfRegular,
   },
   date: {
     fontSize: FontSizes.small,

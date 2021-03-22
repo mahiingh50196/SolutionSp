@@ -11,6 +11,7 @@ import { userInfo } from "../../store/atoms/auth";
 import { useRecoilState } from "recoil";
 import { api } from "../../services";
 import { AuthStates } from "../../config/Constants";
+import { useNavigationState } from "@react-navigation/core";
 
 export const getAddressString = ({
   city,
@@ -40,9 +41,13 @@ export const getAddressString = ({
 const GetLocation = ({ navigation: { navigate, goBack } }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [userData, setUserInfo] = useRecoilState(userInfo);
+  const [loading, setLoading] = useState(false);
+  const index = useNavigationState((state) => state.index);
 
   const getLocation = async () => {
+    setLoading(true);
     let { status } = await Location.requestPermissionsAsync();
+    setLoading(false);
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
       return;
@@ -65,11 +70,16 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
       method: "put",
       url: "/Provider/AddAddress",
       data: { lat: latitude, lng: longitude, address },
+      showLoader: true,
     });
+    const registrationData = Array.isArray(data) ? data[0] : data;
     setUserInfo({
-      ...data,
+      ...registrationData,
       authState: AuthStates.COMPLETE,
     });
+    if (index > 0) {
+      goBack();
+    }
   };
 
   return (
@@ -85,6 +95,7 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
       <Button
         style={styles.signUp}
         title="Allow access"
+        isLoading={loading}
         onPress={getLocation}
       />
       <Button
@@ -95,9 +106,11 @@ const GetLocation = ({ navigation: { navigate, goBack } }) => {
             ...userData,
             authState: AuthStates.COMPLETE,
           });
+          if (index > 0) {
+            goBack();
+          }
         }}
       />
-      {/* <Text>{text}</Text> */}
     </Background>
   );
 };

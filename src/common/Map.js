@@ -6,6 +6,7 @@ import globalStyles from "./globalStyles";
 
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
+import { Colors } from "../config/Theme";
 
 let defaultLocation = {
   latitude: 37.78825,
@@ -13,6 +14,39 @@ let defaultLocation = {
   latitudeDelta: 0.001,
   longitudeDelta: 0.001,
 };
+
+export function getRegionForCoordinates(points) {
+  // points should be an array of { latitude: X, longitude: Y }
+  let minX, maxX, minY, maxY;
+
+  // init first point
+  ((point) => {
+    minX = point.latitude;
+    maxX = point.latitude;
+    minY = point.longitude;
+    maxY = point.longitude;
+  })(points[0]);
+
+  // calculate rect
+  points.map((point) => {
+    minX = Math.min(minX, point.latitude);
+    maxX = Math.max(maxX, point.latitude);
+    minY = Math.min(minY, point.longitude);
+    maxY = Math.max(maxY, point.longitude);
+  });
+
+  const midX = (minX + maxX) / 2;
+  const midY = (minY + maxY) / 2;
+  const deltaX = maxX - minX;
+  const deltaY = maxY - minY;
+
+  return {
+    latitude: midX,
+    longitude: midY,
+    latitudeDelta: deltaX,
+    longitudeDelta: deltaY,
+  };
+}
 
 export default function Map({
   onChangeLocation = () => null,
@@ -73,7 +107,11 @@ export default function Map({
   return (
     <View style={[globalStyles.flexOne]}>
       <MapView
-        initialRegion={initialLocation || defaultLocation}
+        initialRegion={
+          from && to
+            ? getRegionForCoordinates([from, to])
+            : initialLocation || defaultLocation
+        }
         ref={locationRef}
         onMapReady={() => setBottomMargin(0)}
         showsUserLocation={bottomMargin === 0}
@@ -87,17 +125,18 @@ export default function Map({
         onRegionChangeComplete={(event) => {
           onChangeLocation(event);
         }}
-      />
+      >
+        {!!from && !!to && (
+          <MapViewDirections
+            origin={from}
+            destination={to}
+            apikey={"AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc"}
+            strokeWidth={4}
+            strokeColor={Colors.primary}
+          />
+        )}
+      </MapView>
       {!!renderPin && renderPin()}
-      {!!from && !!to && (
-        <MapViewDirections
-          origin={from}
-          destination={to}
-          apikey={"AIzaSyB-45GuN16z0dHAkCGS-vXcJ_JZ0yu3Ihc"}
-          strokeWidth={3}
-          strokeColor="hotpink"
-        />
-      )}
     </View>
   );
 }

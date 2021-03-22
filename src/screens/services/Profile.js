@@ -4,7 +4,7 @@ import { Image, StyleSheet, View, ScrollView } from "react-native";
 import { Background, Text, Header, Touchable } from "../../common";
 import { ImagePick } from "../../components";
 import { userInfo } from "../../store/atoms/auth";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors, FontFamilies, FontSizes } from "../../config/Theme";
 import { SCREEN_WIDTH } from "../../config/Layout";
 import {
@@ -21,9 +21,10 @@ import { UpdateModal } from "../../components";
 
 const tabNames = ["Personal Details", "Documents"];
 
-const PersonalDetails = ({ profileInfo, updateUser }) => {
+const PersonalDetails = ({ updateUser }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatingData, setUpdateData] = useState("");
+  const [profileInfo, setProfileInfo] = useRecoilState(userInfo);
 
   const updatkey = (value) => {
     setUpdateData(value);
@@ -34,14 +35,21 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
     setModalVisible(false);
   };
   const updatedValue = (updatedData) => {
+    console.log(updatedData);
     api({
       url: "/Provider/ProfileUpdate",
-      method: "PUT",
+      method: "put",
       data: updatedData,
+      showLoader: true,
     }).then((res) => {
-      updateUser();
+      const {
+        data: { data },
+      } = res;
+      setProfileInfo({
+        ...profileInfo,
+        ...data,
+      });
     });
-
     setModalVisible(false);
   };
 
@@ -76,7 +84,7 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
         <Image
           resizeMode="cover"
           source={
-            profileInfo && profileInfo.profilePicture
+            profileInfo && profileInfo?.profilePicture?.thumbnail
               ? { uri: profileInfo.profilePicture.thumbnail }
               : Avatar
           }
@@ -87,13 +95,8 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
   };
 
   if (profileInfo) {
-    const {
-      fullName,
-      email,
-      phoneNumber,
-      address,
-      profilePicture,
-    } = profileInfo;
+    const { fullName, email, phoneNumber, address } = profileInfo;
+
     return (
       <View>
         <View style={styles.personalDetailsContainer}>
@@ -105,30 +108,13 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
               width: 150,
             }}
           >
-            {/* {profilePicture ? (
-              <Image
-                source={{ uri: profilePicture.thumbnail }}
-                style={{ width: "100%", height: "100%", borderRadius: 75 }}
-              />
-            ) : (
-              <Image
-                source={profile}
-                style={{ width: "100%", height: "100%", borderRadius: 75 }}
-              />
-            )} */}
-            {/* <Touchable
-              style={{ position: "absolute", right: -60 }}
-              onPress={() => setImgStatus(true)}
-            >
-              <Image source={Camera} />
-            </Touchable> */}
             <ImagePick
               renderOpenModalButton={renderOpenModalButton}
               onPickSuccess={onPickSuccess}
             />
           </Touchable>
         </View>
-        <View style={styles.userinfowrapper}>
+        <View style={[styles.userinfowrapper]}>
           <Text style={styles.profiledetailtext}>Profile Detail </Text>
           <View style={styles.userinfowrap}>
             <Touchable style={styles.userinfoimg}>
@@ -195,22 +181,31 @@ const PersonalDetails = ({ profileInfo, updateUser }) => {
 };
 
 const DocumentList = () => {
+  const profileInfo = useRecoilValue(userInfo);
+  console.log(profileInfo, "yoo");
   return (
     <View>
       <View style={{ paddingTop: 10 }}>
         <View style={styles.userinfowrapper}>
-          <Image source={License} />
+          <Image
+            style={styles.docImage}
+            resizeMode="contain"
+            source={{ uri: profileInfo?.addproof?.original }}
+          />
           <View style={styles.tickproofview}>
-            <Text>Adress Proof</Text>
+            <Text>Address Proof</Text>
             <Image source={Tick} />
           </View>
 
-          <Image source={License} />
+          <Image
+            style={styles.docImage}
+            resizeMode="contain"
+            source={{ uri: profileInfo?.identicard?.original }}
+          />
           <View style={styles.tickproofview}>
             <Text>Identification cards</Text>
             <Image source={Tick} />
           </View>
-          <Image source={License} />
         </View>
       </View>
     </View>
@@ -218,33 +213,26 @@ const DocumentList = () => {
 };
 
 export default function Home({ navigation }) {
-  const info = useRecoilValue(userInfo);
-
   const [activeTab, setActiveTab] = useState(tabNames[0]);
-  const [profileInfo, setProfileInfo] = useState(null);
-
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener("focus", () => {
-  //     getUserDetails();
-  //     // if (info && !info.documentUploaded) {
-  //     //   navigation.navigate("DocsUpload");
-  //     // }
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation, info]);
+  const [profileInfo, setProfileInfo] = useRecoilState(userInfo);
 
   useEffect(() => {
     getData();
   }, []);
 
   const getData = () => {
-    if (info && info._id) {
+    if (profileInfo && profileInfo._id) {
       api({
-        url: `/Provider/GetProviderDetails?providerId=${info._id}`,
+        url: `/Provider/GetProviderDetails?providerId=${profileInfo._id}`,
         method: "GET",
       }).then((res) => {
-        setProfileInfo(res.data.data);
+        const registrationData = Array.isArray(res.data.data)
+          ? res.data.data[0]
+          : res.data.data;
+        setProfileInfo({
+          ...profileInfo,
+          ...registrationData,
+        });
       });
     }
   };
@@ -301,14 +289,13 @@ export default function Home({ navigation }) {
               );
             })}
           </View>
-          {activeTab === tabNames[0] ? (
-            <PersonalDetails
-              profileInfo={profileInfo}
-              updateUser={updateUser}
-            />
-          ) : (
-            <DocumentList />
-          )}
+          <View>
+            {activeTab === tabNames[0] ? (
+              <PersonalDetails updateUser={updateUser} />
+            ) : (
+              <DocumentList />
+            )}
+          </View>
         </View>
       </ScrollView>
     </Background>
@@ -410,5 +397,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+  },
+  docImage: {
+    height: 100,
+    width: SCREEN_WIDTH * 0.8,
   },
 });

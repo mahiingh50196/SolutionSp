@@ -27,7 +27,11 @@ const Button = ({
                 style,
               ]}
             >
-              {!isLoading && <Text style={styles.buttonText}>{title}</Text>}
+              {!isLoading ? (
+                <Text style={styles.buttonText}>{title}</Text>
+              ) : (
+                <ActivityIndicator animating color="red" />
+              )}
             </View>
           </Touchable>
         );
@@ -43,7 +47,11 @@ const Button = ({
                 style,
               ]}
             >
-              {!isLoading && <Text style={styles.buttonText}>{title}</Text>}
+              {!isLoading ? (
+                <Text style={styles.buttonText}>{title}</Text>
+              ) : (
+                <ActivityIndicator animating color="red" />
+              )}
             </View>
           </Touchable>
         );
@@ -59,8 +67,10 @@ const Button = ({
                 style,
               ]}
             >
-              {!isLoading && (
+              {!isLoading ? (
                 <Text style={styles.buttonTransparentText}>{title}</Text>
+              ) : (
+                <ActivityIndicator animating color="red" />
               )}
             </View>
           </Touchable>
@@ -69,16 +79,7 @@ const Button = ({
         return <></>;
     }
   };
-  return (
-    <View>
-      {isLoading && (
-        <View style={styles.indicator}>
-          <ActivityIndicator animating color="red" />
-        </View>
-      )}
-      {renderButton()}
-    </View>
-  );
+  return <View>{renderButton()}</View>;
 };
 
 export default Button;
@@ -112,13 +113,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.buttonText,
     fontFamily: FontFamilies.sfBold,
-  },
-  indicator: {
-    position: "absolute",
-
-    top: 15,
-
-    zIndex: 5,
-    alignSelf: "center",
   },
 });

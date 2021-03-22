@@ -134,7 +134,7 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
         label={`${title} Number`}
         labelStyle={{ color: "#bec2ce" }}
         placeholder="12345678XXXXXXXXXXXX"
-        keyboardType="number-pad"
+        keyboardType="default"
         defaultValue={docNumber}
       />
       <Touchable onPress={() => setPickerVisibility(!pickerVisibility)}>
@@ -159,15 +159,22 @@ const IdUpload = ({ route, navigation: { goBack }, navigation }) => {
           </View>
         </View>
         {pickerVisibility && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={docDate ? docDate : new Date()}
-            mode="date"
-            is24Hour={true}
-            display="default"
-            onChange={onChangeDate}
-            minimumDate={new Date()}
-          />
+          <View>
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={docDate ? docDate : new Date()}
+              mode="date"
+              is24Hour={true}
+              display="spinner"
+              onChange={onChangeDate}
+              minimumDate={new Date()}
+            />
+            <Button
+              title="Done"
+              type="transparent"
+              onPress={() => setPickerVisibility(false)}
+            />
+          </View>
         )}
       </Touchable>
       <View style={styles.space} />

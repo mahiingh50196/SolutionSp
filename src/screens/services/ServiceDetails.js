@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  Linking,
+  Platform,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -67,7 +75,16 @@ const Header = ({ orderDetails }) => {
     <>
       <View style={styles.mainview}>
         <Touchable style={styles.profile}>
-          <Image source={onlineImg} />
+          <Image
+            style={styles.image}
+            source={
+              orderDetails?.profilePicture?.thumbnail
+                ? {
+                    uri: orderDetails.profilePicture.thumbnail,
+                  }
+                : onlineImg
+            }
+          />
         </Touchable>
         <View style={styles.profilename}>
           <Text style={styles.profiletext}>{userName}</Text>
@@ -197,10 +214,12 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
       </View>
     );
   }
+
   return (
     <View>
       <View style={styles.actionIconsContainer}>
         <ActionIconButton
+          onPress={() => Linking.openURL(`tel:${orderDetails.phoneNumber}`)}
           title="Call"
           type="call"
           renderIcon={() => (
@@ -208,23 +227,29 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
           )}
         />
         <ActionIconButton
+          onPress={() => {
+            const url = `sms:${orderDetails.phoneNumber}${
+              Platform.OS === "ios" ? "&" : "?"
+            }body=${""}`;
+            Linking.openURL(url);
+          }}
           title="Message"
           type="message"
           renderIcon={() => (
             <AntDesign name="message1" color={Colors.white} size={20} />
           )}
         />
-        {status !== OrderStates.Canceled ||
-          (status !== OrderStates.Rejected && (
-            <ActionIconButton
-              title="Cancel"
-              type="cancel"
-              renderIcon={() => (
-                <AntDesign name="delete" color={Colors.white} size={20} />
-              )}
-              onPress={handleCancel}
-            />
-          ))}
+        {(status !== OrderStates.Canceled ||
+          status !== OrderStates.Rejected) && (
+          <ActionIconButton
+            title="Cancel"
+            type="cancel"
+            renderIcon={() => (
+              <AntDesign name="delete" color={Colors.white} size={20} />
+            )}
+            onPress={handleCancel}
+          />
+        )}
       </View>
       {renderSwipeButtons()}
     </View>
@@ -303,22 +328,30 @@ export default function ServiceDetails({
     return <></>;
   }
 
-  const renderItem = ({ item: { productName, subcategory } }) => {
+  const renderItem = ({
+    item: { productName, subcategory, price, product, picture, quentity },
+  }) => {
     return (
       <View style={styles.mainflatlistwrapper}>
-        <Image source={Mask} />
+        <Image
+          source={{ uri: picture?.original }}
+          style={styles.productImage}
+        />
         <View style={styles.right}>
-          <Text style={styles.self}>{productName}</Text>
+          <Text style={styles.self}>{`${product} x ${quentity}`}</Text>
           <Text style={styles.deleteall}>{subcategory}</Text>
-          <Text style={styles.self}>$ 40</Text>
+          <Text style={styles.self}>$ {price}</Text>
         </View>
       </View>
     );
   };
 
+  console.log(orderDetails);
+
   return (
     <Background>
       <FlatList
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentStyle}
         data={orderDetails.product}
         renderItem={renderItem}
@@ -428,8 +461,13 @@ const styles = StyleSheet.create({
     color: "grey",
     fontFamily: FontFamilies.sfSemiBold,
   },
+  qty: {
+    fontSize: 12,
+    color: "grey",
+    bottom: 4,
+  },
   contentStyle: {
-    paddingTop: 50,
+    paddingVertical: 50,
   },
   right: {
     paddingLeft: 12,
@@ -479,5 +517,16 @@ const styles = StyleSheet.create({
   mapContainer: {
     height: 100,
     width: SCREEN_WIDTH,
+  },
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 11,
+  },
+  productImage: {
+    height: "100%",
+    width: 70,
+    borderTopLeftRadius: 11,
+    borderBottomLeftRadius: 11,
   },
 });
