@@ -43,14 +43,22 @@ export default function App({
       const {
         data: { data },
       } = res;
-      const updatedMessages = data.map((each) => ({
-        id: each._id,
-        text: each.message,
-        // image: each.picture,
-        user: {
-          _id: each.userId,
-        },
-      }));
+      const updatedMessages = data.map((each) => {
+        console.warn(each._id);
+        const info = {
+          _id: each._id,
+          text: each.message,
+          // image: each.picture,
+          user: {
+            _id: each.userId,
+          },
+        };
+        if (each.picture) {
+          info.image = each.picture;
+        }
+        console.log(info);
+        return info;
+      });
       setMessages(updatedMessages);
     });
   }, []);
