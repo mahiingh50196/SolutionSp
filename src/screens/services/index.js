@@ -7,6 +7,7 @@ import Notification from "./Notification";
 import MyServices from "./MyServices";
 import TrackingDetails from "./TrackingDetails";
 import ServiceProof from "./ServiceProof";
+import Chat from "./Chat";
 
 export {
   Profile,
@@ -18,4 +19,5 @@ export {
   MyServices,
   TrackingDetails,
   ServiceProof,
+  Chat,
 };

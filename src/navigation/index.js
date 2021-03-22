@@ -35,6 +35,7 @@ import {
   ServiceDetails,
   TrackingDetails,
   ServiceProof,
+  Chat,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { api } from "../services";
@@ -74,7 +75,7 @@ function AuthStack() {
         headerTransparent: true,
       }}
     >
-      <auth.Screen name="Welcome" component={Welcome} />
+      <auth.Screen name="Chat" component={Chat} />
       <auth.Screen name="Login" component={Login} />
       <auth.Screen name="ForgetPassword" component={ForgetPassword} />
       <auth.Screen name="Signup" component={Signup} />

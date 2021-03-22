@@ -40,6 +40,8 @@ import Booking from "./Booking.png";
 import Swiper from "./Swiper.png";
 import Pin from "./Pin.png";
 import TakePhoto from "./TakePhoto.png";
+import PhoneCall from "./phoneCall.png";
+import Send from "./send.png";
 
 export {
   Welcome,
@@ -84,4 +86,6 @@ export {
   Swiper,
   Pin,
   TakePhoto,
+  PhoneCall,
+  Send,
 };
