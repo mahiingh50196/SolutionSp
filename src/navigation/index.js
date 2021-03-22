@@ -28,6 +28,7 @@ import {
   ServiceProof,
   ServiceComplete,
   RateOrder,
+  Chat,
 } from "../screens/services";
 import { userInfo } from "../store/atoms/auth";
 import { CustomeDrawer } from "../components";
@@ -127,6 +128,13 @@ function HomeStack() {
         }}
       />
       <home.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <home.Screen
         name="TrackingDetails"
         component={TrackingDetails}
         options={{
@@ -180,6 +188,13 @@ function ServicesStack() {
           headerTransparent: true,
           headerTintColor: Colors.blue,
           title: "Service Details",
+        }}
+      />
+      <services.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          headerShown: false,
         }}
       />
       <services.Screen

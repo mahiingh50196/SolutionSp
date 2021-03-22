@@ -249,10 +249,9 @@ const ManageOrderStates = ({ orderDetails, callback }) => {
         />
         <ActionIconButton
           onPress={() => {
-            const url = `sms:${orderDetails.phoneNumber}${
-              Platform.OS === "ios" ? "&" : "?"
-            }body=${""}`;
-            Linking.openURL(url);
+            navigate("Chat", {
+              order: orderDetails,
+            });
           }}
           title="Message"
           type="message"

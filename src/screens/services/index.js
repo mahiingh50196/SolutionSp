@@ -9,6 +9,7 @@ import TrackingDetails from "./TrackingDetails";
 import ServiceProof from "./ServiceProof";
 import ServiceComplete from "./ServiceComplete";
 import RateOrder from "./RateOrder";
+import Chat from "./Chat";
 
 export {
   Profile,
@@ -22,4 +23,5 @@ export {
   ServiceProof,
   ServiceComplete,
   RateOrder,
+  Chat,
 };

@@ -62,6 +62,7 @@ const Interceptor = () => {
         setUser(null);
       }
       if (error?.response?.data?.message) {
+        console.log(error.response.data.message);
         Toast.show({
           text: error.response.data.message,
           type: "error",
